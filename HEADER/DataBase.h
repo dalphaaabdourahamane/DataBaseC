@@ -21,4 +21,8 @@ bool getUpletByAtt(std::vector<std::vector<std::string>> *uplets,Relation relati
 
 bool deleteUpletByAtt(Relation relation,std::string attr,std::string val);
 
+bool getUpletByAttOR(std::vector<std::vector<std::string>> *uplets, Relation relation, std::vector<std::string> atts,std::vector<std::string> vals);
+
+bool getUpletByAttAND(std::vector<std::vector<std::string>> *uplets, Relation relation, std::vector<std::string> atts,std::vector<std::string> vals);
+
 #endif //PROJETBASEDONNEE_DATABASE_H

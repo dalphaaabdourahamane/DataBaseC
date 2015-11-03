@@ -19,4 +19,6 @@ void upper(char chaine[]);
 
 void copyPartie(char newTab[], char oldTab[],int od,int of );
 
+bool findAttVAleur(std::vector<std::string> attributs,std::vector<std::string> valeurs,std::string att,std::string val);
+
 #endif //PROJETBASEDONNEE_UTILE_H

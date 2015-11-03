@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <algorithm>
+#include <sstream>
 #include "HEADER/Structure.h"
 #include "HEADER/Metadonnee.h"
 #include "HEADER/DataBase.h"
@@ -15,16 +16,26 @@ static int IDREL=0; //id auto increment de la meta relation
 static int IDATT=0; //id auto increment des attribut
 static int NBLISTE = ((TAILLEPAGE - 5)/ 16)+1; // plus 1 pour arrondire a l'entier supperieur
 
+/*
+ * Formule du calcul de la TAILLE de la bitMap (N - N/k)/k ou N=512 et k= taille uplet
+ * EX: pour la meta rel(512 -512/34)/34 =14
+ */
 const int TAILLEMETARELATION = 34; //id,nom,nbatt, taille 10+8*3
 const int TAILLEATTRIBUT = 26; //id,nom,domaine  10+8*2
 const int TAILLERELATT = 24; //idrel,idatt,rang 8*3
 const int TAILLELISTE = 16; //  idrel,numblock 8*2
+
+const int TailleBitMapMetaRelation = (TAILLEBLOCK -TAILLEBLOCK/TAILLEMETARELATION)/TAILLEMETARELATION; //14
+const int TailleBitMapMetaAttribut = (TAILLEBLOCK -TAILLEBLOCK/TAILLEATTRIBUT)/TAILLEATTRIBUT; //id,nom,domaine  10+8*2
+const int TailleBitMapMetaRelAtt = (TAILLEBLOCK -TAILLEBLOCK/TAILLERELATT)/TAILLERELATT; //idrel,idatt,rang 8*3
+const int TailleBitMapMetaListe = (TAILLEBLOCK -TAILLEBLOCK/TAILLELISTE)/TAILLELISTE; //  idrel,numblock 8*2
 
 /*
  * 0 POUR Le bitemap de l'allocation de la memoire
  * 1 pour les meta RELATION
  * 2 et 3 pour les meta ATTRIBUT
  * 4 et 5  pour les meta REL ATT
+ * 6 et plus Meta liste
  * la suite est calculer par ( TAILLE_DE_MEMOIRE - 5 )/ 16, 24 qui est la taille (idREL,BLOCK,)
  */
 char MEMOIRE[TAILLEPAGE][TAILLEBLOCK];
@@ -84,8 +95,15 @@ int main() {
 //    insertionUplet(uplet,listes);
 //    getUpletByRel(&uplets,relation);
 
-    getUpletByAtt(&uplets,relation,"age","5");
+//    getUpletByAtt(&uplets,relation,"age","5");
+    vector<string> v1;
+    v1.push_back("age");
+    v1.push_back("nom");
+    vector<string> v2;
+    v2.push_back("5");
+    v2.push_back("alpha");
 
+    getUpletByAttAND(&uplets,relation,v1,v2);
     for (int i = 0; i < uplets.size(); ++i) {
         cout<<endl <<"NOM-> "<<uplets[i][0]<<" AGE-> " <<uplets[i][1] <<endl;
     }
@@ -99,7 +117,7 @@ int main() {
     }
 
 
-    afficheBlock(MEMOIRE[7]);
+    affichePage();
 
     system("pause");
     return 0;
@@ -122,7 +140,7 @@ void initialisation(){
     MEMOIRE[0][0] ='1';
 
     for (int j = 0; j < TAILLEBLOCK; ++j) {
-        if(j < TAILLEBLOCK-TAILLEMETARELATION) {
+        if(j < TAILLEBLOCK-TailleBitMapMetaRelation) {
             MEMOIRE[1][j] = '#';
         }
         else {
@@ -131,14 +149,14 @@ void initialisation(){
     }
 
     for (int j = 0; j < TAILLEBLOCK; ++j) {
-        if (j < TAILLEBLOCK - TAILLEATTRIBUT) {
+        if (j < TAILLEBLOCK - TailleBitMapMetaAttribut) {
             MEMOIRE[2][j] = '#';
         }else {
             MEMOIRE[2][j] ='0';
         }
     }
     for (int j = 0; j < TAILLEBLOCK; ++j) {
-        if (j < TAILLEBLOCK - TAILLEATTRIBUT) {
+        if (j < TAILLEBLOCK - TailleBitMapMetaAttribut) {
             MEMOIRE[3][j] = '#';
         }else {
             MEMOIRE[3][j] ='0';
@@ -146,7 +164,7 @@ void initialisation(){
     }
 
     for (int j = 0; j < TAILLEBLOCK; ++j) {
-        if(j < TAILLEBLOCK-TAILLERELATT){
+        if(j < TAILLEBLOCK-TailleBitMapMetaRelAtt){
             MEMOIRE[4][j] ='#';
         }
         else {
@@ -155,7 +173,7 @@ void initialisation(){
     }
 
     for (int j = 0; j < TAILLEBLOCK; ++j) {
-        if (j < TAILLEBLOCK - TAILLERELATT){
+        if (j < TAILLEBLOCK - TailleBitMapMetaRelAtt){
             MEMOIRE[5][j] = '#';
         }
         else {
@@ -165,7 +183,7 @@ void initialisation(){
     //liste
     for (int i = 6; i < NBLISTE + 6; ++i) {
         for (int j = 0; j < TAILLEBLOCK; ++j) {
-            if (j < TAILLEBLOCK - TAILLELISTE){
+            if (j < TAILLEBLOCK - TailleBitMapMetaListe){
                 MEMOIRE[i][j] = '#';
             }
             else {
@@ -312,7 +330,7 @@ bool ajouteMetaRelation(Relation relation){
     copy(METARELATION,0,MEMOIRE[1],TAILLEBLOCK);
 
     if(MEMOIRE[0][1] == '0') MEMOIRE[0][1] = '1'; // on met le bit a 1
-    int indiceVide = indicePremierZero(METARELATION,TAILLEBLOCK-TAILLEMETARELATION,TAILLEBLOCK);
+    int indiceVide = indicePremierZero(METARELATION,TAILLEBLOCK-TailleBitMapMetaRelation,TAILLEBLOCK);
     if(indiceVide != -1){
         int position = indiceVide*TAILLEMETARELATION;
         char ent[8];
@@ -336,7 +354,7 @@ bool ajouteMetaRelation(Relation relation){
             METARELATION[position++] =ent[i];
         }
 
-        METARELATION[TAILLEBLOCK-TAILLEMETARELATION+indiceVide]='1'; //mettre a jour le bipmap
+        METARELATION[TAILLEBLOCK-TailleBitMapMetaRelation+indiceVide]='1'; //mettre a jour le bipmap
         copy(MEMOIRE[1],0,METARELATION, TAILLEBLOCK); //recrire le tableau
 
     } else{
@@ -353,8 +371,8 @@ void getMetaRalation(Relation* relation, char nomRel[]){
         char METARELATION[TAILLEBLOCK];
         copy(METARELATION,0,MEMOIRE[1],TAILLEBLOCK);
 
-        for (int i =0; i < TAILLEMETARELATION ; ++i) {
-            if(METARELATION[TAILLEBLOCK-TAILLEMETARELATION+i] == '1'){
+        for (int i =0; i < TailleBitMapMetaRelation ; ++i) {
+            if(METARELATION[TAILLEBLOCK-TailleBitMapMetaRelation+i] == '1'){
                 char nomRelation[10];
                 // i*TAILLEMETARELATION + 8 est l'indice du block decaler de la case du block, on cope dans nom
                 for (int j = 0; j < 10; ++j) {
@@ -390,8 +408,8 @@ void getAllMetaRelation(vector<Relation>* relations){
         Relation  relation;
         copy(METARELATION,0,MEMOIRE[1],TAILLEBLOCK);
 
-        for (int i =0; i < TAILLEMETARELATION ; ++i) {
-            if(METARELATION[TAILLEBLOCK-TAILLEMETARELATION+i] == '1'){
+        for (int i =0; i < TailleBitMapMetaRelation ; ++i) {
+            if(METARELATION[TAILLEBLOCK-TailleBitMapMetaRelation+i] == '1'){
                 // i*TAILLEMETARELATION + 8 est l'indice du block decaler de la case du block, on cope dans nom
 
                 char ent[9];
@@ -424,7 +442,7 @@ bool ajouteAttribut(Attribut attribut[], int size){
     for (int x = 0; x < size; ++x) { // indice des attributs
         attribut1 = attribut[x];
 
-        indiceVide = indicePremierZero(METAATTRIBUT,TAILLEBLOCK-TAILLEATTRIBUT,TAILLEBLOCK);
+        indiceVide = indicePremierZero(METAATTRIBUT,TAILLEBLOCK-TailleBitMapMetaAttribut,TAILLEBLOCK);
         if(indiceVide != -1){
 
         } else{ // si page plaine
@@ -436,14 +454,14 @@ bool ajouteAttribut(Attribut attribut[], int size){
             copy(METAATTRIBUT,0,MEMOIRE[3],TAILLEBLOCK);
             block2plain = true;
             int nombreInsertionPossible=0;
-            for (int i = TAILLEBLOCK-TAILLEATTRIBUT; i <TAILLEBLOCK ; ++i) {
+            for (int i = TAILLEBLOCK-TailleBitMapMetaAttribut; i <TAILLEBLOCK ; ++i) {
                 if(METAATTRIBUT[i]=='0') nombreInsertionPossible++;
             }
             if(nombreInsertionPossible< size-x){
                 cout << "PLUS DE PLACE POSSIBLE POUR LES ATTRIBUTS DE CETTE RELATION DESOLER";
                 return false;
             }
-            indiceVide = indicePremierZero(METAATTRIBUT,TAILLEBLOCK-TAILLEATTRIBUT,TAILLEBLOCK);
+            indiceVide = indicePremierZero(METAATTRIBUT,TAILLEBLOCK-TailleBitMapMetaAttribut,TAILLEBLOCK);
         }
         //Memoire disponible
         int position = indiceVide*TAILLEATTRIBUT;
@@ -460,7 +478,7 @@ bool ajouteAttribut(Attribut attribut[], int size){
         for (int i = 0; i < 8; ++i) {
             METAATTRIBUT[position++] =ent[i];
         }
-        METAATTRIBUT[TAILLEBLOCK-TAILLEATTRIBUT+indiceVide]='1'; //mettre a jour le bipmap du block
+        METAATTRIBUT[TAILLEBLOCK-TailleBitMapMetaAttribut+indiceVide]='1'; //mettre a jour le bipmap du block
 //        afficheBlock(METAATTRIBUT);
     }
 
@@ -485,7 +503,7 @@ bool ajouteRelAtt(RelationAttribut relationAttribut[], int size){
     for (int x = 0; x < size; ++x) { // indice des attributs
         relationAttribut1 = relationAttribut[x];
 
-        indiceVide = indicePremierZero(METARELATT,TAILLEBLOCK-TAILLERELATT,TAILLEBLOCK);
+        indiceVide = indicePremierZero(METARELATT,TAILLEBLOCK-TailleBitMapMetaRelAtt,TAILLEBLOCK);
         if(indiceVide != -1){
 
         } else{ // si page plaine
@@ -497,14 +515,14 @@ bool ajouteRelAtt(RelationAttribut relationAttribut[], int size){
             copy(METARELATT,0,MEMOIRE[5],TAILLEBLOCK);
             block4plain = true;
             int nombreInsertionPossible=0;
-            for (int i = TAILLEBLOCK-TAILLERELATT; i <TAILLEBLOCK ; ++i) {
+            for (int i = TAILLEBLOCK-TailleBitMapMetaRelAtt; i <TAILLEBLOCK ; ++i) {
                 if(METARELATT[i]=='0') nombreInsertionPossible++;
             }
             if(nombreInsertionPossible< size-x){
                 cout << "PLUS DE PLACE POSSIBLE POUR LES ATTRIBUTS DE CETTE RELATION DESOLER";
                 return false;
             }
-            indiceVide = indicePremierZero(METARELATT,TAILLEBLOCK-TAILLERELATT,TAILLEBLOCK);
+            indiceVide = indicePremierZero(METARELATT,TAILLEBLOCK-TailleBitMapMetaRelAtt,TAILLEBLOCK);
         }
         //Memoire disponible
         int position = indiceVide*TAILLERELATT;
@@ -523,7 +541,7 @@ bool ajouteRelAtt(RelationAttribut relationAttribut[], int size){
         for (int i = 0; i < 8; ++i) {
             METARELATT[position++] =ent[i];
         }
-        METARELATT[TAILLEBLOCK-TAILLERELATT+indiceVide]='1'; //mettre a jour le bipmap du block
+        METARELATT[TAILLEBLOCK-TailleBitMapMetaRelAtt+indiceVide]='1'; //mettre a jour le bipmap du block
     }
 
     if(block4plain){
@@ -552,8 +570,8 @@ void getAttributById(Attribut* attribut, int id){
 
     if(MEMOIRE[0][2] == '1'){
         copy(METAATTRIBUT, 0, MEMOIRE[2], TAILLEBLOCK);
-        for (int i = 0; i < TAILLEBLOCK - TAILLEATTRIBUT; ++i) {
-            if(METAATTRIBUT[TAILLEBLOCK - TAILLEATTRIBUT + i] == '1'){
+        for (int i = 0; i < TAILLEBLOCK - TailleBitMapMetaAttribut; ++i) {
+            if(METAATTRIBUT[TAILLEBLOCK - TailleBitMapMetaAttribut + i] == '1'){
                 char ent[9];
                 copyPartie(ent, METAATTRIBUT,i*TAILLEATTRIBUT ,8);
 
@@ -572,8 +590,8 @@ void getAttributById(Attribut* attribut, int id){
 
     if(MEMOIRE[0][3] == '1'){
         copy(METAATTRIBUT, 0, MEMOIRE[3], TAILLEBLOCK);
-        for (int i = 0; i < TAILLEBLOCK - TAILLEATTRIBUT; ++i) {
-            if(METAATTRIBUT[TAILLEBLOCK - TAILLEATTRIBUT + i] == '1'){
+        for (int i = 0; i < TAILLEBLOCK - TailleBitMapMetaAttribut; ++i) {
+            if(METAATTRIBUT[TAILLEBLOCK - TailleBitMapMetaAttribut + i] == '1'){
                 char ent[9];
                 copyPartie(ent, METAATTRIBUT,i*TAILLEATTRIBUT ,8);
 
@@ -599,8 +617,8 @@ void getRelAttByRel(vector<RelationAttribut>* relAtts, Relation relation){
     if(MEMOIRE[0][4]=='1') {
         copy(METARELATT, 0, MEMOIRE[4], TAILLEBLOCK);
 
-        for (int i = 0; i < TAILLERELATT; ++i) {
-            if (METARELATT[TAILLEBLOCK - TAILLERELATT + i] == '1') {
+        for (int i = 0; i < TailleBitMapMetaRelAtt; ++i) {
+            if (METARELATT[TAILLEBLOCK - TailleBitMapMetaRelAtt + i] == '1') {
                 // i*TAILLEMETARELATION + 8 est l'indice du block decalé de la case du block
 
                 char ent[9];
@@ -634,8 +652,8 @@ void getRelAttByRel(vector<RelationAttribut>* relAtts, Relation relation){
         if (MEMOIRE[0][5]=='1') {
             copy(METARELATT,0,MEMOIRE[5],TAILLEBLOCK);
 
-            for (int i =0; i < TAILLERELATT ; ++i) {
-                if(METARELATT[TAILLEBLOCK-TAILLERELATT+i] == '1'){
+            for (int i =0; i < TailleBitMapMetaRelAtt ; ++i) {
+                if(METARELATT[TAILLEBLOCK-TailleBitMapMetaRelAtt+i] == '1'){
                     // i*TAILLEMETARELATION + 8 est l'indice du block decalé de la case du block
 
                     char ent[9];
@@ -704,7 +722,7 @@ string creationUplet(Relation relation){
 
 bool insertionUplet(string uplet,vector<Liste> vector1){
     char UPLET[TAILLEBLOCK];
-    int tailleBipmap = (TAILLEBLOCK/uplet.size());
+    int tailleBipmap = (TAILLEBLOCK - TAILLEBLOCK/uplet.size())/uplet.size();
 
     for (int i = 0; i < vector1.size(); ++i) {
         copy(UPLET,0,MEMOIRE[vector1[i].numBlock],TAILLEBLOCK);
@@ -746,7 +764,7 @@ bool getUpletByRel(vector<vector<string>> *uplets,Relation relation){
     getAttribut(&attributs,relation);
 
     char UPLET[TAILLEBLOCK];
-    int tailleBipmap = (TAILLEBLOCK/relation.taille);
+    int tailleBipmap = (TAILLEBLOCK - TAILLEBLOCK/relation.taille)/relation.taille;
 
     for (int i = 0; i < listeUpletRel.size(); ++i) {
         copy(UPLET,0,MEMOIRE[listeUpletRel[i].numBlock],TAILLEBLOCK);
@@ -799,7 +817,7 @@ bool getUpletByAtt(vector<vector<string>> *uplets, Relation relation, string att
     }
 
     char UPLET[TAILLEBLOCK];
-    int tailleBipmap = (TAILLEBLOCK/relation.taille);
+    int tailleBipmap = (TAILLEBLOCK - TAILLEBLOCK/relation.taille)/relation.taille;
 
     for (int i = 0; i < listeUpletRel.size(); ++i) {
         copy(UPLET,0,MEMOIRE[listeUpletRel[i].numBlock],TAILLEBLOCK);
@@ -858,13 +876,143 @@ bool getUpletByAtt(vector<vector<string>> *uplets, Relation relation, string att
     return false;
 }
 
+bool findAttVAleur(vector<string> attributs,vector<string> valeurs, string att,string val){
+    att.erase(remove(att.begin(), att.end(), ' '), att.end());
+    val.erase(remove(val.begin(), val.end(), ' '), val.end());
+
+    for (int i = 0; i < attributs.size(); ++i) {
+        attributs[i].erase(remove(attributs[i].begin(), attributs[i].end(), ' '), attributs[i].end());
+
+        if((att.compare(attributs[i]) == 0) && (val.compare(valeurs[i])==0) ){
+            return true;
+        }
+    }
+    return false;
+}
+
+bool getUpletByAttOR(vector<vector<string>> *uplets, Relation relation, vector<string> atts,vector<string> vals){
+    vector<Liste> listeUpletRel(0);
+    vector<Attribut> attributs(0);
+    getListebyRel(&listeUpletRel, relation);
+    getAttribut(&attributs,relation);
+
+    char UPLET[TAILLEBLOCK];
+    int tailleBipmap = (TAILLEBLOCK - TAILLEBLOCK/relation.taille)/relation.taille;
+
+    for (int i = 0; i < listeUpletRel.size(); ++i) {
+        copy(UPLET,0,MEMOIRE[listeUpletRel[i].numBlock],TAILLEBLOCK);
+
+        for (int j = 0; j < tailleBipmap; ++j) {
+            //parcour tous le block et on cherche les uplets
+            if(UPLET[TAILLEBLOCK - tailleBipmap + j] == '0' || UPLET[TAILLEBLOCK - tailleBipmap + j] == '#') continue; //Uplet vide ou supprimé
+            int indUplet = j *relation.taille;
+            //pour la lecture des données
+            vector<string> uplet;
+            bool upletValide = false;
+
+            for (int k = 0; k < attributs.size(); ++k) {
+
+                string champ;
+                if(attributs[k].type == 1){
+                    //entier
+                    for (int l = 0; l < 8; ++l) {
+                        champ.push_back(UPLET[indUplet]);
+                        indUplet++;
+                    }
+                    string valeur= static_cast<ostringstream*>( &(ostringstream() << binaireStringToDecimal((char *) champ.c_str())) )->str();
+
+                    if(findAttVAleur(atts,vals,attributs[k].nom,valeur)){
+                        upletValide = true;
+                    }
+                } else{
+                    //str
+                    for (int l = 0; l < 10; ++l) {
+                        champ.push_back(UPLET[indUplet]);
+                        indUplet++;
+                    }
+                    champ.erase(remove(champ.begin(), champ.end(), ' '), champ.end());
+                    if( findAttVAleur(atts,vals,attributs[k].nom,champ) ){
+                        upletValide = true;
+                    }
+                }
+                uplet.push_back(champ);
+
+            }//forAttribut
+
+            if (upletValide) {
+                (*uplets).push_back(uplet);
+            }
+
+        }//forbitmap
+    }//forliste
+    return false;
+}
+
+bool getUpletByAttAND(vector<vector<string>> *uplets, Relation relation, vector<string> atts,vector<string> vals){
+    vector<Liste> listeUpletRel(0);
+    vector<Attribut> attributs(0);
+    getListebyRel(&listeUpletRel, relation);
+    getAttribut(&attributs,relation);
+
+    char UPLET[TAILLEBLOCK];
+    int tailleBipmap = (TAILLEBLOCK - TAILLEBLOCK/relation.taille)/relation.taille;
+
+    for (int i = 0; i < listeUpletRel.size(); ++i) {
+        copy(UPLET,0,MEMOIRE[listeUpletRel[i].numBlock],TAILLEBLOCK);
+
+        for (int j = 0; j < tailleBipmap; ++j) {
+            //parcour tous le block et on cherche les uplets
+            if(UPLET[TAILLEBLOCK - tailleBipmap + j] == '0' || UPLET[TAILLEBLOCK - tailleBipmap + j] == '#') continue; //Uplet vide ou supprimé
+            int indUplet = j *relation.taille;
+            //pour la lecture des données
+            vector<string> uplet;
+            int upletValide = 0;
+
+            for (int k = 0; k < attributs.size(); ++k) {
+
+                string champ;
+                if(attributs[k].type == 1){
+                    //entier
+                    for (int l = 0; l < 8; ++l) {
+                        champ.push_back(UPLET[indUplet]);
+                        indUplet++;
+                    }
+                    string valeur= static_cast<ostringstream*>( &(ostringstream() << binaireStringToDecimal((char *) champ.c_str())) )->str();
+
+                    if(findAttVAleur(atts,vals,attributs[k].nom,valeur)){
+                        upletValide ++;
+                    }
+                } else{
+                    //str
+                    for (int l = 0; l < 10; ++l) {
+                        champ.push_back(UPLET[indUplet]);
+                        indUplet++;
+                    }
+                    champ.erase(remove(champ.begin(), champ.end(), ' '), champ.end());
+                    if( findAttVAleur(atts,vals,attributs[k].nom,champ) ){
+                        upletValide ++;
+                    }
+                }
+                uplet.push_back(champ);
+
+            }//forAttribut
+
+            if (atts.size() == upletValide) {
+                (*uplets).push_back(uplet);
+            }
+
+        }//forbitmap
+    }//forliste
+    return false;
+}
+
 int creationListe(int idRel){
 
     char METALISTE[TAILLEBLOCK];
 
     for (int i = 6; i <NBLISTE+6 ; ++i) {
         copy(METALISTE,0,MEMOIRE[i],TAILLEBLOCK);
-        int indiceBM = indicePremierZero(METALISTE,TAILLEBLOCK-TAILLELISTE,TAILLEBLOCK);
+        int indiceBM = indicePremierZero(METALISTE,TAILLEBLOCK-TailleBitMapMetaListe,TAILLEBLOCK);
         if(indiceBM == -1){
             continue;
         } else{
@@ -890,7 +1038,7 @@ int creationListe(int idRel){
 
             MEMOIRE[0][i] = '1';
             MEMOIRE[0][indiceB] = '1';
-            METALISTE[TAILLEBLOCK - TAILLELISTE + indiceBM] = '1';
+            METALISTE[TAILLEBLOCK - TailleBitMapMetaListe + indiceBM] = '1';
             cout<<endl<<" idliste : "<<indiceBM<<endl;
             copy(MEMOIRE[i],0,METALISTE,TAILLEBLOCK);
 
@@ -910,8 +1058,8 @@ void getListebyRel(vector<Liste>* listes, Relation relation){
 
 //        cout<<endl<<"ID BLOCK LISTE : "<<i; //debug
 
-        for (int j = 0; j < TAILLELISTE; ++j) {
-            if(METALISTE[TAILLEBLOCK-TAILLELISTE + j] == '0') continue;
+        for (int j = 0; j < TailleBitMapMetaListe; ++j) {
+            if(METALISTE[TAILLEBLOCK-TailleBitMapMetaListe + j] == '0') continue;
 
 //            cout<<"ID BITMAP : "<<i<<endl; //debug
 
@@ -944,7 +1092,7 @@ bool deleteUpletByAtt(Relation relation,string attr,string val){
     }
 
     char UPLET[TAILLEBLOCK];
-    int tailleBipmap = (TAILLEBLOCK/relation.taille);
+    int tailleBipmap = (TAILLEBLOCK - TAILLEBLOCK/relation.taille)/relation.taille;
 
     for (int i = 0; i < listeUpletRel.size(); ++i) {
         copy(UPLET,0,MEMOIRE[listeUpletRel[i].numBlock],TAILLEBLOCK);
