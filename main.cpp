@@ -14,7 +14,7 @@
 using namespace std;
 static int IDREL=0; //id auto increment de la meta relation
 static int IDATT=0; //id auto increment des attribut
-static int NBLISTE = ((TAILLEPAGE - 5)/ 16)+1; // plus 1 pour arrondire a l'entier supperieur
+static int NBLISTE = (((TAILLEPAGE - 6) - (TAILLEPAGE - 6)/ 16)/16)+1; // plus 1 pour arrondire a l'entier supperieur
 
 /*
  * Formule du calcul de la TAILLE de la bitMap (N - N/k)/k ou N=512 et k= taille uplet
@@ -99,6 +99,7 @@ int main() {
     vector<string> v1;
     v1.push_back("age");
     v1.push_back("nom");
+
     vector<string> v2;
     v2.push_back("5");
     v2.push_back("alpha");
@@ -180,8 +181,17 @@ void initialisation(){
             MEMOIRE[5][j] ='0';
         }
     }
+
+    for (int j = 0; j < TAILLEBLOCK; ++j) {
+        if (j < TAILLEBLOCK - TailleBitMapMetaListe){
+            MEMOIRE[6][j] = '#';
+        }
+        else {
+            MEMOIRE[6][j] ='0';
+        }
+    }
     //liste
-    for (int i = 6; i < NBLISTE + 6; ++i) {
+    for (int i = 7; i < NBLISTE + 7; ++i) {
         for (int j = 0; j < TAILLEBLOCK; ++j) {
             if (j < TAILLEBLOCK - TailleBitMapMetaListe){
                 MEMOIRE[i][j] = '#';
@@ -192,7 +202,7 @@ void initialisation(){
         }
     }
 
-    for (int i = NBLISTE + 6; i < TAILLEPAGE; ++i) {
+    for (int i = NBLISTE + 7; i < TAILLEPAGE; ++i) {
         for (int j = 0; j < TAILLEBLOCK; ++j) {
             MEMOIRE[i][j] ='#';
         }
@@ -1010,13 +1020,13 @@ int creationListe(int idRel){
 
     char METALISTE[TAILLEBLOCK];
 
-    for (int i = 6; i <NBLISTE+6 ; ++i) {
+    for (int i = 7; i <NBLISTE+7 ; ++i) {
         copy(METALISTE,0,MEMOIRE[i],TAILLEBLOCK);
         int indiceBM = indicePremierZero(METALISTE,TAILLEBLOCK-TailleBitMapMetaListe,TAILLEBLOCK);
         if(indiceBM == -1){
             continue;
         } else{
-            int indiceB = indicePremierZero(MEMOIRE[0],6+NBLISTE,TAILLEPAGE); // hors de la taille de la page on ne peu pas ecrire
+            int indiceB = indicePremierZero(MEMOIRE[0],7+NBLISTE,TAILLEPAGE); // hors de la taille de la page on ne peu pas ecrire
 
 //            le MEMOIRE[0][0] n'est interresant
             if(indiceB == -1){
@@ -1024,7 +1034,7 @@ int creationListe(int idRel){
                 return -1;
             }
 
-            indiceB+=(6+NBLISTE);
+            indiceB+=(7+NBLISTE);
             string ent1;
             string ent2;
 
@@ -1052,7 +1062,7 @@ int creationListe(int idRel){
 void getListebyRel(vector<Liste>* listes, Relation relation){
     char METALISTE[TAILLEBLOCK];
     Liste lis;
-    for (int i = 6; i <NBLISTE+6 ; ++i) {
+    for (int i = 7; i <NBLISTE+7 ; ++i) {
         if(MEMOIRE[0][i] == '0') continue;
         copy(METALISTE, 0, MEMOIRE[i], TAILLEBLOCK);
 
