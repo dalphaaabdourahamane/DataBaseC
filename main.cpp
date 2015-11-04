@@ -3,6 +3,7 @@
 #include <iostream>
 #include <algorithm>
 #include <sstream>
+#include <map>
 #include "HEADER/Structure.h"
 #include "HEADER/Metadonnee.h"
 #include "HEADER/DataBase.h"
@@ -44,14 +45,16 @@ char MEMOIRE[TAILLEPAGE][TAILLEBLOCK];
 int main() {
     initialisation();
     creationRelation();
+//    creationRelation();
 
     char relnom[] ="personne";
+    char relnom1[] ="etudiant";
     vector<RelationAttribut> relAtts;
     vector<Attribut> attributs(0);
-    vector<Liste> listes(0);
+    vector<Liste> listes(0),liste1(0);
     vector<vector<string>> uplets;
 
-    Relation relation;
+    Relation relation,relation1;
     Attribut attribut1, attribut2;
     getMetaRalation(&relation,relnom);
 
@@ -111,13 +114,41 @@ int main() {
     deleteUpletByAtt(relation,"age","5");
 
     uplets.clear();
-    getUpletByRel(&uplets,relation);
+/*
+ *
+ */
+//    getMetaRalation(&relation1,relnom1);
+//    cout<<endl <<creationListe(relation1.id)<<endl;
+//    getListebyRel(&liste1, relation1);
+//    for (int i = 0; i <4; ++i) {
+//        uplet = creationUplet(relation1);
+//
+//        cout<<endl <<uplet<<endl;
+//        insertionUplet(uplet,liste1);
+//    }
+//
+//    getUpletByRel(&uplets,relation1);
+//
+//    for (int i = 0; i < uplets.size(); ++i) {
+//        cout<<endl <<"MATIERE-> "<<uplets[i][0]<<" ID-> " <<uplets[i][1] <<endl;
+//    }
+    /*
+     * modif
+     */
+    vector<string> v3;
+    v3.push_back("age");
 
-    for (int i = 0; i < uplets.size(); ++i) {
-        cout<<endl <<"NOM-> "<<uplets[i][0]<<" AGE-> " <<uplets[i][1] <<endl;
-    }
+    vector<string> v4;
+    v4.push_back("3");
 
 
+    vector<string> v5;
+    v5.push_back("age");
+
+    vector<string> v6;
+    v6.push_back("13");
+
+    updateUpletByRel(relation,v3,v4,v5,v6);
     affichePage();
 
     system("pause");
@@ -221,6 +252,7 @@ void afficheBlock(char tab[]){
 
 void affichePage(){
     for (int i = 0; i < TAILLEPAGE; ++i) {
+        cout<< "----> "<<i;
         afficheBlock(MEMOIRE[i]);
         cout<<endl<<endl;
     }
@@ -630,13 +662,10 @@ void getRelAttByRel(vector<RelationAttribut>* relAtts, Relation relation){
         for (int i = 0; i < TailleBitMapMetaRelAtt; ++i) {
             if (METARELATT[TAILLEBLOCK - TailleBitMapMetaRelAtt + i] == '1') {
                 // i*TAILLEMETARELATION + 8 est l'indice du block decalé de la case du block
-
                 char ent[9];
                 copyPartie(ent, METARELATT, i * TAILLERELATT, 8);
-
                 //compare id de la relation et de la metaRelAtt idrelation
                 if (relation.id == binaireStringToDecimal(ent)) {
-
                     relationAttribut.idRelation = binaireStringToDecimal(ent);
 
                     copyPartie(ent, METARELATT, i * TAILLERELATT + 8, 8);
@@ -1042,14 +1071,14 @@ int creationListe(int idRel){
             ent2.append(decimalToBinaryString(indiceB).c_str());
 
             for (int j = 0; j < 8; ++j) {
-                METALISTE[indiceBM + j] = ent1[j];
-                METALISTE[indiceBM + 8 + j] = ent2[j];
+                METALISTE[indiceBM*TAILLELISTE + j] = ent1[j];
+                METALISTE[indiceBM*TAILLELISTE + 8 + j] = ent2[j];
             }
 
             MEMOIRE[0][i] = '1';
             MEMOIRE[0][indiceB] = '1';
             METALISTE[TAILLEBLOCK - TailleBitMapMetaListe + indiceBM] = '1';
-            cout<<endl<<" idliste : "<<indiceBM<<endl;
+//            cout<<endl<<" idliste : "<<indiceBM<<endl;
             copy(MEMOIRE[i],0,METALISTE,TAILLEBLOCK);
 
             return indiceB;
@@ -1152,6 +1181,107 @@ bool deleteUpletByAtt(Relation relation,string attr,string val){
     }//forliste
 
     return true;
+}
+
+bool updateUpletByRel(Relation relation,vector<string> attFiltres,vector<string> valfiltres,vector<string> newAtts,vector<string> newVals){
+
+    vector<Liste> listeUpletRel(0);
+    vector<Attribut> attributs(0);
+    getListebyRel(&listeUpletRel, relation);
+    getAttribut(&attributs,relation);
+
+    char UPLET[TAILLEBLOCK];
+    int tailleBipmap = (TAILLEBLOCK - TAILLEBLOCK/relation.taille)/relation.taille;
+
+    for (int i = 0; i < listeUpletRel.size(); ++i) {
+        copy(UPLET,0,MEMOIRE[listeUpletRel[i].numBlock],TAILLEBLOCK);
+
+        for (int j = 0; j < tailleBipmap; ++j) {
+            //parcour tous le block et on cherche les uplets
+
+            if(UPLET[TAILLEBLOCK - tailleBipmap + j] == '0' || UPLET[TAILLEBLOCK - tailleBipmap + j] == '#') continue; //Uplet vide ou supprimé
+            int indUplet = j *relation.taille;
+            //pour la lecture des données
+            vector<string> uplet;
+            int upletValide = 0;
+
+            for (int k = 0; k < attributs.size(); ++k) {
+
+                string champ;
+                if(attributs[k].type == 1){
+                    //entier
+                    for (int l = 0; l < 8; ++l) {
+                        champ.push_back(UPLET[indUplet]);
+                        indUplet++;
+                    }
+                    string valeur= static_cast<ostringstream*>( &(ostringstream() << binaireStringToDecimal((char *) champ.c_str())) )->str();
+
+                    if(findAttVAleur(attFiltres,valfiltres,attributs[k].nom,valeur)){
+                        upletValide ++;
+                    }
+                } else{
+                    //str
+                    for (int l = 0; l < 10; ++l) {
+                        champ.push_back(UPLET[indUplet]);
+                        indUplet++;
+                    }
+                    champ.erase(remove(champ.begin(), champ.end(), ' '), champ.end());
+                    if( findAttVAleur(attFiltres,valfiltres,attributs[k].nom,champ) ){
+                        upletValide ++;
+                    }
+                }
+                uplet.push_back(champ);
+
+            }//forAttribut
+
+            if (attFiltres.size() == upletValide) {
+                indUplet = j *relation.taille;
+
+                //parcour attibut et modifier les octets concerné
+                for (int k = 0; k < attributs.size(); ++k) {
+
+                    if(attributs[k].type == 1){
+                        //entier
+                        int pos = find(newAtts.begin(), newAtts.end(), string(attributs[k].nom)) - newAtts.begin(); //uplet k
+                        cout<<endl<<" newAtts.size() "<<newAtts.size(); //debug
+                        if(pos >= newAtts.size()){
+                            indUplet+=8;
+                            continue;
+                        }
+                        //k < newAtts.size
+                        string newIntValeur = decimalToBinaryString(atoi(newVals[pos].c_str()));
+                        cout<<endl<<" newIntValeur "<<newIntValeur<<endl; //debug
+
+                        for (int l = 0; l < 8; ++l) {
+                            UPLET[indUplet] = newIntValeur[l];
+                            indUplet++;
+                        }
+
+                    } else{
+                        //str
+                        int pos = find(newAtts.begin(), newAtts.end(), string(attributs[k].nom)) - newAtts.begin(); //uplet k
+                        //k < newAtts.size
+                        if(pos >= newAtts.size()) {
+                            indUplet+=10;
+                            continue;
+                        }
+
+                        string newStrtValeur = newVals[pos];
+
+                        for (int l = 0; l < 10; ++l) {
+                            UPLET[indUplet] = newStrtValeur[l];
+                            indUplet++;
+                        }
+                       // champ.erase(remove(champ.begin(), champ.end(), ' '), champ.end());
+                    }
+
+                }//forAttribut
+            }//fin if----------------------------------------------------------------------------------------------
+        }//forbitmap
+        copy(MEMOIRE[listeUpletRel[i].numBlock],0,UPLET,TAILLEBLOCK);
+    }//forliste
+
+    return false;
 }
 
 

@@ -25,4 +25,6 @@ bool getUpletByAttOR(std::vector<std::vector<std::string>> *uplets, Relation rel
 
 bool getUpletByAttAND(std::vector<std::vector<std::string>> *uplets, Relation relation, std::vector<std::string> atts,std::vector<std::string> vals);
 
+bool updateUpletByRel(Relation relation,std::vector<std::string> attFiltres,std::vector<std::string> valfiltres,std::vector<std::string> newAtts,std::vector<std::string> newVals);
+
 #endif //PROJETBASEDONNEE_DATABASE_H
