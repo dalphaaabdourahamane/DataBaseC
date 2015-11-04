@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.3)
-project(c__)
+project(ProjetBaseDonnee)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
@@ -19,4 +19,4 @@ set(SOURCE_FILES
     CMakeLists.txt
     main.cpp)
 
-add_executable(c__ ${SOURCE_FILES})
+add_executable(ProjetBaseDonnee ${SOURCE_FILES})
