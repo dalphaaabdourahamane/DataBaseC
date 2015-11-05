@@ -21,4 +21,8 @@ void copyPartie(char newTab[], char oldTab[],int od,int of );
 
 bool findAttVAleur(std::vector<std::string> attributs,std::vector<std::string> valeurs,std::string att,std::string val);
 
+bool sortByIntVal(std::vector<std::string>lhs, std::vector<std::string>  rhs);
+
+bool sortByStrVal(std::vector<std::string>lhs, std::vector<std::string>  rhs);
+
 #endif //PROJETBASEDONNEE_UTILE_H

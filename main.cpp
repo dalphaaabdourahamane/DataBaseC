@@ -107,7 +107,8 @@ int main() {
     v2.push_back("5");
     v2.push_back("alpha");
 
-    getUpletByAttAND(&uplets,relation,v1,v2);
+//    getUpletByAttAND(&uplets,relation,v1,v2);
+    getUpletByRel(&uplets,relation);
     for (int i = 0; i < uplets.size(); ++i) {
         cout<<endl <<"NOM-> "<<uplets[i][0]<<" AGE-> " <<uplets[i][1] <<endl;
     }
@@ -1178,6 +1179,9 @@ bool deleteUpletByAtt(Relation relation,string attr,string val){
 
         }//forbitmap
         copy(MEMOIRE[listeUpletRel[i].numBlock],0,UPLET,TAILLEBLOCK);
+        /*
+         * au cas il n ya aplus de uplet
+         */
     }//forliste
 
     return true;
@@ -1283,5 +1287,97 @@ bool updateUpletByRel(Relation relation,vector<string> attFiltres,vector<string>
 
     return false;
 }
+// Sort Container by name function
+bool sortByIntVal(vector<string>lhs, vector<string>  rhs) { return atoi(lhs.at(1).c_str()) < atoi(rhs.at(1).c_str()); }
+bool sortByStrVal(vector<string>lhs, vector<string>  rhs) { return lhs.at(1) < rhs.at(1); }
 
+bool innerJoin(Relation relation1,Relation relation2,string att1,string att2){
+    vector<vector<string>> uplets1, uplets2,;
+    vector<Attribut> attributs1, attributs2;
 
+    getUpletByRel(&uplets1,relation1);
+    getUpletByRel(&uplets2,relation2);
+
+    getAttribut(&attributs1, relation1);
+    getAttribut(&attributs2, relation2);
+
+    int pos1 = find(attributs1.begin(), attributs1.end(), att1) - attributs1.begin(); //uplet k
+    int pos2 = find(attributs2.begin(), attributs2.end(), att2) - attributs2.begin(); //uplet k
+    if(pos1 >= attributs1.size()) {
+        cout<<endl<<"PROBLEME LE PREMIER ATTRIBUT N HESITE PAS"<<endl;
+        return false;
+    }
+    if(pos2 >= attributs2.size()) {
+        cout<<endl<<"PROBLEME LE DEUXIME ATTRIBUT N HESITE PAS"<<endl;
+        return false;
+    }
+    if (attributs2[pos2].type != attributs1[pos1].type){
+        cout<<endl<<"PROBLEME LES DEUX ATTRIBUTS SONT DE TYPE DIFFERENTS"<<endl;
+        return false;
+    }
+    for (int i = 0; i < uplets1.size(); ++i) {
+        swap( uplets1[i] [0], uplets1[i] [pos1] );
+    }
+    for (int i = 0; i < uplets2.size(); ++i) {
+        swap( uplets1[i] [0], uplets1[i] [pos2] );
+    }
+    sort(uplets1.begin(), uplets1.end(), attributs1.at(pos1).type==1 ? sortByIntVal : sortByStrVal);
+    sort(uplets2.begin(), uplets2.end(), attributs2.at(pos2).type==1 ? sortByIntVal : sortByStrVal);
+
+    vector<vector<string>> resultats;
+    int i=0,j=0,l=0;
+
+    while (i < uplets1.size() && j < uplets2.size()){
+        if(uplets1[i][0] > uplets2[j][0]){
+            j++;
+        } else{
+            if (uplets1[i][0] > uplets2[j][0]){
+                i++;
+            } else{
+                //egalité
+                resultats.resize(resultats.size()+1);
+
+                for (int k = 0; k < uplets1[i].size(); ++k) {
+                    resultats[l].push_back(uplets2[i][k]);
+                }
+                for (int k = 0; k < uplets2[i].size(); ++k) {
+                    resultats[l].push_back(uplets2[j][k]);
+                }
+                l++;
+                //produire le reste
+                int m=j+1;
+                while(m < uplets2.size() && uplets1[i][0] == uplets2[m][0]){
+                    resultats.resize(resultats.size()+1);
+
+                    for (int k = 0; k < uplets1[i].size(); ++k) {
+                        resultats[l].push_back(uplets2[i][k]);
+                    }
+                    for (int k = 0; k < uplets2[i].size(); ++k) {
+                        resultats[l].push_back(uplets2[m][k]);
+                    }
+                    l++; m++;
+                }
+
+                int n=i+1;
+                while(n < uplets2.size() && uplets1[n][0] == uplets2[j][0]){
+                    resultats.resize(resultats.size()+1);
+
+                    for (int k = 0; k < uplets1[i].size(); ++k) {
+                        resultats[l].push_back(uplets2[n][k]);
+                    }
+                    for (int k = 0; k < uplets2[i].size(); ++k) {
+                        resultats[l].push_back(uplets2[j][k]);
+                    }
+                    l++; n++;
+                }
+                i=n; j=m;
+            }
+
+        }
+    }
+    
+    return true;
+}
+//        swap( people[i] [0], people[i] [1] );
+// Sort by name
+//sort(people.begin(), people.end(), sortByName);
