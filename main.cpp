@@ -1362,7 +1362,7 @@ bool innerJoin(Relation relation1,Relation relation2,string att1,string att2){
                     resultats[l].push_back(uplets2[j][k]);
                 }
                 l++;*/
-                vector<string> vecTmp(uplets1[i].size() + uplets2[j].size());
+                vector<string> vecTmp;
 
                 vecTmp.insert(vecTmp.end(),uplets1[i].begin(),uplets1[i].end());
                 vecTmp.insert(vecTmp.end(),uplets2[j].begin(),uplets2[j].end());
@@ -1372,11 +1372,10 @@ bool innerJoin(Relation relation1,Relation relation2,string att1,string att2){
 
                 while(++j < uplets2.size() && uplets1[i][0] == uplets2[j][0]){
 
-                    cout<<endl<<"parcour t "<<vecTmp.size();
-
                     vecTmp.insert(vecTmp.end(),uplets1[i].begin(),uplets1[i].end());
                     vecTmp.insert(vecTmp.end(),uplets2[j].begin(),uplets2[j].end());
                     resultats.push_back(vecTmp);
+                    cout<<endl<<"parcour t "<<vecTmp.size();
                     vecTmp.clear();
                 }
 
@@ -1384,11 +1383,10 @@ bool innerJoin(Relation relation1,Relation relation2,string att1,string att2){
                 if(j==uplets2.size()) j--;
                 while(++i < uplets1.size() && uplets1[i][0] == uplets2[j][0]){
 
-                    cout<<endl<<"parcour t "<<vecTmp.size();
-
                     vecTmp.insert(vecTmp.end(),uplets1[i].begin(),uplets1[i].end());
                     vecTmp.insert(vecTmp.end(),uplets2[j].begin(),uplets2[j].end());
                     resultats.push_back(vecTmp);
+                    cout<<endl<<"parcour t "<<vecTmp.size();
                     vecTmp.clear();
                 }
 
