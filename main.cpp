@@ -3,7 +3,7 @@
 #include <iostream>
 #include <algorithm>
 #include <sstream>
-#include <map>
+
 #include "HEADER/Structure.h"
 #include "HEADER/Metadonnee.h"
 #include "HEADER/DataBase.h"
@@ -45,7 +45,7 @@ char MEMOIRE[TAILLEPAGE][TAILLEBLOCK];
 int main() {
     initialisation();
     creationRelation();
-//    creationRelation();
+    creationRelation();
 
     char relnom[] ="personne";
     char relnom1[] ="etudiant";
@@ -118,21 +118,21 @@ int main() {
 /*
  *
  */
-//    getMetaRalation(&relation1,relnom1);
-//    cout<<endl <<creationListe(relation1.id)<<endl;
-//    getListebyRel(&liste1, relation1);
-//    for (int i = 0; i <4; ++i) {
-//        uplet = creationUplet(relation1);
-//
-//        cout<<endl <<uplet<<endl;
-//        insertionUplet(uplet,liste1);
-//    }
-//
-//    getUpletByRel(&uplets,relation1);
-//
-//    for (int i = 0; i < uplets.size(); ++i) {
-//        cout<<endl <<"MATIERE-> "<<uplets[i][0]<<" ID-> " <<uplets[i][1] <<endl;
-//    }
+    getMetaRalation(&relation1,relnom1);
+    cout<<endl <<creationListe(relation1.id)<<endl;
+    getListebyRel(&liste1, relation1);
+    for (int i = 0; i <4; ++i) {
+        uplet = creationUplet(relation1);
+
+        cout<<endl <<uplet<<endl;
+        insertionUplet(uplet,liste1);
+    }
+
+    getUpletByRel(&uplets,relation1);
+
+    for (int i = 0; i < uplets.size(); ++i) {
+        cout<<endl <<"MATIERE-> "<<uplets[i][0]<<" ID-> " <<uplets[i][1] <<endl;
+    }
     /*
      * modif
      */
@@ -150,6 +150,7 @@ int main() {
     v6.push_back("13");
 
     updateUpletByRel(relation,v3,v4,v5,v6);
+    innerJoin(relation,relation1,"age","age");
     affichePage();
 
     system("pause");
@@ -820,10 +821,12 @@ bool getUpletByRel(vector<vector<string>> *uplets,Relation relation){
                 string champ;
                 if(attributs[k].type == 1){
                     //entier
+                    string ent;
                     for (int l = 0; l < 8; ++l) {
-                        champ.push_back(UPLET[indUplet]);
+                        ent.push_back(UPLET[indUplet]);
                         indUplet++;
                     }
+                    champ= static_cast<ostringstream*>( &(ostringstream() << binaireStringToDecimal((char *) ent.c_str())) )->str();
 //                    cout<<endl<<" int: "<<champ; //debug
                 } else{
                     //str
@@ -893,7 +896,7 @@ bool getUpletByAtt(vector<vector<string>> *uplets, Relation relation, string att
                         champ.push_back(UPLET[indUplet]);
                         indUplet++;
                     }
-                    champ.erase(std::remove(champ.begin(), champ.end(), ' '), champ.end());
+                    champ.erase(remove(champ.begin(), champ.end(), ' '), champ.end());
 
                     if((attr.compare(attributs[k].nom) == 0) && (val.compare(champ)==0) ){
 
@@ -1247,14 +1250,14 @@ bool updateUpletByRel(Relation relation,vector<string> attFiltres,vector<string>
                     if(attributs[k].type == 1){
                         //entier
                         int pos = find(newAtts.begin(), newAtts.end(), string(attributs[k].nom)) - newAtts.begin(); //uplet k
-                        cout<<endl<<" newAtts.size() "<<newAtts.size(); //debug
+//                        cout<<endl<<" newAtts.size() "<<newAtts.size(); //debug
                         if(pos >= newAtts.size()){
                             indUplet+=8;
                             continue;
                         }
                         //k < newAtts.size
                         string newIntValeur = decimalToBinaryString(atoi(newVals[pos].c_str()));
-                        cout<<endl<<" newIntValeur "<<newIntValeur<<endl; //debug
+//                        cout<<endl<<" newIntValeur "<<newIntValeur<<endl; //debug
 
                         for (int l = 0; l < 8; ++l) {
                             UPLET[indUplet] = newIntValeur[l];
@@ -1288,11 +1291,18 @@ bool updateUpletByRel(Relation relation,vector<string> attFiltres,vector<string>
     return false;
 }
 // Sort Container by name function
-bool sortByIntVal(vector<string>lhs, vector<string>  rhs) { return atoi(lhs.at(1).c_str()) < atoi(rhs.at(1).c_str()); }
-bool sortByStrVal(vector<string>lhs, vector<string>  rhs) { return lhs.at(1) < rhs.at(1); }
+bool sortByIntVal(vector<string>lhs, vector<string>  rhs) { return atoi(lhs.at(0).c_str()) < atoi(rhs.at(0).c_str()); }
+bool sortByStrVal(vector<string>lhs, vector<string>  rhs) { return lhs.at(0) < rhs.at(0); }
+
+int findPosition(vector<Attribut> attributs,string nom){
+    for (int i = 0; i < attributs.size(); ++i) {
+        if(string(attributs[i].nom).compare(nom) == 0) return i;
+    }
+    return -1;
+}
 
 bool innerJoin(Relation relation1,Relation relation2,string att1,string att2){
-    vector<vector<string>> uplets1, uplets2,;
+    vector<vector<string>> uplets1, uplets2;
     vector<Attribut> attributs1, attributs2;
 
     getUpletByRel(&uplets1,relation1);
@@ -1301,13 +1311,13 @@ bool innerJoin(Relation relation1,Relation relation2,string att1,string att2){
     getAttribut(&attributs1, relation1);
     getAttribut(&attributs2, relation2);
 
-    int pos1 = find(attributs1.begin(), attributs1.end(), att1) - attributs1.begin(); //uplet k
-    int pos2 = find(attributs2.begin(), attributs2.end(), att2) - attributs2.begin(); //uplet k
-    if(pos1 >= attributs1.size()) {
+    int pos1 = findPosition(attributs1, att1); //uplet k
+    int pos2 = findPosition(attributs2, att2); //uplet k
+    if(pos1 < 0) {
         cout<<endl<<"PROBLEME LE PREMIER ATTRIBUT N HESITE PAS"<<endl;
         return false;
     }
-    if(pos2 >= attributs2.size()) {
+    if(pos2 < 0) {
         cout<<endl<<"PROBLEME LE DEUXIME ATTRIBUT N HESITE PAS"<<endl;
         return false;
     }
@@ -1315,69 +1325,102 @@ bool innerJoin(Relation relation1,Relation relation2,string att1,string att2){
         cout<<endl<<"PROBLEME LES DEUX ATTRIBUTS SONT DE TYPE DIFFERENTS"<<endl;
         return false;
     }
+    cout<<endl<<"ChekPoint 1 "<<pos1<<" "<<pos2; //debug
+
     for (int i = 0; i < uplets1.size(); ++i) {
         swap( uplets1[i] [0], uplets1[i] [pos1] );
     }
     for (int i = 0; i < uplets2.size(); ++i) {
-        swap( uplets1[i] [0], uplets1[i] [pos2] );
+        swap( uplets2[i] [0], uplets2[i] [pos2] );
     }
+
+
     sort(uplets1.begin(), uplets1.end(), attributs1.at(pos1).type==1 ? sortByIntVal : sortByStrVal);
     sort(uplets2.begin(), uplets2.end(), attributs2.at(pos2).type==1 ? sortByIntVal : sortByStrVal);
 
+
     vector<vector<string>> resultats;
-    int i=0,j=0,l=0;
+    int i=0,j=0;
 
     while (i < uplets1.size() && j < uplets2.size()){
+        cout<<endl<<"Boucle-> 1 "<<uplets1[i][0]<<"  "<<uplets2[j][0]<<" **i : "<<i<<"**j : "<<j; //debug
+
         if(uplets1[i][0] > uplets2[j][0]){
             j++;
         } else{
-            if (uplets1[i][0] > uplets2[j][0]){
+            if (uplets1[i][0] < uplets2[j][0]){
                 i++;
             } else{
                 //egalité
-                resultats.resize(resultats.size()+1);
+                 cout<<endl<<"egalite 2 "<<uplets1[i][0]<<"  "<<uplets2[j][0]<<" taille"<<uplets1[i].size() + uplets2[j].size(); //debug
+          /*      resultats.resize(resultats.size()+1);
 
                 for (int k = 0; k < uplets1[i].size(); ++k) {
-                    resultats[l].push_back(uplets2[i][k]);
+                    resultats[l].push_back(uplets1[i][k]);
                 }
                 for (int k = 0; k < uplets2[i].size(); ++k) {
                     resultats[l].push_back(uplets2[j][k]);
                 }
-                l++;
+                l++;*/
+                vector<string> vecTmp(uplets1[i].size() + uplets2[j].size());
+
+                vecTmp.insert(vecTmp.end(),uplets1[i].begin(),uplets1[i].end());
+                vecTmp.insert(vecTmp.end(),uplets2[j].begin(),uplets2[j].end());
+                resultats.push_back(vecTmp);
+                vecTmp.clear();
                 //produire le reste
-                int m=j+1;
-                while(m < uplets2.size() && uplets1[i][0] == uplets2[m][0]){
-                    resultats.resize(resultats.size()+1);
 
-                    for (int k = 0; k < uplets1[i].size(); ++k) {
-                        resultats[l].push_back(uplets2[i][k]);
-                    }
-                    for (int k = 0; k < uplets2[i].size(); ++k) {
-                        resultats[l].push_back(uplets2[m][k]);
-                    }
-                    l++; m++;
+                while(++j < uplets2.size() && uplets1[i][0] == uplets2[j][0]){
+
+                    cout<<endl<<"parcour t "<<vecTmp.size();
+
+                    vecTmp.insert(vecTmp.end(),uplets1[i].begin(),uplets1[i].end());
+                    vecTmp.insert(vecTmp.end(),uplets2[j].begin(),uplets2[j].end());
+                    resultats.push_back(vecTmp);
+                    vecTmp.clear();
                 }
 
-                int n=i+1;
-                while(n < uplets2.size() && uplets1[n][0] == uplets2[j][0]){
-                    resultats.resize(resultats.size()+1);
+                cout<<endl<<"ChekPoint *** "<<i<<" "<<j;
+                if(j==uplets2.size()) j--;
+                while(++i < uplets1.size() && uplets1[i][0] == uplets2[j][0]){
 
-                    for (int k = 0; k < uplets1[i].size(); ++k) {
-                        resultats[l].push_back(uplets2[n][k]);
-                    }
-                    for (int k = 0; k < uplets2[i].size(); ++k) {
-                        resultats[l].push_back(uplets2[j][k]);
-                    }
-                    l++; n++;
+                    cout<<endl<<"parcour t "<<vecTmp.size();
+
+                    vecTmp.insert(vecTmp.end(),uplets1[i].begin(),uplets1[i].end());
+                    vecTmp.insert(vecTmp.end(),uplets2[j].begin(),uplets2[j].end());
+                    resultats.push_back(vecTmp);
+                    vecTmp.clear();
                 }
-                i=n; j=m;
+
             }
 
         }
     }
-    
+
+    cout<<endl<<"Taille "<<resultats.size()<< " : ";
+    for (int k = 0; k < resultats.size(); ++k) {
+        cout<<endl<<"UPLET "<<k<<endl;
+        cout<<" ->TU : "<<resultats[k].size();
+        for (int l = 0; l <resultats[k].size() ; ++l) {
+            cout<< "   "<<" "<<resultats[k][l];
+        }
+        cout<<endl;
+    }
+
+/*
+    for (int i = 0; i < uplets1.size(); ++i) {
+        cout<<endl;
+        for (int j = 0; j < uplets1[i].size(); ++j) {
+            cout<<uplets1[i][j]<<" ";
+        }
+        cout<<endl;
+    }for (int i = 0; i < uplets2.size(); ++i) {
+        cout<<endl;
+        for (int j = 0; j < uplets2[i].size(); ++j) {
+            cout<<uplets2[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+     */
     return true;
 }
-//        swap( people[i] [0], people[i] [1] );
-// Sort by name
-//sort(people.begin(), people.end(), sortByName);
