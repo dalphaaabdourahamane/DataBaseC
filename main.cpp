@@ -1422,3 +1422,12 @@ bool innerJoin(Relation relation1,Relation relation2,string att1,string att2){
      */
     return true;
 }
+
+bool projetion(vector<vector<string>> uplets, vector<int> idatt){
+    for (int i = 0; i < idatt.size(); ++i) {
+        for (int j = 0; j < uplets.size(); ++j) {
+            uplets[j].erase( uplets[j].begin() + idatt[i]);
+        }
+    }
+    
+}
