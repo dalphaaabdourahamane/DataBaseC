@@ -3,6 +3,7 @@
 #include <iostream>
 #include <algorithm>
 #include <sstream>
+#include <conio.h>
 
 #include "HEADER/Structure.h"
 #include "HEADER/Metadonnee.h"
@@ -44,117 +45,120 @@ char MEMOIRE[TAILLEPAGE][TAILLEBLOCK];
 
 int main() {
     initialisation();
-    creationRelation();
-    creationRelation();
-
-    char relnom[] ="personne";
-    char relnom1[] ="etudiant";
-    vector<RelationAttribut> relAtts;
-    vector<Attribut> attributs(0);
-    vector<Liste> listes(0),liste1(0);
-    vector<vector<string>> uplets;
-
-    Relation relation,relation1;
-    Attribut attribut1, attribut2;
-    getMetaRalation(&relation,relnom);
-
-    cout<<endl <<"ID-> "<<relation.id<<" NOM-> " <<relation.nom <<
-    " NBATT-> "<<relation.nbAtt <<" TAILLE->"<<relation.taille <<endl;
-
-    getAttributById(&attribut1,1);
-    cout<<endl <<"ID-> "<<attribut1.id<<" NOM-> " <<attribut1.nom <<" TYPE-> " << attribut1.type <<endl;
-
-    getAttributById(&attribut2,2);
-    cout<<endl <<"ID-> "<<attribut2.id<<" NOM-> " <<attribut2.nom <<" TYPE-> " << attribut2.type <<endl;
-
-    getRelAttByRel(&relAtts,relation);
-    for (int i = 0; i < relAtts.size(); ++i) {
-        cout<<endl <<"ID REL-> "<<relAtts[i].idRelation<<" ID ATT-> " <<relAtts[i].idAttribut <<" RANG-> " << relAtts[i].rang <<endl;
-    }
-
-    getAttribut(&attributs,relation);
-    for (int i = 0; i < attributs.size(); ++i) {
-        cout<<endl <<"ID-> "<<attributs[i].id<<" NOM-> " <<attributs[i].nom <<" TYPE-> " << attributs[i].type <<endl;
-    }
-
-
-    cout<<endl <<creationListe(relation.id)<<endl;
-
-    getListebyRel(&listes, relation);
-    for (int i = 0; i < listes.size(); ++i) {
-        cout<<endl <<"ID REL-> "<<listes[i].idRelation<<" ID BLOCK-> " <<listes[i].numBlock <<endl;
-    }
-    string uplet;
-    for (int i = 0; i <4; ++i) {
-        uplet = creationUplet(relation);
-
-        cout<<endl <<uplet<<endl;
-        insertionUplet(uplet,listes);
-    }
-
-//    uplet = creationUplet(relation);
-//
-//    cout<<endl <<uplet<<endl;
-//    insertionUplet(uplet,listes);
-//    getUpletByRel(&uplets,relation);
-
-//    getUpletByAtt(&uplets,relation,"age","5");
-    vector<string> v1;
-    v1.push_back("age");
-    v1.push_back("nom");
-
-    vector<string> v2;
-    v2.push_back("5");
-    v2.push_back("alpha");
-
-//    getUpletByAttAND(&uplets,relation,v1,v2);
-    getUpletByRel(&uplets,relation);
-    for (int i = 0; i < uplets.size(); ++i) {
-        cout<<endl <<"NOM-> "<<uplets[i][0]<<" AGE-> " <<uplets[i][1] <<endl;
-    }
-    deleteUpletByAtt(relation,"age","5");
-
-    uplets.clear();
-/*
- *
- */
-    getMetaRalation(&relation1,relnom1);
-    cout<<endl <<creationListe(relation1.id)<<endl;
-    getListebyRel(&liste1, relation1);
-    for (int i = 0; i <4; ++i) {
-        uplet = creationUplet(relation1);
-
-        cout<<endl <<uplet<<endl;
-        insertionUplet(uplet,liste1);
-    }
-
-    getUpletByRel(&uplets,relation1);
-
-    for (int i = 0; i < uplets.size(); ++i) {
-        cout<<endl <<"MATIERE-> "<<uplets[i][0]<<" ID-> " <<uplets[i][1] <<endl;
-    }
     /*
-     * modif
-     */
-    vector<string> v3;
-    v3.push_back("age");
+      creationRelation();
+      creationRelation();
 
-    vector<string> v4;
-    v4.push_back("3");
+      char relnom[] ="personne";
+      char relnom1[] ="etudiant";
+      vector<RelationAttribut> relAtts;
+      vector<Attribut> attributs(0);
+      vector<Liste> listes(0),liste1(0);
+      vector<vector<string>> uplets;
+
+      Relation relation,relation1;
+      Attribut attribut1, attribut2;
+      getMetaRalation(&relation,relnom);
+
+      cout<<endl <<"ID-> "<<relation.id<<" NOM-> " <<relation.nom <<
+      " NBATT-> "<<relation.nbAtt <<" TAILLE->"<<relation.taille <<endl;
+
+      getAttributById(&attribut1,1);
+      cout<<endl <<"ID-> "<<attribut1.id<<" NOM-> " <<attribut1.nom <<" TYPE-> " << attribut1.type <<endl;
+
+      getAttributById(&attribut2,2);
+      cout<<endl <<"ID-> "<<attribut2.id<<" NOM-> " <<attribut2.nom <<" TYPE-> " << attribut2.type <<endl;
+
+      getRelAttByRel(&relAtts,relation);
+      for (int i = 0; i < relAtts.size(); ++i) {
+          cout<<endl <<"ID REL-> "<<relAtts[i].idRelation<<" ID ATT-> " <<relAtts[i].idAttribut <<" RANG-> " << relAtts[i].rang <<endl;
+      }
+
+      getAttribut(&attributs,relation);
+      for (int i = 0; i < attributs.size(); ++i) {
+          cout<<endl <<"ID-> "<<attributs[i].id<<" NOM-> " <<attributs[i].nom <<" TYPE-> " << attributs[i].type <<endl;
+      }
 
 
-    vector<string> v5;
-    v5.push_back("age");
+      cout<<endl <<creationListe(relation.id)<<endl;
 
-    vector<string> v6;
-    v6.push_back("13");
+      getListebyRel(&listes, relation);
+      for (int i = 0; i < listes.size(); ++i) {
+          cout<<endl <<"ID REL-> "<<listes[i].idRelation<<" ID BLOCK-> " <<listes[i].numBlock <<endl;
+      }
+      string uplet;
+      for (int i = 0; i <4; ++i) {
+          uplet = creationUplet(relation);
 
-    updateUpletByRel(relation,v3,v4,v5,v6);
+          cout<<endl <<uplet<<endl;
+          insertionUplet(uplet,listes);
+      }
 
-    vector<vector<string>> resultats;
-    innerJoin(&resultats, relation,relation1,"age","age");
-    affichePage();
+  //    uplet = creationUplet(relation);
+  //
+  //    cout<<endl <<uplet<<endl;
+  //    insertionUplet(uplet,listes);
+  //    getUpletByRel(&uplets,relation);
 
+  //    getUpletByAtt(&uplets,relation,"age","5");
+      vector<string> v1;
+      v1.push_back("age");
+      v1.push_back("nom");
+
+      vector<string> v2;
+      v2.push_back("5");
+      v2.push_back("alpha");
+
+  //    getUpletByAttAND(&uplets,relation,v1,v2);
+      getUpletByRel(&uplets,relation);
+      for (int i = 0; i < uplets.size(); ++i) {
+          cout<<endl <<"NOM-> "<<uplets[i][0]<<" AGE-> " <<uplets[i][1] <<endl;
+      }
+      deleteUpletByAtt(relation,"age","5");
+
+      uplets.clear();
+  //
+  //
+  //
+      getMetaRalation(&relation1,relnom1);
+      cout<<endl <<creationListe(relation1.id)<<endl;
+      getListebyRel(&liste1, relation1);
+      for (int i = 0; i <4; ++i) {
+          uplet = creationUplet(relation1);
+
+          cout<<endl <<uplet<<endl;
+          insertionUplet(uplet,liste1);
+      }
+
+      getUpletByRel(&uplets,relation1);
+
+      for (int i = 0; i < uplets.size(); ++i) {
+          cout<<endl <<"MATIERE-> "<<uplets[i][0]<<" ID-> " <<uplets[i][1] <<endl;
+      }
+  //
+  //     modif
+  //
+      vector<string> v3;
+      v3.push_back("age");
+
+      vector<string> v4;
+      v4.push_back("3");
+
+
+      vector<string> v5;
+      v5.push_back("age");
+
+      vector<string> v6;
+      v6.push_back("13");
+
+      updateUpletByRel(relation,v3,v4,v5,v6);
+
+      vector<vector<string>> resultats;
+      innerJoin(&resultats, relation,relation1,"age","age");
+      affichePage();
+  */
+
+    affichageMenu();
     system("pause");
     return 0;
 }
@@ -331,6 +335,7 @@ void copyPartie(char newTab[], char oldTab[],int od,int of ){
 void creationRelation(){
     Relation relation;
     cout<<endl;
+    cin.ignore();
     cout<<"Donner le nom de la RELATION : ";
     cin.get(relation.nom,10);
     cin.ignore();
@@ -411,7 +416,7 @@ bool ajouteMetaRelation(Relation relation){
     return true;
 }
 
-void getMetaRalation(Relation* relation, char nomRel[]){
+bool getMetaRalation(Relation* relation, char nomRel[]){
 
     if(MEMOIRE[0][1]=='1'){
         char METARELATION[TAILLEBLOCK];
@@ -439,12 +444,13 @@ void getMetaRalation(Relation* relation, char nomRel[]){
                     copyPartie(ent,METARELATION,i*TAILLEMETARELATION + 26 ,8);
                     relation->taille = binaireStringToDecimal(ent);
 
-                    return ;
+                    return true;
                 }
 
             }
         }
     }
+    return false;
 }
 
 void getAllMetaRelation(vector<Relation>* relations){
@@ -1281,7 +1287,7 @@ bool updateUpletByRel(Relation relation,vector<string> attFiltres,vector<string>
                             UPLET[indUplet] = newStrtValeur[l];
                             indUplet++;
                         }
-                       // champ.erase(remove(champ.begin(), champ.end(), ' '), champ.end());
+                        // champ.erase(remove(champ.begin(), champ.end(), ' '), champ.end());
                     }
 
                 }//forAttribut
@@ -1352,16 +1358,16 @@ bool innerJoin(vector<vector<string>>* resultats, Relation relation1,Relation re
                 i++;
             } else{
                 //egalité
-                 cout<<endl<<"egalite 2 "<<uplets1[i][0]<<"  "<<uplets2[j][0]<<" taille"<<uplets1[i].size() + uplets2[j].size(); //debug
-          /*      resultats.resize(resultats.size()+1);
+                cout<<endl<<"egalite 2 "<<uplets1[i][0]<<"  "<<uplets2[j][0]<<" taille"<<uplets1[i].size() + uplets2[j].size(); //debug
+                /*      resultats.resize(resultats.size()+1);
 
-                for (int k = 0; k < uplets1[i].size(); ++k) {
-                    resultats[l].push_back(uplets1[i][k]);
-                }
-                for (int k = 0; k < uplets2[i].size(); ++k) {
-                    resultats[l].push_back(uplets2[j][k]);
-                }
-                l++;*/
+                      for (int k = 0; k < uplets1[i].size(); ++k) {
+                          resultats[l].push_back(uplets1[i][k]);
+                      }
+                      for (int k = 0; k < uplets2[i].size(); ++k) {
+                          resultats[l].push_back(uplets2[j][k]);
+                      }
+                      l++;*/
                 vector<string> vecTmp;
 
                 vecTmp.insert(vecTmp.end(),uplets1[i].begin(),uplets1[i].end());
@@ -1429,10 +1435,205 @@ bool projetion(vector<vector<string>> uplets, vector<int> idatt){
             uplets[j].erase( uplets[j].begin() + idatt[i]);
         }
     }
-    
+
 }
 
-int affchageMenu(){
+int affichageMenuOperation(){
+
+    LableMenu: //lable
+    system("cls");
     int choixMenu;
-    
+
+    cout<<" _______________MENU OPERATION_______________"<<endl;
+    cout<<"|                                            |"<<endl;
+    cout<<"|            1.INSERTION                     |"<<endl;
+    cout<<"|            2.SELECTION                     |"<<endl;
+    cout<<"|            3.SUPRESSION                    |"<<endl;
+    cout<<"|            4.MISE A JOUR                   |"<<endl;
+    cout<<"|            5.JOINTURE                      |"<<endl;
+    cout<<"|            6.RETOUR                        |"<<endl;
+    cout<<"|____________________________________________|"<<endl;
+
+    LabelchoixMenu:   cout<<"\nVotre choix?"<<endl;
+    cin>>choixMenu;
+    switch (choixMenu)
+    {
+        case 1: {
+
+            string nomRelation;
+            Relation relation;
+            LableInsertion: system("cls");
+
+            cout << "_________________INSERTION__________________";
+            cout<<"DONNER LE NOM DE LA RELATION : ";
+            cin.ignore(); cin>>nomRelation;
+            if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
+                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                goto LableInsertion;
+            }
+            break;
+        }
+        case 2:
+            system("cls");
+            cout<<"SELECTION"<<endl;
+            affichageMenuOperationSelection();
+            break;
+        case 3:
+            cout<<"SUPRESSION";
+            break;
+        case 4:
+            cout<<"MISE A JOUR";
+            break;
+        case 5:
+            cout<<"JOINTURE";
+            break;
+        case 6:
+            cout<<"RETOUR"<<endl;
+            affichageMenu();
+            break;
+        default:
+            cout<<"Vous ne ferez rien du tout!";
+            goto LabelchoixMenu;
+            break;
+    }
+    cout<<endl;
+    return choixMenu;
+
+}
+
+int affichageMenuAffichage(){
+
+    LabelMenu: system("cls");
+    int choixMenu;
+
+    cout<<" _______________MENU AFFICHAGE_______________"<<endl;
+    cout<<"|                                            |"<<endl;
+    cout<<"|            1.RELATIONS                     |"<<endl;
+    cout<<"|            2.UPLETS RELATION               |"<<endl;
+    cout<<"|            3.BLOCK                         |"<<endl;
+    cout<<"|            4.MEMOIRE                       |"<<endl;
+    cout<<"|            5.RETOUR                        |"<<endl;
+    cout<<"|____________________________________________|"<<endl;
+
+    LabelchoixMenu:   cout<<"\nVotre choix?"<<endl;
+    cin>>choixMenu;
+    switch (choixMenu)
+    {
+        case 1:
+            system("cls");
+            cout<<"_________________RELATIONS__________________";
+            break;
+        case 2:
+            system("cls");
+            cout<<"UPLETS RELATION"<<endl;
+            break;
+        case 3:
+            system("cls");
+            cout<<"__________________BLOCK_____________________";
+            break;
+        case 4:
+            system("cls");
+            cout<<"_________________MEMOIRE___________________";
+            affichePage();
+            getch();
+            goto LabelMenu;
+            break;
+        case 5:
+            cout<<"RETOUR"<<endl;
+            affichageMenu();
+            break;
+        default:
+            cout<<"Vous ne ferez rien du tout!";
+            goto LabelchoixMenu;
+            break;
+    }
+    cout<<endl;
+    return choixMenu;
+
+}
+
+int affichageMenuOperationSelection(){
+    int choixMenu;
+
+    cout<<" __________MENU OPERATION SELECTION__________"<<endl;
+    cout<<"|                                            |"<<endl;
+    cout<<"|            1.SELECTION SUR UN ATTTIBUT     |"<<endl;
+    cout<<"|            2.SELECTION OU                  |"<<endl;
+    cout<<"|            3.SELECTION ET                  |"<<endl;
+    cout<<"|            4.RETOUR                        |"<<endl;
+    cout<<"|____________________________________________|"<<endl;
+
+    LabelchoixMenu:  cout<<"\nVotre choix?"<<endl;
+    cin>>choixMenu;
+    switch (choixMenu)
+    {
+        case 1:
+            cout<<"SELECTION SUR UN ATTTIBUT ";
+            break;
+        case 2:
+            cout<<"SELECTION OU  ";
+            break;
+        case 3:
+            cout<<"SELECTION ET";
+            break;
+        case 4:
+            cout<<"RETOUR"<<endl;
+            affichageMenuOperation();
+            break;
+        default:
+            cout<<"Vous ne ferez rien du tout!";
+            goto LabelchoixMenu;
+            break;
+    }
+    cout<<endl;
+    return choixMenu;
+
+}
+
+int affichageMenu(){
+
+    LabelMenu: system("cls");
+
+    int choixMenu;
+
+    cout<<" ___________________MENU_____________________"<<endl;
+    cout<<"|                                            |"<<endl;
+    cout<<"|            1.CREATION RELATION             |"<<endl;
+    cout<<"|            2.OPERATION                     |"<<endl;
+    cout<<"|            3.AFFICHAGE                     |"<<endl;
+    cout<<"|            4.EXIT!                         |"<<endl;
+    cout<<"|____________________________________________|"<<endl;
+
+    LabelChoixMenu: cout<<"\nVotre choix?"<<endl;
+    cin>>choixMenu;
+    switch (choixMenu)
+    {
+        case 1: {
+            system("cls");
+            cout << "________________CREATION RELATION__________ ";
+            creationRelation();
+            goto LabelMenu;
+            break;
+        }
+        case 2:
+            system("cls");
+            cout<<"OPERATION"<<endl;
+            affichageMenuOperation();
+            break;
+        case 3:
+            system("cls");
+            cout<<"AFFICHAGE";
+            affichageMenuAffichage();
+            break;
+        case 4:
+            cout<<"exit";
+            break;
+        default:
+            cout<<"Vous ne ferez rien du tout!";
+            goto LabelChoixMenu;
+            break;
+    }
+    cout<<endl;
+    return choixMenu;
+
 }

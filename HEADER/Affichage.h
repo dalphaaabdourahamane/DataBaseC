@@ -9,6 +9,12 @@ void afficheBlock(char tab[]);
 
 void affichePage();
 
-int affchageMenu();
+int affichageMenu();
+
+int affichageMenuOperation();
+
+int affichageMenuOperationSelection();
+
+int affichageMenuAffichage();
 
 #endif //PROJETBASEDONNEE_AFFICHAGE_H
