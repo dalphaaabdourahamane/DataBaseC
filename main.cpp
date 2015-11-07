@@ -769,7 +769,7 @@ string creationUplet(Relation relation){
     return uplet;
 }
 
-bool insertionUplet(string uplet,vector<Liste> vector1){
+bool insertionUplet(string uplet,vector<Liste> vector1, int relationId){
     char UPLET[TAILLEBLOCK];
     int tailleBipmap = (TAILLEBLOCK - TAILLEBLOCK/uplet.size())/uplet.size();
 
@@ -791,12 +791,15 @@ bool insertionUplet(string uplet,vector<Liste> vector1){
         return true;
     }
     //tous les blocks sont plein
-    int idNewBlock = creationListe(vector1[0].idRelation);
+    int idNewBlock = creationListe(relationId);
     if (idNewBlock != -1) {
-        for (int i = 0; i < vector1.size(); ++i) {
-            MEMOIRE[idNewBlock][i] = uplet[i];
-            return true;
+        copy(UPLET,0,MEMOIRE[idNewBlock],TAILLEBLOCK);
+        for (int i = 0; i < uplet.size(); ++i) {
+            UPLET[i] = uplet[i];
         }
+        UPLET[TAILLEBLOCK-tailleBipmap] ='1';
+        copy(MEMOIRE[idNewBlock],0,UPLET,TAILLEBLOCK);
+        return true;
     } else {
         cout<<endl<<"WARNING : PLUS DE PLACE POUR L INSERTION D UPLET "<<endl;
     }
@@ -1097,7 +1100,7 @@ int creationListe(int idRel){
         }
     }//for
 
-    return 0;
+    return -1;
 }
 
 void getListebyRel(vector<Liste>* listes, Relation relation){
@@ -1129,6 +1132,7 @@ void getListebyRel(vector<Liste>* listes, Relation relation){
         }
     }
 }
+
 
 bool deleteUpletByAtt(Relation relation,string attr,string val){
     vector<Liste> listeUpletRel(0);
@@ -1438,6 +1442,13 @@ bool projetion(vector<vector<string>> uplets, vector<int> idatt){
 
 }
 
+
+
+/*
+ *
+ */
+
+
 int affichageMenuOperation(){
 
     LableMenu: //lable
@@ -1462,15 +1473,21 @@ int affichageMenuOperation(){
 
             string nomRelation;
             Relation relation;
+            vector<Liste> listes(0);
             LableInsertion: system("cls");
 
             cout << "_________________INSERTION__________________";
-            cout<<"DONNER LE NOM DE LA RELATION : ";
+            cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
             cin.ignore(); cin>>nomRelation;
             if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
                 cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
                 goto LableInsertion;
             }
+//            creationListe(relation.id);//!! averifier
+            getListebyRel(&listes, relation);
+            insertionUplet(creationUplet(relation), listes,relation.id);
+            goto LableMenu;
+
             break;
         }
         case 2:
