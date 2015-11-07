@@ -150,7 +150,9 @@ int main() {
     v6.push_back("13");
 
     updateUpletByRel(relation,v3,v4,v5,v6);
-    innerJoin(relation,relation1,"age","age");
+
+    vector<vector<string>> resultats;
+    innerJoin(&resultats, relation,relation1,"age","age");
     affichePage();
 
     system("pause");
@@ -1301,7 +1303,7 @@ int findPosition(vector<Attribut> attributs,string nom){
     return -1;
 }
 
-bool innerJoin(Relation relation1,Relation relation2,string att1,string att2){
+bool innerJoin(vector<vector<string>>* resultats, Relation relation1,Relation relation2,string att1,string att2){
     vector<vector<string>> uplets1, uplets2;
     vector<Attribut> attributs1, attributs2;
 
@@ -1338,8 +1340,6 @@ bool innerJoin(Relation relation1,Relation relation2,string att1,string att2){
     sort(uplets1.begin(), uplets1.end(), attributs1.at(pos1).type==1 ? sortByIntVal : sortByStrVal);
     sort(uplets2.begin(), uplets2.end(), attributs2.at(pos2).type==1 ? sortByIntVal : sortByStrVal);
 
-
-    vector<vector<string>> resultats;
     int i=0,j=0;
 
     while (i < uplets1.size() && j < uplets2.size()){
@@ -1366,7 +1366,7 @@ bool innerJoin(Relation relation1,Relation relation2,string att1,string att2){
 
                 vecTmp.insert(vecTmp.end(),uplets1[i].begin(),uplets1[i].end());
                 vecTmp.insert(vecTmp.end(),uplets2[j].begin(),uplets2[j].end());
-                resultats.push_back(vecTmp);
+                resultats->push_back(vecTmp);
                 vecTmp.clear();
                 //produire le reste
 
@@ -1374,7 +1374,7 @@ bool innerJoin(Relation relation1,Relation relation2,string att1,string att2){
 
                     vecTmp.insert(vecTmp.end(),uplets1[i].begin(),uplets1[i].end());
                     vecTmp.insert(vecTmp.end(),uplets2[j].begin(),uplets2[j].end());
-                    resultats.push_back(vecTmp);
+                    resultats->push_back(vecTmp);
                     cout<<endl<<"parcour t "<<vecTmp.size();
                     vecTmp.clear();
                 }
@@ -1385,7 +1385,7 @@ bool innerJoin(Relation relation1,Relation relation2,string att1,string att2){
 
                     vecTmp.insert(vecTmp.end(),uplets1[i].begin(),uplets1[i].end());
                     vecTmp.insert(vecTmp.end(),uplets2[j].begin(),uplets2[j].end());
-                    resultats.push_back(vecTmp);
+                    resultats->push_back(vecTmp);
                     cout<<endl<<"parcour t "<<vecTmp.size();
                     vecTmp.clear();
                 }
@@ -1395,12 +1395,12 @@ bool innerJoin(Relation relation1,Relation relation2,string att1,string att2){
         }
     }
 
-    cout<<endl<<"Taille "<<resultats.size()<< " : ";
-    for (int k = 0; k < resultats.size(); ++k) {
+    cout<<endl<<"Taille "<<resultats->size()<< " : ";
+    for (int k = 0; k < resultats->size(); ++k) {
         cout<<endl<<"UPLET "<<k<<endl;
-        cout<<" ->TU : "<<resultats[k].size();
-        for (int l = 0; l <resultats[k].size() ; ++l) {
-            cout<< "   "<<" "<<resultats[k][l];
+        cout<<" ->TU : "<<(*resultats)[k].size();
+        for (int l = 0; l <(*resultats)[k].size() ; ++l) {
+            cout<< "   "<<(*resultats)[k][l];
         }
         cout<<endl;
     }
@@ -1429,5 +1429,10 @@ bool projetion(vector<vector<string>> uplets, vector<int> idatt){
             uplets[j].erase( uplets[j].begin() + idatt[i]);
         }
     }
+    
+}
+
+int affchageMenu(){
+    int choixMenu;
     
 }
