@@ -856,6 +856,7 @@ bool getUpletByRel(vector<vector<string>> *uplets,Relation relation){
 
         }//forbitmap
     }//forliste
+    return true;
 }
 
 bool getUpletByAtt(vector<vector<string>> *uplets, Relation relation, string attr,string val){
@@ -1353,8 +1354,8 @@ bool innerJoin(vector<vector<string>>* resultats, Relation relation1,Relation re
     }
 
 
-    sort(uplets1.begin(), uplets1.end(), attributs1.at(pos1).type==1 ? sortByIntVal : sortByStrVal);
-    sort(uplets2.begin(), uplets2.end(), attributs2.at(pos2).type==1 ? sortByIntVal : sortByStrVal);
+    sort(uplets1.begin(), uplets1.end(), attributs1[pos1].type==1 ? sortByIntVal : sortByStrVal);
+    sort(uplets2.begin(), uplets2.end(), attributs2[pos2].type==1 ? sortByIntVal : sortByStrVal);
 
     int i=0,j=0;
 
@@ -1445,7 +1446,7 @@ bool projetion(vector<vector<string>> uplets, vector<int> idatt){
             uplets[j].erase( uplets[j].begin() + idatt[i]);
         }
     }
-
+    return true;
 }
 
 
@@ -1499,6 +1500,7 @@ int affichageMenuOperation(){
 //            creationListe(relation.id);//!! averifier
             getListebyRel(&listes, relation);
             insertionUplet(creationUplet(relation), listes,relation.id);
+            getch();
             goto LabelMenu;
 
             break;
@@ -1648,7 +1650,7 @@ int affichageMenuAffichage(){
 
             LableUpletRelation:
             system("cls");
-            cout << "_______________UPLETS RELATION\"_____________" << endl;
+            cout << "_______________UPLETS RELATION_____________" << endl;
             cout << endl << "DONNER LE NOM DE LA RELATION : ";
             cin.ignore();
             cin >> nomRelation;
@@ -1691,7 +1693,7 @@ int affichageMenuAffichage(){
         }
         case 4: {
             system("cls");
-            cout << "_________________MEMOIRE___________________";
+            cout << "_________________MEMOIRE___________________"<<endl<<endl;
             affichePage();
             getch();
             goto LabelMenu;
