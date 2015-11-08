@@ -5,6 +5,8 @@
 #include <sstream>
 #include <conio.h>
 #include <windows.h>
+#include <fstream>
+#include <stdlib.h>
 
 #include "HEADER/Structure.h"
 #include "HEADER/Metadonnee.h"
@@ -42,123 +44,28 @@ const int TailleBitMapMetaListe = (TAILLEBLOCK -TAILLEBLOCK/TAILLELISTE)/TAILLEL
  * la suite est calculer par ( TAILLE_DE_MEMOIRE - 5 )/ 16, 24 qui est la taille (idREL,BLOCK,)
  */
 char MEMOIRE[TAILLEPAGE][TAILLEBLOCK];
+string nomfichier = "C:/Users/DIALLO Alpha Abdoura/ClionProjects/ProjetBaseDonnee/AFDataBase/bdi.txt";
 
 
 int main() {
-    initialisation();
-    /*
-      creationRelation();
-      creationRelation();
 
-      char relnom[] ="personne";
-      char relnom1[] ="etudiant";
-      vector<RelationAttribut> relAtts;
-      vector<Attribut> attributs(0);
-      vector<Liste> listes(0),liste1(0);
-      vector<vector<string>> uplets;
+    ifstream fichier(nomfichier.c_str(),ios::in);
+    if (fichier.fail()) {
+        cout << "LE FICHER BDI N EXISTE PAS DONC NOUS ALLONS L INITIALISER POUR VOUS SO KEEP CALM AND WATCH :) "<<endl;
+        initialisation();
 
-      Relation relation,relation1;
-      Attribut attribut1, attribut2;
-      getMetaRalation(&relation,relnom);
+    } else {
+        cout << "LE FICHER BDI EXISTE NOUS ALLONS LE CHARGER  :) "<<endl;
+        for (int i = 0; i < TAILLEPAGE; ++i) {
+            for (int j = 0; j < TAILLEBLOCK; ++j) {
+                fichier >> MEMOIRE[i][j];
+            }
+        }
+        cout << "LE FICHER BDI CHARGER AVEC SUCCES :) "<<endl;
 
-      cout<<endl <<"ID-> "<<relation.id<<" NOM-> " <<relation.nom <<
-      " NBATT-> "<<relation.nbAtt <<" TAILLE->"<<relation.taille <<endl;
-
-      getAttributById(&attribut1,1);
-      cout<<endl <<"ID-> "<<attribut1.id<<" NOM-> " <<attribut1.nom <<" TYPE-> " << attribut1.type <<endl;
-
-      getAttributById(&attribut2,2);
-      cout<<endl <<"ID-> "<<attribut2.id<<" NOM-> " <<attribut2.nom <<" TYPE-> " << attribut2.type <<endl;
-
-      getRelAttByRel(&relAtts,relation);
-      for (int i = 0; i < relAtts.size(); ++i) {
-          cout<<endl <<"ID REL-> "<<relAtts[i].idRelation<<" ID ATT-> " <<relAtts[i].idAttribut <<" RANG-> " << relAtts[i].rang <<endl;
-      }
-
-      getAttribut(&attributs,relation);
-      for (int i = 0; i < attributs.size(); ++i) {
-          cout<<endl <<"ID-> "<<attributs[i].id<<" NOM-> " <<attributs[i].nom <<" TYPE-> " << attributs[i].type <<endl;
-      }
-
-
-      cout<<endl <<creationListe(relation.id)<<endl;
-
-      getListebyRel(&listes, relation);
-      for (int i = 0; i < listes.size(); ++i) {
-          cout<<endl <<"ID REL-> "<<listes[i].idRelation<<" ID BLOCK-> " <<listes[i].numBlock <<endl;
-      }
-      string uplet;
-      for (int i = 0; i <4; ++i) {
-          uplet = creationUplet(relation);
-
-          cout<<endl <<uplet<<endl;
-          insertionUplet(uplet,listes);
-      }
-
-  //    uplet = creationUplet(relation);
-  //
-  //    cout<<endl <<uplet<<endl;
-  //    insertionUplet(uplet,listes);
-  //    getUpletByRel(&uplets,relation);
-
-  //    getUpletByAtt(&uplets,relation,"age","5");
-      vector<string> v1;
-      v1.push_back("age");
-      v1.push_back("nom");
-
-      vector<string> v2;
-      v2.push_back("5");
-      v2.push_back("alpha");
-
-  //    getUpletByAttAND(&uplets,relation,v1,v2);
-      getUpletByRel(&uplets,relation);
-      for (int i = 0; i < uplets.size(); ++i) {
-          cout<<endl <<"NOM-> "<<uplets[i][0]<<" AGE-> " <<uplets[i][1] <<endl;
-      }
-      deleteUpletByAtt(relation,"age","5");
-
-      uplets.clear();
-  //
-  //
-  //
-      getMetaRalation(&relation1,relnom1);
-      cout<<endl <<creationListe(relation1.id)<<endl;
-      getListebyRel(&liste1, relation1);
-      for (int i = 0; i <4; ++i) {
-          uplet = creationUplet(relation1);
-
-          cout<<endl <<uplet<<endl;
-          insertionUplet(uplet,liste1);
-      }
-
-      getUpletByRel(&uplets,relation1);
-
-      for (int i = 0; i < uplets.size(); ++i) {
-          cout<<endl <<"MATIERE-> "<<uplets[i][0]<<" ID-> " <<uplets[i][1] <<endl;
-      }
-  //
-  //     modif
-  //
-      vector<string> v3;
-      v3.push_back("age");
-
-      vector<string> v4;
-      v4.push_back("3");
-
-
-      vector<string> v5;
-      v5.push_back("age");
-
-      vector<string> v6;
-      v6.push_back("13");
-
-      updateUpletByRel(relation,v3,v4,v5,v6);
-
-      vector<vector<string>> resultats;
-      innerJoin(&resultats, relation,relation1,"age","age");
-      affichePage();
-  */
-
+    }
+    fichier.close();
+    getch();
     affichageMenu();
     system("pause");
     return 0;
@@ -260,11 +167,56 @@ void afficheBlock(char tab[]){
 }
 
 void affichePage(){
-    for (int i = 0; i < TAILLEPAGE; ++i) {
+
+    cout<< "----> "<<0;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+    afficheBlock(MEMOIRE[0]);
+    cout<<endl<<endl;
+
+    cout<< "----> "<<1;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
+    afficheBlock(MEMOIRE[1]);
+    cout<<endl<<endl;
+
+    for (int i = 2; i < 4; ++i) {
         cout<< "----> "<<i;
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),9 );
         afficheBlock(MEMOIRE[i]);
         cout<<endl<<endl;
     }
+
+    for (int i = 4; i < 6; ++i) {
+        cout<< "----> "<<i;
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
+        afficheBlock(MEMOIRE[i]);
+        cout<<endl<<endl;
+    }
+
+    cout<< "----> "<<6;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+    afficheBlock(MEMOIRE[6]);
+    cout<<endl<<endl;
+
+    for (int i = 7; i < NBLISTE+7; ++i) {
+        cout<< "----> "<<i;
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 10);
+        afficheBlock(MEMOIRE[i]);
+        cout<<endl<<endl;
+    }
+
+    for (int i = NBLISTE+7; i < TAILLEPAGE; ++i) {
+        cout<< "----> "<<i;
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 13);
+        afficheBlock(MEMOIRE[i]);
+        cout<<endl<<endl;
+    }
+
+//    for (int i = 0; i < TAILLEPAGE; ++i) {
+//        cout<< "----> "<<i;
+//        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), i+5);
+//        afficheBlock(MEMOIRE[i]);
+//        cout<<endl<<endl;
+//    }
 }
 
 void upper(char chaine[]) {
@@ -1934,9 +1886,23 @@ int affichageMenu(){
             cout<<"AFFICHAGE";
             affichageMenuAffichage();
             break;
-        case 4:
-            cout<<"exit";
+        case 4: {
+            cout << "exit";
+            cout<<endl<<"OUH LA LA VOUS PARTEZ DEJA !!! BON C EST PAS GRAVE ON VA ENREGISTRER QUAND MEME POUR  "<<endl;
+            const char separateur(' ');
+
+            ofstream ofstream1(nomfichier,ios::out|ios::ate);
+            for (int k = 0; k < TAILLEPAGE; ++k) {
+                for (int i = 0; i < TAILLEBLOCK; ++i) {
+                    ofstream1 << MEMOIRE[k][i] << separateur;
+                }
+            }
+
+            ofstream1.close();
+            cout<<endl<<"C EST OK BEY BEY "<<endl;
+
             break;
+        }
         default:
             cout<<"Vous ne ferez rien du tout!";
             goto LabelChoixMenu;
