@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <sstream>
 #include <conio.h>
+#include <windows.h>
 
 #include "HEADER/Structure.h"
 #include "HEADER/Metadonnee.h"
@@ -1448,7 +1449,12 @@ bool projetion(vector<vector<string>> uplets, vector<int> idatt){
  *
  */
 
-
+void gotoxy(int x, int y) {
+    COORD coord;
+    coord.X = x;
+    coord.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
 int affichageMenuOperation(){
 
     LableMenu: //lable
@@ -1536,25 +1542,70 @@ int affichageMenuAffichage(){
     cin>>choixMenu;
     switch (choixMenu)
     {
-        case 1:
+        case 1: {
             system("cls");
-            cout<<"_________________RELATIONS__________________";
+            vector<Relation> relations;
+            cout << "_________________RELATIONS__________________";
+            getAllMetaRelation(&relations);
+            for (int i = 0; i < relations.size(); ++i) {
+                cout<<endl<<"--> ID : "<<relations[i].id<<" NOM : "<<relations[i].nom<<" NB ATT : "<<relations[i].nbAtt<<" TAILLE : "<<relations[i].taille<<endl;
+            }
+            getch();
+            goto  LabelMenu;
             break;
-        case 2:
+        }
+        case 2: {
+            string nomRelation;
+            Relation relation;
+            vector<Attribut> attributs(0);
+            vector<vector<string>> uplets;
+
+            LableUpletRelation:
             system("cls");
-            cout<<"UPLETS RELATION"<<endl;
+            cout << "_______________UPLETS RELATION\"_____________" << endl;
+            cout << endl << "DONNER LE NOM DE LA RELATION : ";
+            cin.ignore();
+            cin >> nomRelation;
+            if (!getMetaRalation(&relation, (char *) nomRelation.c_str())) {
+                cout << endl << "ERREUR CETTE RELATION N HESITE PAS" << endl;
+                goto LableUpletRelation;
+            }
+            getAttribut(&attributs, relation);
+            getUpletByRel(&uplets, relation);
+            char nomAtt[11];
+            for (int i = 0; i < uplets.size(); ++i) {
+                cout << endl << "---> ";
+                for (int j = 0; j < uplets[i].size(); ++j) {
+                    strncpy(nomAtt,attributs[j].nom,10);
+                    upper(nomAtt);
+                    cout <<nomAtt<<" "<<uplets[i][j]<<" ";
+                }
+            }
+            getch();
+            goto LabelMenu;
             break;
-        case 3:
+        }
+        case 3: {
             system("cls");
-            cout<<"__________________BLOCK_____________________";
+            cout << "__________________BLOCK_____________________";
+            int idBlock = 0;
+            do {
+                cout << endl << "DONNER LE NUMERO DU BLOCK [0 - " << TAILLEPAGE << "] : ";
+                cin >> idBlock;
+            } while (idBlock > TAILLEPAGE || idBlock < 0);
+            afficheBlock(MEMOIRE[idBlock]);
+            getch();
+            goto LabelMenu
             break;
-        case 4:
+        }
+        case 4: {
             system("cls");
-            cout<<"_________________MEMOIRE___________________";
+            cout << "_________________MEMOIRE___________________";
             affichePage();
             getch();
             goto LabelMenu;
             break;
+        }
         case 5:
             cout<<"RETOUR"<<endl;
             affichageMenu();

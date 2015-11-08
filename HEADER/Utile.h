@@ -27,4 +27,6 @@ bool sortByStrVal(std::vector<std::string>lhs, std::vector<std::string>  rhs);
 
 int findPosition(std::vector<Attribut> attributs,std::string nom);
 
+void gotoxy(int x, int y);
+
 #endif //PROJETBASEDONNEE_UTILE_H
