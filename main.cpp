@@ -1462,7 +1462,7 @@ void gotoxy(int x, int y) {
 }
 int affichageMenuOperation(){
 
-    LableMenu: //lable
+    LabelMenu: //lable
     system("cls");
     int choixMenu;
 
@@ -1493,30 +1493,106 @@ int affichageMenuOperation(){
             cin.ignore(); cin>>nomRelation;
             if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
                 cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
-                if(4 == cpt++)goto LableMenu;
+                if(4 == cpt++)goto LabelMenu;
                 goto LableInsertion;
             }
 //            creationListe(relation.id);//!! averifier
             getListebyRel(&listes, relation);
             insertionUplet(creationUplet(relation), listes,relation.id);
-            goto LableMenu;
+            goto LabelMenu;
 
             break;
         }
         case 2:
             system("cls");
-            cout<<"SELECTION"<<endl;
+            cout<<"_______________SELECTION____________________"<<endl;
             affichageMenuOperationSelection();
             break;
         case 3:
             cout<<"SUPRESSION";
             break;
-        case 4:
-            cout<<"MISE A JOUR";
+        case 4:{
+            string nomRelation,attribut,valeur;
+            int cpt = 0;
+            Relation relation;
+            vector<string> listeAttrs,newListeAttrs;
+            vector<string> listeValeurs,newListeValeurs;
+            vector<vector<string>> uplets;
+
+            LableMAJ:system("cls");
+
+            cout << "______________MISE A JOUR________________  ";
+            cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
+            cin.ignore(); cin>>nomRelation;
+            if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
+                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                if(4 == cpt++)goto LabelMenu;
+                goto LableMAJ;
+            }
+
+            string rep;
+            do {
+                cout<<endl<<"DONNER CHAMP DE LA RELATION A SELECTIONNER : ";
+                cin.ignore();
+                cin>>attribut;
+                listeAttrs.push_back(attribut);
+                cout<<endl<<"DONNER LA VALEUR DU CHAMP : ";
+                cin.ignore();
+                cin>>valeur;
+                listeValeurs.push_back(valeur);
+                cout<<endl<<"VOULEZ VOUS CONTINUEZ (o/n):  ";
+                cin.ignore();
+                cin>>rep;
+            } while (rep.compare("n")!=0);
+            do {
+                cout<<endl<<"DONNER CHAMP DE LA RELATION A MODIFIER : ";
+                cin.ignore();
+                cin>>attribut;
+                newListeAttrs.push_back(attribut);
+                cout<<endl<<"DONNER NOUVELLE LA VALEUR DU CHAMP : ";
+                cin.ignore();
+                cin>>valeur;
+                newListeValeurs.push_back(valeur);
+                cout<<endl<<"VOULEZ VOUS CONTINUEZ (o/n):  ";
+                cin.ignore();
+                cin>>rep;
+            } while (rep.compare("n")!=0);
+
+            updateUpletByRel(relation,listeAttrs,listeValeurs,newListeAttrs,newListeValeurs);
+
+            goto LabelMenu;
             break;
-        case 5:
-            cout<<"JOINTURE";
+        }
+        case 5: {
+            string nomRelation1,nomRelation2,attribut1, attribut2;
+            int cpt = 0;
+            Relation relation1, relation2;
+            vector<vector<string>> resultats;
+
+            LableJointure:system("cls");
+
+            cout << "_________________JOINTURE___________________";
+            cout<<endl<<"DONNER LE NOM DE LA PREMIERE RELATION : ";
+            cin.ignore(); cin>>nomRelation1;
+            if(! getMetaRalation(&relation1, (char *) nomRelation1.c_str()) ){
+                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                if(4 == cpt++)goto LabelMenu;
+                goto LableJointure;
+            }
+            cout<<endl<<"DONNER LE NOM DE LA DEUXIEME RELATION : ";
+            cin.ignore(); cin>>nomRelation2;
+            if(! getMetaRalation(&relation2, (char *) nomRelation2.c_str()) ){
+                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                if(4 == cpt++)goto LabelMenu;
+                goto LableJointure;
+            }
+            cout<<endl<<"DONNER LE NOM DU PREMIER ATTRIBUT : ";
+            cin.ignore(); cin>>attribut1;
+            cout<<endl<<"DONNER LE NOM DU DEUXIEME ATTRIBUT : ";
+            cin.ignore(); cin>>attribut2;
+            innerJoin(&resultats, relation1,relation2,"age","age");
             break;
+        }
         case 6:
             cout<<"RETOUR"<<endl;
             affichageMenu();
@@ -1806,7 +1882,6 @@ int affichageMenuOperationSelection(){
             getch();
             goto LabelMenu;
             break;
-        }
         }
         case 4:
             cout<<"RETOUR"<<endl;
