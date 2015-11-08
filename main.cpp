@@ -1127,13 +1127,14 @@ void getListebyRel(vector<Liste>* listes, Relation relation){
 
                 copyPartie(ent, METALISTE,j*TAILLELISTE+8 ,8);
                 lis.numBlock = binaireStringToDecimal(ent);
+                lis.idBlockListe=i;
+                lis.idBipmapListe= TAILLEBLOCK - TailleBitMapMetaListe + j;
 
                 (*listes).push_back(lis);
             }
         }
     }
 }
-
 
 bool deleteUpletByAtt(Relation relation,string attr,string val){
     vector<Liste> listeUpletRel(0);
@@ -1194,10 +1195,14 @@ bool deleteUpletByAtt(Relation relation,string attr,string val){
             }//forAttribut
 
         }//forbitmap
-        copy(MEMOIRE[listeUpletRel[i].numBlock],0,UPLET,TAILLEBLOCK);
         /*
          * au cas il n ya aplus de uplet
          */
+        if(indicePremierZero(UPLET,TAILLEBLOCK-tailleBipmap,TAILLEBLOCK) == -1){
+            MEMOIRE[0][listeUpletRel[i].numBlock] = '0';
+            MEMOIRE[listeUpletRel[i].idBlockListe][listeUpletRel[i].idBipmapListe] = '0';
+        }
+        copy(MEMOIRE[listeUpletRel[i].numBlock],0,UPLET,TAILLEBLOCK);
     }//forliste
 
     return true;

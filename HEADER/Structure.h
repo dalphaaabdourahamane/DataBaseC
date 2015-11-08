@@ -35,5 +35,7 @@ struct RelationAttribut {
 struct Liste{
     int idRelation;
     int numBlock;
+    int idBlockListe;
+    int idBipmapListe;
 };
 #endif //PROJETBASEDONNEE_STRUCTURE_H
