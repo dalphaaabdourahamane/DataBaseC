@@ -1483,6 +1483,7 @@ int affichageMenuOperation(){
         case 1: {
 
             string nomRelation;
+            int cpt=0;
             Relation relation;
             vector<Liste> listes(0);
             LableInsertion: system("cls");
@@ -1492,6 +1493,7 @@ int affichageMenuOperation(){
             cin.ignore(); cin>>nomRelation;
             if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
                 cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                if(4 == cpt++)goto LableMenu;
                 goto LableInsertion;
             }
 //            creationListe(relation.id);//!! averifier
@@ -1552,6 +1554,9 @@ int affichageMenuAffichage(){
             vector<Relation> relations;
             cout << "_________________RELATIONS__________________";
             getAllMetaRelation(&relations);
+            if(relations.empty()){
+                cout<<endl<<"PAS DE RELATION";
+            }
             for (int i = 0; i < relations.size(); ++i) {
                 cout<<endl<<"--> ID : "<<relations[i].id<<" NOM : "<<relations[i].nom<<" NB ATT : "<<relations[i].nbAtt<<" TAILLE : "<<relations[i].taille<<endl;
             }
@@ -1577,6 +1582,11 @@ int affichageMenuAffichage(){
             }
             getAttribut(&attributs, relation);
             getUpletByRel(&uplets, relation);
+            if(uplets.empty()){
+                cout<<endl<<"PAS DE UPLETS POUR CETTE RELATION";
+                getch();
+                goto LabelMenu;
+            }
             char nomAtt[11];
             for (int i = 0; i < uplets.size(); ++i) {
                 cout << endl << "---> ";
@@ -1600,7 +1610,7 @@ int affichageMenuAffichage(){
             } while (idBlock > TAILLEPAGE || idBlock < 0);
             afficheBlock(MEMOIRE[idBlock]);
             getch();
-            goto LabelMenu
+            goto LabelMenu;
             break;
         }
         case 4: {
@@ -1626,11 +1636,13 @@ int affichageMenuAffichage(){
 }
 
 int affichageMenuOperationSelection(){
+
+    LabelMenu: system("cls");
     int choixMenu;
 
     cout<<" __________MENU OPERATION SELECTION__________"<<endl;
     cout<<"|                                            |"<<endl;
-    cout<<"|            1.SELECTION SUR UN ATTTIBUT     |"<<endl;
+    cout<<"|            1.SELECTION SUR UN ATTIBUT      |"<<endl;
     cout<<"|            2.SELECTION OU                  |"<<endl;
     cout<<"|            3.SELECTION ET                  |"<<endl;
     cout<<"|            4.RETOUR                        |"<<endl;
@@ -1640,15 +1652,162 @@ int affichageMenuOperationSelection(){
     cin>>choixMenu;
     switch (choixMenu)
     {
-        case 1:
-            cout<<"SELECTION SUR UN ATTTIBUT ";
+        case 1: {
+            string nomRelation,attribut,valeur;
+            int cpt = 0;
+            Relation relation;
+            vector<Attribut> attributs(0);
+            vector<vector<string>> uplets;
+
+            LableSelectionAtt:system("cls");
+
+            cout << "___________SELECTION SUR UN ATTIBUT___________ ";
+            cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
+            cin.ignore(); cin>>nomRelation;
+            if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
+                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                if(4 == cpt++)goto LabelMenu;
+                goto LableSelectionAtt;
+            }
+            cout<<endl<<"DONNER CHAMP DE LA RELATION : ";
+            cin.ignore(); cin>>attribut;
+            cout<<endl<<"DONNER CHAMP DE LA VALEUR : ";
+            cin.ignore(); cin>>valeur;
+            getUpletByAtt(&uplets,relation,attribut,valeur);
+
+            getAttribut(&attributs, relation);
+            if(uplets.empty()){
+                cout<<endl<<"PAS DE UPLETS";
+                getch();
+                goto LabelMenu;
+            }
+            char nomAtt[11];
+            for (int i = 0; i < uplets.size(); ++i) {
+                cout << endl << "---> ";
+                for (int j = 0; j < uplets[i].size(); ++j) {
+                    strncpy(nomAtt,attributs[j].nom,10);
+                    upper(nomAtt);
+                    cout <<nomAtt<<" "<<uplets[i][j]<<" ";
+                }
+            }
+            getch();
+            goto LabelMenu;
+
             break;
-        case 2:
-            cout<<"SELECTION OU  ";
+        }
+        case 2: {
+            string nomRelation,attribut,valeur;
+            int cpt = 0;
+            Relation relation;
+            vector<Attribut> attributs(0);
+            vector<string> listeAttrs;
+            vector<string> listeValeurs;
+            vector<vector<string>> uplets;
+
+            LableSelectionOR:system("cls");
+
+            cout << "______________SELECTION OU__________________  ";
+            cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
+            cin.ignore(); cin>>nomRelation;
+            if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
+                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                if(4 == cpt++)goto LabelMenu;
+                goto LableSelectionOR;
+            }
+
+            string rep;
+            do {
+                cout<<endl<<"DONNER CHAMP DE LA RELATION : ";
+                cin.ignore();
+                cin>>attribut;
+                listeAttrs.push_back(attribut);
+                cout<<endl<<"DONNER CHAMP DE LA VALEUR : ";
+                cin.ignore();
+                cin>>valeur;
+                listeValeurs.push_back(valeur);
+                cout<<endl<<"VOULEZ VOUS CONTINUEZ (o/n):  ";
+                cin.ignore();
+                cin>>rep;
+            } while (rep.compare("n")!=0);
+
+            getUpletByAttOR(&uplets,relation,listeAttrs,listeValeurs);
+
+            getAttribut(&attributs, relation);
+            if(uplets.empty()){
+                cout<<endl<<"PAS DE UPLETS";
+                getch();
+                goto LabelMenu;
+            }
+            char nomAtt[11];
+            for (int i = 0; i < uplets.size(); ++i) {
+                cout << endl << "---> ";
+                for (int j = 0; j < uplets[i].size(); ++j) {
+                    strncpy(nomAtt,attributs[j].nom,10);
+                    upper(nomAtt);
+                    cout <<nomAtt<<" "<<uplets[i][j]<<" ";
+                }
+            }
+            getch();
+            goto LabelMenu;
             break;
-        case 3:
-            cout<<"SELECTION ET";
+        }
+        case 3: {
+            string nomRelation,attribut,valeur;
+            int cpt = 0;
+            Relation relation;
+            vector<Attribut> attributs(0);
+            vector<string> listeAttrs;
+            vector<string> listeValeurs;
+            vector<vector<string>> uplets;
+
+            LableSelectionAND:system("cls");
+
+            cout << "______________SELECTION ET__________________  ";
+            cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
+            cin.ignore(); cin>>nomRelation;
+            if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
+                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                if(4 == cpt++)goto LabelMenu;
+                goto LableSelectionAND;
+            }
+
+            string rep;
+            do {
+                cout<<endl<<"DONNER CHAMP DE LA RELATION : ";
+                cin.ignore();
+                cin>>attribut;
+                listeAttrs.push_back(attribut);
+                cout<<endl<<"DONNER CHAMP DE LA VALEUR : ";
+                cin.ignore();
+                cin>>valeur;
+                listeValeurs.push_back(valeur);
+                cout<<endl<<"VOULEZ VOUS CONTINUEZ (o/n):  ";
+                cin.ignore();
+                cin>>rep;
+            } while (rep.compare("n")!=0);
+
+            getUpletByAttAND(&uplets,relation,listeAttrs,listeValeurs);
+
+            getAttribut(&attributs, relation);
+            if(uplets.empty()){
+                cout<<endl<<"PAS DE UPLETS";
+                getch();
+                goto LabelMenu;
+            }
+            char nomAtt[11];
+            for (int i = 0; i < uplets.size(); ++i) {
+                cout << endl << "---> ";
+                for (int j = 0; j < uplets[i].size(); ++j) {
+                    strncpy(nomAtt,attributs[j].nom,10);
+                    upper(nomAtt);
+                    cout <<nomAtt<<" "<<uplets[i][j]<<" ";
+                }
+            }
+            getch();
+            goto LabelMenu;
             break;
+        }
+        }
         case 4:
             cout<<"RETOUR"<<endl;
             affichageMenuOperation();
