@@ -13,6 +13,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d6dacc17-f8d8-47f7-a11e-183eff82fc6b" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/AFDataBase/bdi.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/AFDataBase/testalpha" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HEADER/Affichage.h" afterPath="$PROJECT_DIR$/HEADER/Affichage.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HEADER/DataBase.h" afterPath="$PROJECT_DIR$/HEADER/DataBase.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HEADER/Metadonnee.h" afterPath="$PROJECT_DIR$/HEADER/Metadonnee.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HEADER/Structure.h" afterPath="$PROJECT_DIR$/HEADER/Structure.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HEADER/Utile.h" afterPath="$PROJECT_DIR$/HEADER/Utile.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.cpp" afterPath="$PROJECT_DIR$/main.cpp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="ProjetBaseDonnee.iws" />
@@ -37,7 +45,7 @@
       <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.61614496">
+            <state vertical-scroll-proportion="0.2520593">
               <caret line="49" column="52" selection-start-line="49" selection-start-column="52" selection-end-line="49" selection-end-column="52" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
@@ -311,9 +319,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1370" height="744" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19423929" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19423929" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.328125" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6207386" sideWeight="0.5086207" order="7" side_tool="true" content_ui="tabs" />
@@ -1177,7 +1185,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.61614496">
+        <state vertical-scroll-proportion="0.2520593">
           <caret line="49" column="52" selection-start-line="49" selection-start-column="52" selection-end-line="49" selection-end-column="52" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
