@@ -9,7 +9,7 @@
 
 std::string decimalToBinaryString(int n);
 
-int binaireStringToDecimal(char* str);
+int binaireStringToDecimal(const char* str);
 
 int indicePremierZero(char tab[],int d, int f);
 
