@@ -47,7 +47,43 @@ char MEMOIRE[TAILLEPAGE][TAILLEBLOCK];
 string nomfichier = "C:/Users/DIALLO Alpha Abdoura/ClionProjects/ProjetBaseDonnee/AFDataBase/bdi.txt";
 
 
+void getAllMetaRelation(vector<Relation>* relations){
+
+    if(MEMOIRE[0][1]=='1'){
+        char METARELATION[TAILLEBLOCK];
+        Relation  relation;
+        copy(METARELATION,0,MEMOIRE[1],TAILLEBLOCK);
+
+        for (int i =0; i < TailleBitMapMetaRelation ; ++i) {
+            if(METARELATION[TAILLEBLOCK-TailleBitMapMetaRelation+i] == '1'){
+                // i*TAILLEMETARELATION + 8 est l'indice du block decaler de la case du block, on cope dans nom
+
+                char ent[9];
+
+                copyPartie(ent, METARELATION,i*TAILLEMETARELATION,8);
+                relation.id = binaireStringToDecimal(ent);
+
+                copyPartie(relation.nom,METARELATION,i*TAILLEMETARELATION + 8 ,9);
+
+                copyPartie(ent,METARELATION,i*TAILLEMETARELATION + 18 ,8);
+                relation.nbAtt = binaireStringToDecimal(ent);
+
+                copyPartie(ent,METARELATION,i*TAILLEMETARELATION + 26 ,8);
+                relation.taille = binaireStringToDecimal(ent);
+                (*relations).push_back(relation);
+            }
+        }
+    }
+}
+
 int main() {
+
+    vector<Relation> temporaire;
+    getAllMetaRelation(&temporaire);
+    IDREL = temporaire.size();
+    for (int i = 0; i < temporaire.size(); ++i) {
+        IDATT+=temporaire[i].nbAtt;
+    }
 
     ifstream fichier(nomfichier.c_str(),ios::in);
     if (fichier.fail()) {
@@ -404,35 +440,6 @@ bool getMetaRalation(Relation* relation, char nomRel[]){
         }
     }
     return false;
-}
-
-void getAllMetaRelation(vector<Relation>* relations){
-
-    if(MEMOIRE[0][1]=='1'){
-        char METARELATION[TAILLEBLOCK];
-        Relation  relation;
-        copy(METARELATION,0,MEMOIRE[1],TAILLEBLOCK);
-
-        for (int i =0; i < TailleBitMapMetaRelation ; ++i) {
-            if(METARELATION[TAILLEBLOCK-TailleBitMapMetaRelation+i] == '1'){
-                // i*TAILLEMETARELATION + 8 est l'indice du block decaler de la case du block, on cope dans nom
-
-                char ent[9];
-
-                copyPartie(ent, METARELATION,i*TAILLEMETARELATION,8);
-                relation.id = binaireStringToDecimal(ent);
-
-                copyPartie(relation.nom,METARELATION,i*TAILLEMETARELATION + 8 ,9);
-
-                copyPartie(ent,METARELATION,i*TAILLEMETARELATION + 18 ,8);
-                relation.nbAtt = binaireStringToDecimal(ent);
-
-                copyPartie(ent,METARELATION,i*TAILLEMETARELATION + 26 ,8);
-                relation.taille = binaireStringToDecimal(ent);
-                (*relations).push_back(relation);
-            }
-        }
-    }
 }
 
 bool ajouteAttribut(Attribut attribut[], int size){
