@@ -25,10 +25,10 @@ static int NBLISTE = (((TAILLEPAGE - 6) - (TAILLEPAGE - 6)/ 16)/16)+1; // plus 1
  * Formule du calcul de la TAILLE de la bitMap (N - N/k)/k ou N=512 et k= taille uplet
  * EX: pour la meta rel(512 -512/34)/34 =14
  */
-const int TAILLEMETARELATION = 34; //id,nom,nbatt, taille 10+8*3
-const int TAILLEATTRIBUT = 26; //id,nom,domaine  10+8*2
-const int TAILLERELATT = 24; //idrel,idatt,rang 8*3
-const int TAILLELISTE = 16; //  idrel,numblock 8*2
+const int TAILLEMETARELATION = 22; //id,nom,nbatt, taille 10+8*3
+const int TAILLEATTRIBUT = 18; //id,nom,domaine  10+8*2
+const int TAILLERELATT = 12; //idrel,idatt,rang 8*3
+const int TAILLELISTE = 8; //  idrel,numblock 8*2
 
 const int TailleBitMapMetaRelation = (TAILLEBLOCK -TAILLEBLOCK/TAILLEMETARELATION)/TAILLEMETARELATION; //14
 const int TailleBitMapMetaAttribut = (TAILLEBLOCK -TAILLEBLOCK/TAILLEATTRIBUT)/TAILLEATTRIBUT; //id,nom,domaine  10+8*2
@@ -60,15 +60,15 @@ void getAllMetaRelation(vector<Relation>* relations){
 
                 char ent[9];
 
-                copyPartie(ent, METARELATION,i*TAILLEMETARELATION,8);
+                copyPartie(ent, METARELATION,i*TAILLEMETARELATION,4);
                 relation.id = binaireStringToDecimal(ent);
 
-                copyPartie(relation.nom,METARELATION,i*TAILLEMETARELATION + 8 ,9);
+                copyPartie(relation.nom,METARELATION,i*TAILLEMETARELATION + 4 ,9);
 
-                copyPartie(ent,METARELATION,i*TAILLEMETARELATION + 18 ,8);
+                copyPartie(ent,METARELATION,i*TAILLEMETARELATION + 14 ,4);
                 relation.nbAtt = binaireStringToDecimal(ent);
 
-                copyPartie(ent,METARELATION,i*TAILLEMETARELATION + 26 ,8);
+                copyPartie(ent,METARELATION,i*TAILLEMETARELATION + 18 ,4);
                 relation.taille = binaireStringToDecimal(ent);
                 (*relations).push_back(relation);
             }
@@ -106,8 +106,6 @@ int main() {
     system("pause");
     return 0;
 }
-
-
 
 
 
@@ -262,7 +260,7 @@ void upper(char chaine[]) {
 
 string decimalToBinaryString(int n){
     n%=256;
-    const int size=sizeof(n)*8;
+    const int size=sizeof(n)*4;
     string res;
     bool s=0;
     for (int a=0;a<size;a++){
@@ -276,7 +274,7 @@ string decimalToBinaryString(int n){
     if (!res.size())
         res.push_back('0');
     int taille= res.size();
-    for (int i = taille; i <8 ; ++i) {
+    for (int i = taille; i <4 ; ++i) {
         res.insert(0,1,'0');
     }
     return res;
@@ -350,7 +348,7 @@ void creationRelation(){
         } while (attribut[i].type!=1 && attribut[i].type!=2);
 
         if(attribut[i].type == 1){
-            relation.taille +=8;
+            relation.taille +=4;
         } else{   relation.taille +=10;}
 
         relationAttribut[i].idRelation = relation.id;
@@ -373,10 +371,10 @@ bool ajouteMetaRelation(Relation relation){
     int indiceVide = indicePremierZero(METARELATION,TAILLEBLOCK-TailleBitMapMetaRelation,TAILLEBLOCK);
     if(indiceVide != -1){
         int position = indiceVide*TAILLEMETARELATION;
-        char ent[8];
+        char ent[4];
 
         strcpy(ent,decimalToBinaryString(relation.id).c_str());
-        for (int i = 0; i < 8; ++i) {
+        for (int i = 0; i < 4; ++i) {
             METARELATION[position++] =ent[i];
         }
 
@@ -385,12 +383,12 @@ bool ajouteMetaRelation(Relation relation){
         }
 
         strcpy(ent,decimalToBinaryString(relation.nbAtt).c_str());
-        for (int i = 0; i < 8; ++i) {
+        for (int i = 0; i < 4; ++i) {
             METARELATION[position++] =ent[i];
         }
 
         strcpy(ent,decimalToBinaryString(relation.taille).c_str());
-        for (int i = 0; i < 8; ++i) {
+        for (int i = 0; i < 4; ++i) {
             METARELATION[position++] =ent[i];
         }
 
@@ -414,23 +412,23 @@ bool getMetaRalation(Relation* relation, char nomRel[]){
         for (int i =0; i < TailleBitMapMetaRelation ; ++i) {
             if(METARELATION[TAILLEBLOCK-TailleBitMapMetaRelation+i] == '1'){
                 char nomRelation[10];
-                // i*TAILLEMETARELATION + 8 est l'indice du block decaler de la case du block, on cope dans nom
+                // i*TAILLEMETARELATION + 4 est l'indice du block decaler de la case du block, on cope dans nom
                 for (int j = 0; j < 10; ++j) {
-                    nomRelation[j] = METARELATION[i*TAILLEMETARELATION + 8 + j];
+                    nomRelation[j] = METARELATION[i*TAILLEMETARELATION + 4 + j];
                 }
 
                 if(strcmp(nomRel, nomRelation) == 0){
                     char ent[9];
 
-                    copyPartie(ent, METARELATION,i*TAILLEMETARELATION,8);
+                    copyPartie(ent, METARELATION,i*TAILLEMETARELATION,4);
                     relation->id = binaireStringToDecimal(ent);
 
-                    copyPartie(relation->nom,METARELATION,i*TAILLEMETARELATION + 8 ,9);
+                    copyPartie(relation->nom,METARELATION,i*TAILLEMETARELATION + 4 ,9);
 
-                    copyPartie(ent,METARELATION,i*TAILLEMETARELATION + 18 ,8);
+                    copyPartie(ent,METARELATION,i*TAILLEMETARELATION + 14 ,4);
                     relation->nbAtt = binaireStringToDecimal(ent);
 
-                    copyPartie(ent,METARELATION,i*TAILLEMETARELATION + 26 ,8);
+                    copyPartie(ent,METARELATION,i*TAILLEMETARELATION + 18 ,4);
                     relation->taille = binaireStringToDecimal(ent);
 
                     return true;
@@ -478,16 +476,16 @@ bool ajouteAttribut(Attribut attribut[], int size){
         //Memoire disponible
         int position = indiceVide*TAILLEATTRIBUT;
 
-        char ent[8];
+        char ent[4];
         strcpy(ent,decimalToBinaryString(attribut1.id).c_str());
-        for (int i = 0; i < 8; ++i) {
+        for (int i = 0; i < 4; ++i) {
             METAATTRIBUT[position++] =ent[i];
         }
         for (int i = 0; i < 10; ++i) {
             METAATTRIBUT[position++] =attribut1.nom[i];
         }
         strcpy(ent,decimalToBinaryString(attribut1.type).c_str());
-        for (int i = 0; i < 8; ++i) {
+        for (int i = 0; i < 4; ++i) {
             METAATTRIBUT[position++] =ent[i];
         }
         METAATTRIBUT[TAILLEBLOCK-TailleBitMapMetaAttribut+indiceVide]='1'; //mettre a jour le bipmap du block
@@ -539,18 +537,18 @@ bool ajouteRelAtt(RelationAttribut relationAttribut[], int size){
         //Memoire disponible
         int position = indiceVide*TAILLERELATT;
 
-        char ent[8];
+        char ent[4];
         strcpy(ent,decimalToBinaryString(relationAttribut1.idRelation).c_str());
-        for (int i = 0; i < 8; ++i) {
+        for (int i = 0; i < 4; ++i) {
             METARELATT[position++] =ent[i];
         }
 
         strcpy(ent,decimalToBinaryString(relationAttribut1.idAttribut).c_str());
-        for (int i = 0; i < 8; ++i) {
+        for (int i = 0; i < 4; ++i) {
             METARELATT[position++] =ent[i];
         }
         strcpy(ent,decimalToBinaryString(relationAttribut1.rang).c_str());
-        for (int i = 0; i < 8; ++i) {
+        for (int i = 0; i < 4; ++i) {
             METARELATT[position++] =ent[i];
         }
         METARELATT[TAILLEBLOCK-TailleBitMapMetaRelAtt+indiceVide]='1'; //mettre a jour le bipmap du block
@@ -585,14 +583,14 @@ void getAttributById(Attribut* attribut, int id){
         for (int i = 0; i < TAILLEBLOCK - TailleBitMapMetaAttribut; ++i) {
             if(METAATTRIBUT[TAILLEBLOCK - TailleBitMapMetaAttribut + i] == '1'){
                 char ent[9];
-                copyPartie(ent, METAATTRIBUT,i*TAILLEATTRIBUT ,8);
+                copyPartie(ent, METAATTRIBUT,i*TAILLEATTRIBUT ,4);
 
                 if(id == binaireStringToDecimal(ent)){
                     attribut->id = binaireStringToDecimal(ent);
 
-                    copyPartie(attribut->nom, METAATTRIBUT,i*TAILLEATTRIBUT + 8 ,9);
+                    copyPartie(attribut->nom, METAATTRIBUT,i*TAILLEATTRIBUT + 4 ,9);
 
-                    copyPartie(ent, METAATTRIBUT,i*TAILLEATTRIBUT + 18 ,8);
+                    copyPartie(ent, METAATTRIBUT,i*TAILLEATTRIBUT + 14 ,4);
                     attribut->type = binaireStringToDecimal(ent);
                     return;
                 }
@@ -605,14 +603,14 @@ void getAttributById(Attribut* attribut, int id){
         for (int i = 0; i < TAILLEBLOCK - TailleBitMapMetaAttribut; ++i) {
             if(METAATTRIBUT[TAILLEBLOCK - TailleBitMapMetaAttribut + i] == '1'){
                 char ent[9];
-                copyPartie(ent, METAATTRIBUT,i*TAILLEATTRIBUT ,8);
+                copyPartie(ent, METAATTRIBUT,i*TAILLEATTRIBUT ,4);
 
                 if(id == binaireStringToDecimal(ent)){
                     attribut->id = binaireStringToDecimal(ent);
 
-                    copyPartie(attribut->nom, METAATTRIBUT,i*TAILLEATTRIBUT + 8 ,9);
+                    copyPartie(attribut->nom, METAATTRIBUT,i*TAILLEATTRIBUT + 4 ,9);
 
-                    copyPartie(ent, METAATTRIBUT,i*TAILLEATTRIBUT + 18 ,8);
+                    copyPartie(ent, METAATTRIBUT,i*TAILLEATTRIBUT + 14 ,4);
                     attribut->type = binaireStringToDecimal(ent);
                     return;
                 }
@@ -631,17 +629,17 @@ void getRelAttByRel(vector<RelationAttribut>* relAtts, Relation relation){
 
         for (int i = 0; i < TailleBitMapMetaRelAtt; ++i) {
             if (METARELATT[TAILLEBLOCK - TailleBitMapMetaRelAtt + i] == '1') {
-                // i*TAILLEMETARELATION + 8 est l'indice du block decalé de la case du block
+                // i*TAILLEMETARELATION + 84 est l'indice du block decalé de la case du block
                 char ent[9];
-                copyPartie(ent, METARELATT, i * TAILLERELATT, 8);
+                copyPartie(ent, METARELATT, i * TAILLERELATT, 4);
                 //compare id de la relation et de la metaRelAtt idrelation
                 if (relation.id == binaireStringToDecimal(ent)) {
                     relationAttribut.idRelation = binaireStringToDecimal(ent);
 
-                    copyPartie(ent, METARELATT, i * TAILLERELATT + 8, 8);
+                    copyPartie(ent, METARELATT, i * TAILLERELATT + 4, 4);
                     relationAttribut.idAttribut = binaireStringToDecimal(ent);
 
-                    copyPartie(ent, METARELATT, i * TAILLERELATT + 16, 8);
+                    copyPartie(ent, METARELATT, i * TAILLERELATT + 8, 4);
                     relationAttribut.rang = binaireStringToDecimal(ent);
 
                     (*relAtts).push_back(relationAttribut);
@@ -665,18 +663,18 @@ void getRelAttByRel(vector<RelationAttribut>* relAtts, Relation relation){
                 if(METARELATT[TAILLEBLOCK-TailleBitMapMetaRelAtt+i] == '1'){
                     // i*TAILLEMETARELATION + 8 est l'indice du block decalé de la case du block
 
-                    char ent[9];
-                    copyPartie(ent, METARELATT,i*TAILLERELATT ,8);
+                    char ent[5];
+                    copyPartie(ent, METARELATT,i*TAILLERELATT ,4);
 
                     //compare id de la relation et de la metaRelAtt idrelation
                     if(relation.id == binaireStringToDecimal(ent)){
 
                         relationAttribut.idRelation = binaireStringToDecimal(ent);
 
-                        copyPartie(ent, METARELATT,i*TAILLERELATT + 8 ,8);
+                        copyPartie(ent, METARELATT,i*TAILLERELATT + 4 ,4);
                         relationAttribut.idAttribut = binaireStringToDecimal(ent);
 
-                        copyPartie(ent, METARELATT,i*TAILLERELATT + 16,8);
+                        copyPartie(ent, METARELATT,i*TAILLERELATT + 8,4);
                         relationAttribut.rang = binaireStringToDecimal(ent);
 
                         (*relAtts).push_back(relationAttribut);
@@ -793,7 +791,7 @@ bool getUpletByRel(vector<vector<string>> *uplets,Relation relation){
                 if(attributs[k].type == 1){
                     //entier
                     string ent;
-                    for (int l = 0; l < 8; ++l) {
+                    for (int l = 0; l < 4; ++l) {
                         ent.push_back(UPLET[indUplet]);
                         indUplet++;
                     }
@@ -853,7 +851,7 @@ bool getUpletByAtt(vector<vector<string>> *uplets, Relation relation, string att
                 string champ;
                 if(attributs[k].type == 1){
                     //entier
-                    for (int l = 0; l < 8; ++l) {
+                    for (int l = 0; l < 4; ++l) {
                         champ.push_back(UPLET[indUplet]);
                         indUplet++;
                     }
@@ -930,7 +928,7 @@ bool getUpletByAttOR(vector<vector<string>> *uplets, Relation relation, vector<s
                 string champ;
                 if(attributs[k].type == 1){
                     //entier
-                    for (int l = 0; l < 8; ++l) {
+                    for (int l = 0; l < 4; ++l) {
                         champ.push_back(UPLET[indUplet]);
                         indUplet++;
                     }
@@ -988,7 +986,7 @@ bool getUpletByAttAND(vector<vector<string>> *uplets, Relation relation, vector<
                 string champ;
                 if(attributs[k].type == 1){
                     //entier
-                    for (int l = 0; l < 8; ++l) {
+                    for (int l = 0; l < 4; ++l) {
                         champ.push_back(UPLET[indUplet]);
                         indUplet++;
                     }
@@ -1046,9 +1044,9 @@ int creationListe(int idRel){
             ent1.append(decimalToBinaryString(idRel).c_str());
             ent2.append(decimalToBinaryString(indiceB).c_str());
 
-            for (int j = 0; j < 8; ++j) {
+            for (int j = 0; j < 4; ++j) {
                 METALISTE[indiceBM*TAILLELISTE + j] = ent1[j];
-                METALISTE[indiceBM*TAILLELISTE + 8 + j] = ent2[j];
+                METALISTE[indiceBM*TAILLELISTE + 4 + j] = ent2[j];
             }
 
             MEMOIRE[0][i] = '1';
@@ -1079,13 +1077,13 @@ void getListebyRel(vector<Liste>* listes, Relation relation){
 //            cout<<"ID BITMAP : "<<i<<endl; //debug
 
             char ent[9];
-            copyPartie(ent, METALISTE,j*TAILLELISTE ,8);
+            copyPartie(ent, METALISTE,j*TAILLELISTE ,4);
 
             int id = binaireStringToDecimal(ent);
             if (relation.id == id) {
                 lis.idRelation = id;
 
-                copyPartie(ent, METALISTE,j*TAILLELISTE+8 ,8);
+                copyPartie(ent, METALISTE,j*TAILLELISTE+4 ,4);
                 lis.numBlock = binaireStringToDecimal(ent);
                 lis.idBlockListe=i;
                 lis.idBipmapListe= TAILLEBLOCK - TailleBitMapMetaListe + j;
@@ -1125,7 +1123,7 @@ bool deleteUpletByAtt(Relation relation,string attr,string val){
                 string champ;
                 if(attributs[k].type == 1){
                     //entier
-                    for (int l = 0; l < 8; ++l) {
+                    for (int l = 0; l < 4; ++l) {
                         champ.push_back(UPLET[indUplet]);
                         indUplet++;
                     }
@@ -1195,7 +1193,7 @@ bool updateUpletByRel(Relation relation,vector<string> attFiltres,vector<string>
                 string champ;
                 if(attributs[k].type == 1){
                     //entier
-                    for (int l = 0; l < 8; ++l) {
+                    for (int l = 0; l < 4; ++l) {
                         champ.push_back(UPLET[indUplet]);
                         indUplet++;
                     }
@@ -1230,14 +1228,14 @@ bool updateUpletByRel(Relation relation,vector<string> attFiltres,vector<string>
                         int pos = find(newAtts.begin(), newAtts.end(), string(attributs[k].nom)) - newAtts.begin(); //uplet k
 //                        cout<<endl<<" newAtts.size() "<<newAtts.size(); //debug
                         if(pos >= newAtts.size()){
-                            indUplet+=8;
+                            indUplet+=4;
                             continue;
                         }
                         //k < newAtts.size
                         string newIntValeur = decimalToBinaryString(atoi(newVals[pos].c_str()));
 //                        cout<<endl<<" newIntValeur "<<newIntValeur<<endl; //debug
 
-                        for (int l = 0; l < 8; ++l) {
+                        for (int l = 0; l < 4; ++l) {
                             UPLET[indUplet] = newIntValeur[l];
                             indUplet++;
                         }
@@ -1409,7 +1407,6 @@ bool projetion(vector<vector<string>> uplets, vector<int> idatt){
 }
 
 
-
 /*
  *
  */
@@ -1420,6 +1417,7 @@ void gotoxy(int x, int y) {
     coord.Y = y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
+
 int affichageMenuOperation(){
 
     LabelMenu: //lable
