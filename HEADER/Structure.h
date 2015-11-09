@@ -18,13 +18,13 @@ struct Attribut{
     int type; // 0 entier 1 string
 };
 
-struct Domain {
-    int type;
-    union {
-        char str[10]  = {' '};
-        int ent;
-    };
-};
+//struct Domaine {
+//    int type;
+//    union {
+//        char str[10]  = {' '};
+//        int ent;
+//    };
+//};
 
 struct RelationAttribut {
     int idRelation;
@@ -35,5 +35,7 @@ struct RelationAttribut {
 struct Liste{
     int idRelation;
     int numBlock;
+    int idBlockListe;
+    int idBipmapListe;
 };
 #endif //PROJETBASEDONNEE_STRUCTURE_H

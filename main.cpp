@@ -3,6 +3,10 @@
 #include <iostream>
 #include <algorithm>
 #include <sstream>
+#include <conio.h>
+#include <windows.h>
+#include <fstream>
+#include <stdlib.h>
 
 #include "HEADER/Structure.h"
 #include "HEADER/Metadonnee.h"
@@ -40,121 +44,65 @@ const int TailleBitMapMetaListe = (TAILLEBLOCK -TAILLEBLOCK/TAILLELISTE)/TAILLEL
  * la suite est calculer par ( TAILLE_DE_MEMOIRE - 5 )/ 16, 24 qui est la taille (idREL,BLOCK,)
  */
 char MEMOIRE[TAILLEPAGE][TAILLEBLOCK];
+string nomfichier = "C:/Users/DIALLO Alpha Abdoura/ClionProjects/ProjetBaseDonnee/AFDataBase/bdi.txt";
 
+
+void getAllMetaRelation(vector<Relation>* relations){
+
+    if(MEMOIRE[0][1]=='1'){
+        char METARELATION[TAILLEBLOCK];
+        Relation  relation;
+        copy(METARELATION,0,MEMOIRE[1],TAILLEBLOCK);
+
+        for (int i =0; i < TailleBitMapMetaRelation ; ++i) {
+            if(METARELATION[TAILLEBLOCK-TailleBitMapMetaRelation+i] == '1'){
+                // i*TAILLEMETARELATION + 8 est l'indice du block decaler de la case du block, on cope dans nom
+
+                char ent[9];
+
+                copyPartie(ent, METARELATION,i*TAILLEMETARELATION,8);
+                relation.id = binaireStringToDecimal(ent);
+
+                copyPartie(relation.nom,METARELATION,i*TAILLEMETARELATION + 8 ,9);
+
+                copyPartie(ent,METARELATION,i*TAILLEMETARELATION + 18 ,8);
+                relation.nbAtt = binaireStringToDecimal(ent);
+
+                copyPartie(ent,METARELATION,i*TAILLEMETARELATION + 26 ,8);
+                relation.taille = binaireStringToDecimal(ent);
+                (*relations).push_back(relation);
+            }
+        }
+    }
+}
 
 int main() {
-    initialisation();
-    creationRelation();
-    creationRelation();
 
-    char relnom[] ="personne";
-    char relnom1[] ="etudiant";
-    vector<RelationAttribut> relAtts;
-    vector<Attribut> attributs(0);
-    vector<Liste> listes(0),liste1(0);
-    vector<vector<string>> uplets;
-
-    Relation relation,relation1;
-    Attribut attribut1, attribut2;
-    getMetaRalation(&relation,relnom);
-
-    cout<<endl <<"ID-> "<<relation.id<<" NOM-> " <<relation.nom <<
-    " NBATT-> "<<relation.nbAtt <<" TAILLE->"<<relation.taille <<endl;
-
-    getAttributById(&attribut1,1);
-    cout<<endl <<"ID-> "<<attribut1.id<<" NOM-> " <<attribut1.nom <<" TYPE-> " << attribut1.type <<endl;
-
-    getAttributById(&attribut2,2);
-    cout<<endl <<"ID-> "<<attribut2.id<<" NOM-> " <<attribut2.nom <<" TYPE-> " << attribut2.type <<endl;
-
-    getRelAttByRel(&relAtts,relation);
-    for (int i = 0; i < relAtts.size(); ++i) {
-        cout<<endl <<"ID REL-> "<<relAtts[i].idRelation<<" ID ATT-> " <<relAtts[i].idAttribut <<" RANG-> " << relAtts[i].rang <<endl;
+    vector<Relation> temporaire;
+    getAllMetaRelation(&temporaire);
+    IDREL = temporaire.size();
+    for (int i = 0; i < temporaire.size(); ++i) {
+        IDATT+=temporaire[i].nbAtt;
     }
 
-    getAttribut(&attributs,relation);
-    for (int i = 0; i < attributs.size(); ++i) {
-        cout<<endl <<"ID-> "<<attributs[i].id<<" NOM-> " <<attributs[i].nom <<" TYPE-> " << attributs[i].type <<endl;
+    ifstream fichier(nomfichier.c_str(),ios::in);
+    if (fichier.fail()) {
+        cout << "LE FICHER BDI N EXISTE PAS DONC NOUS ALLONS L INITIALISER POUR VOUS SO KEEP CALM AND WATCH :) "<<endl;
+        initialisation();
+
+    } else {
+        cout << "LE FICHER BDI EXISTE NOUS ALLONS LE CHARGER  :) "<<endl;
+        for (int i = 0; i < TAILLEPAGE; ++i) {
+            for (int j = 0; j < TAILLEBLOCK; ++j) {
+                fichier >> MEMOIRE[i][j];
+            }
+        }
+        cout << "LE FICHER BDI CHARGER AVEC SUCCES :) "<<endl;
+
     }
-
-
-    cout<<endl <<creationListe(relation.id)<<endl;
-
-    getListebyRel(&listes, relation);
-    for (int i = 0; i < listes.size(); ++i) {
-        cout<<endl <<"ID REL-> "<<listes[i].idRelation<<" ID BLOCK-> " <<listes[i].numBlock <<endl;
-    }
-    string uplet;
-    for (int i = 0; i <4; ++i) {
-        uplet = creationUplet(relation);
-
-        cout<<endl <<uplet<<endl;
-        insertionUplet(uplet,listes);
-    }
-
-//    uplet = creationUplet(relation);
-//
-//    cout<<endl <<uplet<<endl;
-//    insertionUplet(uplet,listes);
-//    getUpletByRel(&uplets,relation);
-
-//    getUpletByAtt(&uplets,relation,"age","5");
-    vector<string> v1;
-    v1.push_back("age");
-    v1.push_back("nom");
-
-    vector<string> v2;
-    v2.push_back("5");
-    v2.push_back("alpha");
-
-//    getUpletByAttAND(&uplets,relation,v1,v2);
-    getUpletByRel(&uplets,relation);
-    for (int i = 0; i < uplets.size(); ++i) {
-        cout<<endl <<"NOM-> "<<uplets[i][0]<<" AGE-> " <<uplets[i][1] <<endl;
-    }
-    deleteUpletByAtt(relation,"age","5");
-
-    uplets.clear();
-/*
- *
- */
-    getMetaRalation(&relation1,relnom1);
-    cout<<endl <<creationListe(relation1.id)<<endl;
-    getListebyRel(&liste1, relation1);
-    for (int i = 0; i <4; ++i) {
-        uplet = creationUplet(relation1);
-
-        cout<<endl <<uplet<<endl;
-        insertionUplet(uplet,liste1);
-    }
-
-    getUpletByRel(&uplets,relation1);
-
-    for (int i = 0; i < uplets.size(); ++i) {
-        cout<<endl <<"MATIERE-> "<<uplets[i][0]<<" ID-> " <<uplets[i][1] <<endl;
-    }
-    /*
-     * modif
-     */
-    vector<string> v3;
-    v3.push_back("age");
-
-    vector<string> v4;
-    v4.push_back("3");
-
-
-    vector<string> v5;
-    v5.push_back("age");
-
-    vector<string> v6;
-    v6.push_back("13");
-
-    updateUpletByRel(relation,v3,v4,v5,v6);
-
-    vector<vector<string>> resultats;
-    innerJoin(&resultats, relation,relation1,"age","age");
-    affichePage();
-
+    fichier.close();
+    getch();
+    affichageMenu();
     system("pause");
     return 0;
 }
@@ -255,11 +203,56 @@ void afficheBlock(char tab[]){
 }
 
 void affichePage(){
-    for (int i = 0; i < TAILLEPAGE; ++i) {
+
+    cout<< "----> "<<0;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+    afficheBlock(MEMOIRE[0]);
+    cout<<endl<<endl;
+
+    cout<< "----> "<<1;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
+    afficheBlock(MEMOIRE[1]);
+    cout<<endl<<endl;
+
+    for (int i = 2; i < 4; ++i) {
         cout<< "----> "<<i;
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),9 );
         afficheBlock(MEMOIRE[i]);
         cout<<endl<<endl;
     }
+
+    for (int i = 4; i < 6; ++i) {
+        cout<< "----> "<<i;
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
+        afficheBlock(MEMOIRE[i]);
+        cout<<endl<<endl;
+    }
+
+    cout<< "----> "<<6;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+    afficheBlock(MEMOIRE[6]);
+    cout<<endl<<endl;
+
+    for (int i = 7; i < NBLISTE+7; ++i) {
+        cout<< "----> "<<i;
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 10);
+        afficheBlock(MEMOIRE[i]);
+        cout<<endl<<endl;
+    }
+
+    for (int i = NBLISTE+7; i < TAILLEPAGE; ++i) {
+        cout<< "----> "<<i;
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 13);
+        afficheBlock(MEMOIRE[i]);
+        cout<<endl<<endl;
+    }
+
+//    for (int i = 0; i < TAILLEPAGE; ++i) {
+//        cout<< "----> "<<i;
+//        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), i+5);
+//        afficheBlock(MEMOIRE[i]);
+//        cout<<endl<<endl;
+//    }
 }
 
 void upper(char chaine[]) {
@@ -331,6 +324,7 @@ void copyPartie(char newTab[], char oldTab[],int od,int of ){
 void creationRelation(){
     Relation relation;
     cout<<endl;
+    cin.ignore();
     cout<<"Donner le nom de la RELATION : ";
     cin.get(relation.nom,10);
     cin.ignore();
@@ -411,7 +405,7 @@ bool ajouteMetaRelation(Relation relation){
     return true;
 }
 
-void getMetaRalation(Relation* relation, char nomRel[]){
+bool getMetaRalation(Relation* relation, char nomRel[]){
 
     if(MEMOIRE[0][1]=='1'){
         char METARELATION[TAILLEBLOCK];
@@ -439,41 +433,13 @@ void getMetaRalation(Relation* relation, char nomRel[]){
                     copyPartie(ent,METARELATION,i*TAILLEMETARELATION + 26 ,8);
                     relation->taille = binaireStringToDecimal(ent);
 
-                    return ;
+                    return true;
                 }
 
             }
         }
     }
-}
-
-void getAllMetaRelation(vector<Relation>* relations){
-
-    if(MEMOIRE[0][1]=='1'){
-        char METARELATION[TAILLEBLOCK];
-        Relation  relation;
-        copy(METARELATION,0,MEMOIRE[1],TAILLEBLOCK);
-
-        for (int i =0; i < TailleBitMapMetaRelation ; ++i) {
-            if(METARELATION[TAILLEBLOCK-TailleBitMapMetaRelation+i] == '1'){
-                // i*TAILLEMETARELATION + 8 est l'indice du block decaler de la case du block, on cope dans nom
-
-                char ent[9];
-
-                copyPartie(ent, METARELATION,i*TAILLEMETARELATION,8);
-                relation.id = binaireStringToDecimal(ent);
-
-                copyPartie(relation.nom,METARELATION,i*TAILLEMETARELATION + 8 ,9);
-
-                copyPartie(ent,METARELATION,i*TAILLEMETARELATION + 18 ,8);
-                relation.nbAtt = binaireStringToDecimal(ent);
-
-                copyPartie(ent,METARELATION,i*TAILLEMETARELATION + 26 ,8);
-                relation.taille = binaireStringToDecimal(ent);
-                (*relations).push_back(relation);
-            }
-        }
-    }
+    return false;
 }
 
 bool ajouteAttribut(Attribut attribut[], int size){
@@ -763,7 +729,7 @@ string creationUplet(Relation relation){
     return uplet;
 }
 
-bool insertionUplet(string uplet,vector<Liste> vector1){
+bool insertionUplet(string uplet,vector<Liste> vector1, int relationId){
     char UPLET[TAILLEBLOCK];
     int tailleBipmap = (TAILLEBLOCK - TAILLEBLOCK/uplet.size())/uplet.size();
 
@@ -785,12 +751,15 @@ bool insertionUplet(string uplet,vector<Liste> vector1){
         return true;
     }
     //tous les blocks sont plein
-    int idNewBlock = creationListe(vector1[0].idRelation);
+    int idNewBlock = creationListe(relationId);
     if (idNewBlock != -1) {
-        for (int i = 0; i < vector1.size(); ++i) {
-            MEMOIRE[idNewBlock][i] = uplet[i];
-            return true;
+        copy(UPLET,0,MEMOIRE[idNewBlock],TAILLEBLOCK);
+        for (int i = 0; i < uplet.size(); ++i) {
+            UPLET[i] = uplet[i];
         }
+        UPLET[TAILLEBLOCK-tailleBipmap] ='1';
+        copy(MEMOIRE[idNewBlock],0,UPLET,TAILLEBLOCK);
+        return true;
     } else {
         cout<<endl<<"WARNING : PLUS DE PLACE POUR L INSERTION D UPLET "<<endl;
     }
@@ -846,6 +815,7 @@ bool getUpletByRel(vector<vector<string>> *uplets,Relation relation){
 
         }//forbitmap
     }//forliste
+    return true;
 }
 
 bool getUpletByAtt(vector<vector<string>> *uplets, Relation relation, string attr,string val){
@@ -1091,7 +1061,7 @@ int creationListe(int idRel){
         }
     }//for
 
-    return 0;
+    return -1;
 }
 
 void getListebyRel(vector<Liste>* listes, Relation relation){
@@ -1117,6 +1087,8 @@ void getListebyRel(vector<Liste>* listes, Relation relation){
 
                 copyPartie(ent, METALISTE,j*TAILLELISTE+8 ,8);
                 lis.numBlock = binaireStringToDecimal(ent);
+                lis.idBlockListe=i;
+                lis.idBipmapListe= TAILLEBLOCK - TailleBitMapMetaListe + j;
 
                 (*listes).push_back(lis);
             }
@@ -1183,10 +1155,14 @@ bool deleteUpletByAtt(Relation relation,string attr,string val){
             }//forAttribut
 
         }//forbitmap
-        copy(MEMOIRE[listeUpletRel[i].numBlock],0,UPLET,TAILLEBLOCK);
         /*
          * au cas il n ya aplus de uplet
          */
+        if(indicePremierZero(UPLET,TAILLEBLOCK-tailleBipmap,TAILLEBLOCK) == -1){
+            MEMOIRE[0][listeUpletRel[i].numBlock] = '0';
+            MEMOIRE[listeUpletRel[i].idBlockListe][listeUpletRel[i].idBipmapListe] = '0';
+        }
+        copy(MEMOIRE[listeUpletRel[i].numBlock],0,UPLET,TAILLEBLOCK);
     }//forliste
 
     return true;
@@ -1281,7 +1257,7 @@ bool updateUpletByRel(Relation relation,vector<string> attFiltres,vector<string>
                             UPLET[indUplet] = newStrtValeur[l];
                             indUplet++;
                         }
-                       // champ.erase(remove(champ.begin(), champ.end(), ' '), champ.end());
+                        // champ.erase(remove(champ.begin(), champ.end(), ' '), champ.end());
                     }
 
                 }//forAttribut
@@ -1337,8 +1313,8 @@ bool innerJoin(vector<vector<string>>* resultats, Relation relation1,Relation re
     }
 
 
-    sort(uplets1.begin(), uplets1.end(), attributs1.at(pos1).type==1 ? sortByIntVal : sortByStrVal);
-    sort(uplets2.begin(), uplets2.end(), attributs2.at(pos2).type==1 ? sortByIntVal : sortByStrVal);
+    sort(uplets1.begin(), uplets1.end(), attributs1[pos1].type==1 ? sortByIntVal : sortByStrVal);
+    sort(uplets2.begin(), uplets2.end(), attributs2[pos2].type==1 ? sortByIntVal : sortByStrVal);
 
     int i=0,j=0;
 
@@ -1352,16 +1328,16 @@ bool innerJoin(vector<vector<string>>* resultats, Relation relation1,Relation re
                 i++;
             } else{
                 //egalité
-                 cout<<endl<<"egalite 2 "<<uplets1[i][0]<<"  "<<uplets2[j][0]<<" taille"<<uplets1[i].size() + uplets2[j].size(); //debug
-          /*      resultats.resize(resultats.size()+1);
+                cout<<endl<<"egalite 2 "<<uplets1[i][0]<<"  "<<uplets2[j][0]<<" taille"<<uplets1[i].size() + uplets2[j].size(); //debug
+                /*      resultats.resize(resultats.size()+1);
 
-                for (int k = 0; k < uplets1[i].size(); ++k) {
-                    resultats[l].push_back(uplets1[i][k]);
-                }
-                for (int k = 0; k < uplets2[i].size(); ++k) {
-                    resultats[l].push_back(uplets2[j][k]);
-                }
-                l++;*/
+                      for (int k = 0; k < uplets1[i].size(); ++k) {
+                          resultats[l].push_back(uplets1[i][k]);
+                      }
+                      for (int k = 0; k < uplets2[i].size(); ++k) {
+                          resultats[l].push_back(uplets2[j][k]);
+                      }
+                      l++;*/
                 vector<string> vecTmp;
 
                 vecTmp.insert(vecTmp.end(),uplets1[i].begin(),uplets1[i].end());
@@ -1429,10 +1405,517 @@ bool projetion(vector<vector<string>> uplets, vector<int> idatt){
             uplets[j].erase( uplets[j].begin() + idatt[i]);
         }
     }
-    
+    return true;
 }
 
-int affchageMenu(){
+
+
+/*
+ *
+ */
+
+void gotoxy(int x, int y) {
+    COORD coord;
+    coord.X = x;
+    coord.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+int affichageMenuOperation(){
+
+    LabelMenu: //lable
+    system("cls");
     int choixMenu;
-    
+
+    cout<<" _______________MENU OPERATION_______________"<<endl;
+    cout<<"|                                            |"<<endl;
+    cout<<"|            1.INSERTION                     |"<<endl;
+    cout<<"|            2.SELECTION                     |"<<endl;
+    cout<<"|            3.SUPRESSION                    |"<<endl;
+    cout<<"|            4.MISE A JOUR                   |"<<endl;
+    cout<<"|            5.JOINTURE                      |"<<endl;
+    cout<<"|            6.RETOUR                        |"<<endl;
+    cout<<"|____________________________________________|"<<endl;
+
+    LabelchoixMenu:   cout<<"\nVotre choix?"<<endl;
+    cin>>choixMenu;
+    switch (choixMenu)
+    {
+        case 1: {
+
+            string nomRelation;
+            int cpt=0;
+            Relation relation;
+            vector<Liste> listes(0);
+            LableInsertion: system("cls");
+
+            cout << "_________________INSERTION__________________";
+            cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
+            cin.ignore(); cin>>nomRelation;
+            if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
+                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                if(4 == cpt++)goto LabelMenu;
+                goto LableInsertion;
+            }
+//            creationListe(relation.id);//!! averifier
+            getListebyRel(&listes, relation);
+            insertionUplet(creationUplet(relation), listes,relation.id);
+            getch();
+            goto LabelMenu;
+
+            break;
+        }
+        case 2:
+            system("cls");
+            cout<<"_______________SELECTION____________________"<<endl;
+            affichageMenuOperationSelection();
+            break;
+        case 3:
+            cout<<"SUPRESSION";
+            break;
+        case 4:{
+            string nomRelation,attribut,valeur;
+            int cpt = 0;
+            Relation relation;
+            vector<string> listeAttrs,newListeAttrs;
+            vector<string> listeValeurs,newListeValeurs;
+            vector<vector<string>> uplets;
+
+            LableMAJ:system("cls");
+
+            cout << "______________MISE A JOUR________________  ";
+            cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
+            cin.ignore(); cin>>nomRelation;
+            if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
+                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                if(4 == cpt++)goto LabelMenu;
+                goto LableMAJ;
+            }
+
+            string rep;
+            do {
+                cout<<endl<<"DONNER CHAMP DE LA RELATION A SELECTIONNER : ";
+                cin.ignore();
+                cin>>attribut;
+                listeAttrs.push_back(attribut);
+                cout<<endl<<"DONNER LA VALEUR DU CHAMP : ";
+                cin.ignore();
+                cin>>valeur;
+                listeValeurs.push_back(valeur);
+                cout<<endl<<"VOULEZ VOUS CONTINUEZ (o/n):  ";
+                cin.ignore();
+                cin>>rep;
+            } while (rep.compare("n")!=0);
+            do {
+                cout<<endl<<"DONNER CHAMP DE LA RELATION A MODIFIER : ";
+                cin.ignore();
+                cin>>attribut;
+                newListeAttrs.push_back(attribut);
+                cout<<endl<<"DONNER NOUVELLE LA VALEUR DU CHAMP : ";
+                cin.ignore();
+                cin>>valeur;
+                newListeValeurs.push_back(valeur);
+                cout<<endl<<"VOULEZ VOUS CONTINUEZ (o/n):  ";
+                cin.ignore();
+                cin>>rep;
+            } while (rep.compare("n")!=0);
+
+            updateUpletByRel(relation,listeAttrs,listeValeurs,newListeAttrs,newListeValeurs);
+
+            goto LabelMenu;
+            break;
+        }
+        case 5: {
+            string nomRelation1,nomRelation2,attribut1, attribut2;
+            int cpt = 0;
+            Relation relation1, relation2;
+            vector<vector<string>> resultats;
+
+            LableJointure:system("cls");
+
+            cout << "_________________JOINTURE___________________";
+            cout<<endl<<"DONNER LE NOM DE LA PREMIERE RELATION : ";
+            cin.ignore(); cin>>nomRelation1;
+            if(! getMetaRalation(&relation1, (char *) nomRelation1.c_str()) ){
+                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                if(4 == cpt++)goto LabelMenu;
+                goto LableJointure;
+            }
+            cout<<endl<<"DONNER LE NOM DE LA DEUXIEME RELATION : ";
+            cin.ignore(); cin>>nomRelation2;
+            if(! getMetaRalation(&relation2, (char *) nomRelation2.c_str()) ){
+                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                if(4 == cpt++)goto LabelMenu;
+                goto LableJointure;
+            }
+            cout<<endl<<"DONNER LE NOM DU PREMIER ATTRIBUT : ";
+            cin.ignore(); cin>>attribut1;
+            cout<<endl<<"DONNER LE NOM DU DEUXIEME ATTRIBUT : ";
+            cin.ignore(); cin>>attribut2;
+            innerJoin(&resultats, relation1,relation2,"age","age");
+            break;
+        }
+        case 6:
+            cout<<"RETOUR"<<endl;
+            affichageMenu();
+            break;
+        default:
+            cout<<"Vous ne ferez rien du tout!";
+            goto LabelchoixMenu;
+            break;
+    }
+    cout<<endl;
+    return choixMenu;
+
+}
+
+int affichageMenuAffichage(){
+
+    LabelMenu: system("cls");
+    int choixMenu;
+
+    cout<<" _______________MENU AFFICHAGE_______________"<<endl;
+    cout<<"|                                            |"<<endl;
+    cout<<"|            1.RELATIONS                     |"<<endl;
+    cout<<"|            2.UPLETS RELATION               |"<<endl;
+    cout<<"|            3.BLOCK                         |"<<endl;
+    cout<<"|            4.MEMOIRE                       |"<<endl;
+    cout<<"|            5.RETOUR                        |"<<endl;
+    cout<<"|____________________________________________|"<<endl;
+
+    LabelchoixMenu:   cout<<"\nVotre choix?"<<endl;
+    cin>>choixMenu;
+    switch (choixMenu)
+    {
+        case 1: {
+            system("cls");
+            vector<Relation> relations;
+            cout << "_________________RELATIONS__________________";
+            getAllMetaRelation(&relations);
+            if(relations.empty()){
+                cout<<endl<<"PAS DE RELATION";
+            }
+            for (int i = 0; i < relations.size(); ++i) {
+                cout<<endl<<"--> ID : "<<relations[i].id<<" NOM : "<<relations[i].nom<<" NB ATT : "<<relations[i].nbAtt<<" TAILLE : "<<relations[i].taille<<endl;
+            }
+            getch();
+            goto  LabelMenu;
+            break;
+        }
+        case 2: {
+            string nomRelation;
+            Relation relation;
+            vector<Attribut> attributs(0);
+            vector<vector<string>> uplets;
+
+            LableUpletRelation:
+            system("cls");
+            cout << "_______________UPLETS RELATION_____________" << endl;
+            cout << endl << "DONNER LE NOM DE LA RELATION : ";
+            cin.ignore();
+            cin >> nomRelation;
+            if (!getMetaRalation(&relation, (char *) nomRelation.c_str())) {
+                cout << endl << "ERREUR CETTE RELATION N HESITE PAS" << endl;
+                goto LableUpletRelation;
+            }
+            getAttribut(&attributs, relation);
+            getUpletByRel(&uplets, relation);
+            if(uplets.empty()){
+                cout<<endl<<"PAS DE UPLETS POUR CETTE RELATION";
+                getch();
+                goto LabelMenu;
+            }
+            char nomAtt[11];
+            for (int i = 0; i < uplets.size(); ++i) {
+                cout << endl << "---> ";
+                for (int j = 0; j < uplets[i].size(); ++j) {
+                    strncpy(nomAtt,attributs[j].nom,10);
+                    upper(nomAtt);
+                    cout <<nomAtt<<" "<<uplets[i][j]<<" ";
+                }
+            }
+            getch();
+            goto LabelMenu;
+            break;
+        }
+        case 3: {
+            system("cls");
+            cout << "__________________BLOCK_____________________";
+            int idBlock = 0;
+            do {
+                cout << endl << "DONNER LE NUMERO DU BLOCK [0 - " << TAILLEPAGE << "] : ";
+                cin >> idBlock;
+            } while (idBlock > TAILLEPAGE || idBlock < 0);
+            afficheBlock(MEMOIRE[idBlock]);
+            getch();
+            goto LabelMenu;
+            break;
+        }
+        case 4: {
+            system("cls");
+            cout << "_________________MEMOIRE___________________"<<endl<<endl;
+            affichePage();
+            getch();
+            goto LabelMenu;
+            break;
+        }
+        case 5:
+            cout<<"RETOUR"<<endl;
+            affichageMenu();
+            break;
+        default:
+            cout<<"Vous ne ferez rien du tout!";
+            goto LabelchoixMenu;
+            break;
+    }
+    cout<<endl;
+    return choixMenu;
+
+}
+
+int affichageMenuOperationSelection(){
+
+    LabelMenu: system("cls");
+    int choixMenu;
+
+    cout<<" __________MENU OPERATION SELECTION__________"<<endl;
+    cout<<"|                                            |"<<endl;
+    cout<<"|            1.SELECTION SUR UN ATTIBUT      |"<<endl;
+    cout<<"|            2.SELECTION OU                  |"<<endl;
+    cout<<"|            3.SELECTION ET                  |"<<endl;
+    cout<<"|            4.RETOUR                        |"<<endl;
+    cout<<"|____________________________________________|"<<endl;
+
+    LabelchoixMenu:  cout<<"\nVotre choix?"<<endl;
+    cin>>choixMenu;
+    switch (choixMenu)
+    {
+        case 1: {
+            string nomRelation,attribut,valeur;
+            int cpt = 0;
+            Relation relation;
+            vector<Attribut> attributs(0);
+            vector<vector<string>> uplets;
+
+            LableSelectionAtt:system("cls");
+
+            cout << "___________SELECTION SUR UN ATTIBUT___________ ";
+            cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
+            cin.ignore(); cin>>nomRelation;
+            if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
+                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                if(4 == cpt++)goto LabelMenu;
+                goto LableSelectionAtt;
+            }
+            cout<<endl<<"DONNER CHAMP DE LA RELATION : ";
+            cin.ignore(); cin>>attribut;
+            cout<<endl<<"DONNER CHAMP DE LA VALEUR : ";
+            cin.ignore(); cin>>valeur;
+            getUpletByAtt(&uplets,relation,attribut,valeur);
+
+            getAttribut(&attributs, relation);
+            if(uplets.empty()){
+                cout<<endl<<"PAS DE UPLETS";
+                getch();
+                goto LabelMenu;
+            }
+            char nomAtt[11];
+            for (int i = 0; i < uplets.size(); ++i) {
+                cout << endl << "---> ";
+                for (int j = 0; j < uplets[i].size(); ++j) {
+                    strncpy(nomAtt,attributs[j].nom,10);
+                    upper(nomAtt);
+                    cout <<nomAtt<<" "<<uplets[i][j]<<" ";
+                }
+            }
+            getch();
+            goto LabelMenu;
+
+            break;
+        }
+        case 2: {
+            string nomRelation,attribut,valeur;
+            int cpt = 0;
+            Relation relation;
+            vector<Attribut> attributs(0);
+            vector<string> listeAttrs;
+            vector<string> listeValeurs;
+            vector<vector<string>> uplets;
+
+            LableSelectionOR:system("cls");
+
+            cout << "______________SELECTION OU__________________  ";
+            cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
+            cin.ignore(); cin>>nomRelation;
+            if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
+                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                if(4 == cpt++)goto LabelMenu;
+                goto LableSelectionOR;
+            }
+
+            string rep;
+            do {
+                cout<<endl<<"DONNER CHAMP DE LA RELATION : ";
+                cin.ignore();
+                cin>>attribut;
+                listeAttrs.push_back(attribut);
+                cout<<endl<<"DONNER CHAMP DE LA VALEUR : ";
+                cin.ignore();
+                cin>>valeur;
+                listeValeurs.push_back(valeur);
+                cout<<endl<<"VOULEZ VOUS CONTINUEZ (o/n):  ";
+                cin.ignore();
+                cin>>rep;
+            } while (rep.compare("n")!=0);
+
+            getUpletByAttOR(&uplets,relation,listeAttrs,listeValeurs);
+
+            getAttribut(&attributs, relation);
+            if(uplets.empty()){
+                cout<<endl<<"PAS DE UPLETS";
+                getch();
+                goto LabelMenu;
+            }
+            char nomAtt[11];
+            for (int i = 0; i < uplets.size(); ++i) {
+                cout << endl << "---> ";
+                for (int j = 0; j < uplets[i].size(); ++j) {
+                    strncpy(nomAtt,attributs[j].nom,10);
+                    upper(nomAtt);
+                    cout <<nomAtt<<" "<<uplets[i][j]<<" ";
+                }
+            }
+            getch();
+            goto LabelMenu;
+            break;
+        }
+        case 3: {
+            string nomRelation,attribut,valeur;
+            int cpt = 0;
+            Relation relation;
+            vector<Attribut> attributs(0);
+            vector<string> listeAttrs;
+            vector<string> listeValeurs;
+            vector<vector<string>> uplets;
+
+            LableSelectionAND:system("cls");
+
+            cout << "______________SELECTION ET__________________  ";
+            cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
+            cin.ignore(); cin>>nomRelation;
+            if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
+                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                if(4 == cpt++)goto LabelMenu;
+                goto LableSelectionAND;
+            }
+
+            string rep;
+            do {
+                cout<<endl<<"DONNER CHAMP DE LA RELATION : ";
+                cin.ignore();
+                cin>>attribut;
+                listeAttrs.push_back(attribut);
+                cout<<endl<<"DONNER CHAMP DE LA VALEUR : ";
+                cin.ignore();
+                cin>>valeur;
+                listeValeurs.push_back(valeur);
+                cout<<endl<<"VOULEZ VOUS CONTINUEZ (o/n):  ";
+                cin.ignore();
+                cin>>rep;
+            } while (rep.compare("n")!=0);
+
+            getUpletByAttAND(&uplets,relation,listeAttrs,listeValeurs);
+
+            getAttribut(&attributs, relation);
+            if(uplets.empty()){
+                cout<<endl<<"PAS DE UPLETS";
+                getch();
+                goto LabelMenu;
+            }
+            char nomAtt[11];
+            for (int i = 0; i < uplets.size(); ++i) {
+                cout << endl << "---> ";
+                for (int j = 0; j < uplets[i].size(); ++j) {
+                    strncpy(nomAtt,attributs[j].nom,10);
+                    upper(nomAtt);
+                    cout <<nomAtt<<" "<<uplets[i][j]<<" ";
+                }
+            }
+            getch();
+            goto LabelMenu;
+            break;
+        }
+        case 4:
+            cout<<"RETOUR"<<endl;
+            affichageMenuOperation();
+            break;
+        default:
+            cout<<"Vous ne ferez rien du tout!";
+            goto LabelchoixMenu;
+            break;
+    }
+    cout<<endl;
+    return choixMenu;
+
+}
+
+int affichageMenu(){
+
+    LabelMenu: system("cls");
+
+    int choixMenu;
+
+    cout<<" ___________________MENU_____________________"<<endl;
+    cout<<"|                                            |"<<endl;
+    cout<<"|            1.CREATION RELATION             |"<<endl;
+    cout<<"|            2.OPERATION                     |"<<endl;
+    cout<<"|            3.AFFICHAGE                     |"<<endl;
+    cout<<"|            4.EXIT!                         |"<<endl;
+    cout<<"|____________________________________________|"<<endl;
+
+    LabelChoixMenu: cout<<"\nVotre choix?"<<endl;
+    cin>>choixMenu;
+    switch (choixMenu)
+    {
+        case 1: {
+            system("cls");
+            cout << "________________CREATION RELATION__________ ";
+            creationRelation();
+            goto LabelMenu;
+            break;
+        }
+        case 2:
+            system("cls");
+            cout<<"OPERATION"<<endl;
+            affichageMenuOperation();
+            break;
+        case 3:
+            system("cls");
+            cout<<"AFFICHAGE";
+            affichageMenuAffichage();
+            break;
+        case 4: {
+            cout << "exit";
+            cout<<endl<<"OUH LA LA VOUS PARTEZ DEJA !!! BON C EST PAS GRAVE ON VA ENREGISTRER QUAND MEME POUR  "<<endl;
+            const char separateur(' ');
+
+            ofstream ofstream1(nomfichier,ios::out|ios::ate);
+            for (int k = 0; k < TAILLEPAGE; ++k) {
+                for (int i = 0; i < TAILLEBLOCK; ++i) {
+                    ofstream1 << MEMOIRE[k][i] << separateur;
+                }
+            }
+
+            ofstream1.close();
+            cout<<endl<<"C EST OK BEY BEY "<<endl;
+
+            break;
+        }
+        default:
+            cout<<"Vous ne ferez rien du tout!";
+            goto LabelChoixMenu;
+            break;
+    }
+    cout<<endl;
+    return choixMenu;
+
 }

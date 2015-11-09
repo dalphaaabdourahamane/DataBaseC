@@ -18,7 +18,7 @@ bool ajouteAttribut(Attribut attribut[], int size);
 
 bool ajouteRelAtt(RelationAttribut relationAttribut[], int size);
 
-void getMetaRalation(Relation* relation,char nomRel[]);
+bool getMetaRalation(Relation* relation,char nomRel[]);
 
 void getAllMetaRalation(std::vector<Relation>* relations);
 

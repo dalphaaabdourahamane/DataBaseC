@@ -13,7 +13,7 @@ void creationRelation();
 
 std::string creationUplet(Relation relation);
 
-bool insertionUplet(std::string uplet,std::vector<Liste> vector1);
+bool insertionUplet(std::string uplet,std::vector<Liste> vector1,int relationId=0);
 
 bool getUpletByRel(std::vector<std::vector<std::string>> *uplets,Relation relation);
 
