@@ -7,9 +7,9 @@
 
 #include <string>
 
-std::string decimalToBinaryString(int n);
+std::string decimalToString(int n);
 
-int binaireStringToDecimal(const char* str);
+int stringToDecimal(const char *str);
 
 int indicePremierZero(char tab[],int d, int f);
 

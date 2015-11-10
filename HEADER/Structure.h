@@ -18,13 +18,10 @@ struct Attribut{
     int type; // 0 entier 1 string
 };
 
-//struct Domaine {
-//    int type;
-//    union {
-//        char str[10]  = {' '};
-//        int ent;
-//    };
-//};
+struct TmpBlock {
+    int bm;
+    char* tmpBlock;
+};
 
 struct RelationAttribut {
     int idRelation;
