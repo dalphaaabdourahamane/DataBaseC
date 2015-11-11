@@ -9,6 +9,8 @@ void afficheBlock(char tab[]);
 
 void affichePage();
 
+void afficheTmpBlock();
+
 int affichageMenu();
 
 int affichageMenuOperation();

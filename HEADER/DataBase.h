@@ -31,4 +31,6 @@ bool innerJoin(std::vector<std::vector<std::string>> *resultats,Relation relatio
 
 bool projetion(std::vector<std::vector<std::string>> uplets, std::vector<std::string> atts, Relation relation);
 
+bool creationBlockTemp(std::vector<std::vector<std::string>> uplets,Relation relation);
+
 #endif //PROJETBASEDONNEE_DATABASE_H

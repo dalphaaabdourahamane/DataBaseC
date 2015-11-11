@@ -20,7 +20,8 @@ struct Attribut{
 
 struct TmpBlock {
     int bm;
-    char* tmpBlock;
+    Relation relation;
+    char tmpBlock[512];
 };
 
 struct RelationAttribut {

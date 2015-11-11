@@ -96,14 +96,13 @@ int main() {
         for (int i = 0; i < TAILLEPAGE; ++i) {
             for (int j = 0; j < TAILLEBLOCK; ++j) {
                 fichier >> MEMOIRE[i][j];
-//                cout<<" ("<<(int)MEMOIRE[i][j]<<") "<<MEMOIRE[i][j];
             }
         }
         cout << "LE FICHER BDI CHARGER AVEC SUCCES :) "<<endl;
 
     }
     fichier.close();
-    getch();
+    cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
     affichageMenu();
     system("pause");
     return 0;
@@ -452,6 +451,7 @@ bool ajouteAttribut(Attribut attribut[], int size){
                 return false;
             }
             indiceVide = indicePremierZero(METAATTRIBUT,TAILLEBLOCK-TailleBitMapMetaAttribut,TAILLEBLOCK);
+
         }
         //Memoire disponible
         int position = indiceVide*TAILLEATTRIBUT;
@@ -1394,34 +1394,48 @@ bool projetion(vector<vector<string>> uplets, vector<string> atts, Relation rela
     return true;
 }
 
-
 bool creationBlockTemp(vector<vector<string>> uplets,Relation relation){
+
     char tmp[TAILLEBLOCK];
     int bm = (TAILLEBLOCK - TAILLEBLOCK/relation.taille)/relation.taille;
     bm=TAILLEBLOCK - bm;
-
     for (int i = 0; i <TAILLEBLOCK ; ++i) {
-        if (i<bm) {
-            tmp[i] ='#';
+        if (i < bm) {
+            tmp[i] = '#';
         } else {
             tmp[i] = '0';
         }
     }
+    int h = bm;
     int k=0,p=bm;
     for (int i = 0; i < uplets.size(); ++i) {
-        for (int j = 0; j <  uplets[i].size(); ++j) {
-            for (int l = 0; l < uplets[i][j].size(); ++l) {
-                tmp[k++] = uplets[i][j][l];
+        for (int j = 0; j < uplets[i].size(); ++j) {
+            for (int l = 0; l <uplets[i][j].size() ; ++l) {
+                tmp[k++] = uplets[i][j].c_str()[l];
             }
         }
-        tmp[bm++]='1';
+        tmp[p++]='1';
     }
-
-    TEMPMEMOIRE.push_back(TmpBlock{bm,tmp});
+    TmpBlock tmpBlock;
+    tmpBlock.bm=h;
+    tmpBlock.relation=relation;
+    strcpy(tmpBlock.tmpBlock,tmp);
+    TEMPMEMOIRE.push_back(tmpBlock);
 
 }
 
+void afficheTmpBlock(){
+    for (int i = 0; i < TEMPMEMOIRE.size(); ++i) {
+        for (int j = 0; j < TAILLEBLOCK-TEMPMEMOIRE[i].bm; ++j) {
 
+            if (TEMPMEMOIRE[i].tmpBlock[TEMPMEMOIRE[i].bm+j] == '1') {
+                for (int k = 0; k < TEMPMEMOIRE[i].relation.taille; ++k) {
+                    cout<<TEMPMEMOIRE[i].tmpBlock[k + j*TEMPMEMOIRE[i].relation.taille]<<" ";
+                }
+            }
+        }
+    }
+}
 /*
  *
  */
@@ -1473,7 +1487,7 @@ int affichageMenuOperation(){
 //            creationListe(relation.id);//!! averifier
             getListebyRel(&listes, relation);
             insertionUplet(creationUplet(relation), listes,relation.id);
-            getch();
+            cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
             goto LabelMenu;
 
             break;
@@ -1507,7 +1521,7 @@ int affichageMenuOperation(){
             cin>>valeur;
 
             deleteUpletByAtt(relation,attribut,valeur);
-            getch();
+            cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
             goto LabelMenu;
 
             break;
@@ -1623,7 +1637,7 @@ int affichageMenuOperation(){
             } while (cpt!= relation.nbAtt && rep.compare("n") !=0);
 
             projetion(resultats,attributs,relation);
-            getch();
+            cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
             goto LabelMenu;
             break;
         }
@@ -1670,7 +1684,7 @@ int affichageMenuAffichage(){
             for (int i = 0; i < relations.size(); ++i) {
                 cout<<endl<<"--> ID : "<<relations[i].id<<" NOM : "<<relations[i].nom<<" NB ATT : "<<relations[i].nbAtt<<" TAILLE : "<<relations[i].taille<<endl;
             }
-            getch();
+            cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
             goto  LabelMenu;
             break;
         }
@@ -1694,7 +1708,7 @@ int affichageMenuAffichage(){
             getUpletByRel(&uplets, relation);
             if(uplets.empty()){
                 cout<<endl<<"PAS DE UPLETS POUR CETTE RELATION";
-                getch();
+                cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
                 goto LabelMenu;
             }
             char nomAtt[11];
@@ -1706,7 +1720,7 @@ int affichageMenuAffichage(){
                     cout <<nomAtt<<" "<<uplets[i][j]<<" ";
                 }
             }
-            getch();
+            cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
             goto LabelMenu;
             break;
         }
@@ -1719,7 +1733,7 @@ int affichageMenuAffichage(){
                 cin >> idBlock;
             } while (idBlock > TAILLEPAGE || idBlock < 0);
             afficheBlock(MEMOIRE[idBlock]);
-            getch();
+            cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
             goto LabelMenu;
             break;
         }
@@ -1727,7 +1741,7 @@ int affichageMenuAffichage(){
             system("cls");
             cout << "_________________MEMOIRE___________________"<<endl<<endl;
             affichePage();
-            getch();
+            cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
             goto LabelMenu;
             break;
         }
@@ -1788,7 +1802,7 @@ int affichageMenuOperationSelection(){
             getAttribut(&attributs, relation);
             if(uplets.empty()){
                 cout<<endl<<"PAS DE UPLETS";
-                getch();
+                cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
                 goto LabelMenu;
             }
             char nomAtt[11];
@@ -1800,7 +1814,7 @@ int affichageMenuOperationSelection(){
                     cout <<nomAtt<<" "<<uplets[i][j]<<" ";
                 }
             }
-            getch();
+            cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
             goto LabelMenu;
 
             break;
@@ -1845,7 +1859,7 @@ int affichageMenuOperationSelection(){
             getAttribut(&attributs, relation);
             if(uplets.empty()){
                 cout<<endl<<"PAS DE UPLETS";
-                getch();
+                cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
                 goto LabelMenu;
             }
             char nomAtt[11];
@@ -1857,7 +1871,7 @@ int affichageMenuOperationSelection(){
                     cout <<nomAtt<<" "<<uplets[i][j]<<" ";
                 }
             }
-            getch();
+            cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
             goto LabelMenu;
             break;
         }
@@ -1901,7 +1915,7 @@ int affichageMenuOperationSelection(){
             getAttribut(&attributs, relation);
             if(uplets.empty()){
                 cout<<endl<<"PAS DE UPLETS";
-                getch();
+                cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
                 goto LabelMenu;
             }
             char nomAtt[11];
@@ -1913,7 +1927,7 @@ int affichageMenuOperationSelection(){
                     cout <<nomAtt<<" "<<uplets[i][j]<<" ";
                 }
             }
-            getch();
+            cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
             goto LabelMenu;
             break;
         }
