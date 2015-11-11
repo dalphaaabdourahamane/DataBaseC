@@ -211,7 +211,6 @@ void afficheBlock(char tab[]){
     cout<<endl;
     cout<<"[ ";
     for (int i = 0; i < TAILLEBLOCK; ++i) {
-        // if((i%100)==0) cout<<endl;
         cout<<" "<<tab[i]  ;
     }
     cout<<" ]";
@@ -262,12 +261,6 @@ void affichePage(){
         cout<<endl<<endl;
     }
 
-//    for (int i = 0; i < TAILLEPAGE; ++i) {
-//        cout<< "----> "<<i;
-//        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), i+5);
-//        afficheBlock(MEMOIRE[i]);
-//        cout<<endl<<endl;
-//    }
 }
 
 void upper(char chaine[]) {
@@ -488,7 +481,6 @@ bool ajouteAttribut(Attribut attribut[], int size){
             METAATTRIBUT[position++] =ent[i];
         }
         METAATTRIBUT[TAILLEBLOCK-TailleBitMapMetaAttribut+indiceVide]='1'; //mettre a jour le bipmap du block
-//        afficheBlock(METAATTRIBUT);
     }
 
     if(block2plain){
@@ -654,7 +646,6 @@ void getRelAttByRel(vector<RelationAttribut>* relAtts, Relation relation){
             }
         }
     }
-    cout<<endl <<"debug nbaat : "<<nblignetrouve<<endl; //debug
 
     if(nblignetrouve < relation.nbAtt){ // on verifie dans le block 5
         if (MEMOIRE[0][5]=='1') {
@@ -738,9 +729,6 @@ bool insertionUplet(string uplet,vector<Liste> vector1, int relationId){
         int ind = indicePremierZero(UPLET,TAILLEBLOCK-tailleBipmap,TAILLEBLOCK);
         if(ind == -1) continue; // pas de place dans ce block
 
-//        cout<<"TAILLE : "<<uplet.size()<<" IND : "<<ind<<endl;
-//        cout<<"bitMAP : "<<TAILLEBLOCK-tailleBipmap + ind<<endl;
-
         for (int j = 0; j < uplet.size(); ++j) {
             if((int)uplet[j] == 32){
                 uplet[j]=((char)0);
@@ -779,7 +767,6 @@ bool insertionUplet(string uplet,vector<Liste> vector1, int relationId){
 bool getUpletByRel(vector<vector<string>> *uplets,Relation relation){
     vector<Liste> listeUpletRel(0);
     vector<Attribut> attributs(0);
-//    vector<vector<string>> uplets(0); //liste attribut
 
     getListebyRel(&listeUpletRel, relation);
     getAttribut(&attributs,relation);
@@ -807,14 +794,12 @@ bool getUpletByRel(vector<vector<string>> *uplets,Relation relation){
                         indUplet++;
                     }
                     champ= static_cast<ostringstream*>( &(ostringstream() << stringToDecimal((char *) ent.c_str())) )->str();
-//                    cout<<endl<<" int: "<<champ; //debug
                 } else{
                     //str
                     for (int l = 0; l < 10; ++l) {
                         champ.push_back(UPLET[indUplet]);
                         indUplet++;
                     }
-//                    cout<<endl<<" str: "<<champ; //debug
                 }
                 uplet.push_back(champ);
 
@@ -830,7 +815,6 @@ bool getUpletByRel(vector<vector<string>> *uplets,Relation relation){
 bool getUpletByAtt(vector<vector<string>> *uplets, Relation relation, string attr,string val){
     vector<Liste> listeUpletRel(0);
     vector<Attribut> attributs(0);
-//    vector<vector<string>> uplets(0); //liste attribut
 
     getListebyRel(&listeUpletRel, relation);
     getAttribut(&attributs,relation);
@@ -845,12 +829,10 @@ bool getUpletByAtt(vector<vector<string>> *uplets, Relation relation, string att
 
     for (int i = 0; i < listeUpletRel.size(); ++i) {
         copy(UPLET,0,MEMOIRE[listeUpletRel[i].numBlock],TAILLEBLOCK);
-//        cout<<endl<<"id block: "<<listeUpletRel[i].numBlock;//debug
 
         for (int j = 0; j < tailleBipmap; ++j) {
             //parcour tous le block et on cherche les uplets
             if(UPLET[TAILLEBLOCK - tailleBipmap + j] == '0' || UPLET[TAILLEBLOCK - tailleBipmap + j] == '#') continue; //Uplet vide ou supprimé
-//            cout<<endl<<"id block: "<<j; //debug
 
             int indUplet = j *relation.taille;
             //pour la lecture des données
@@ -883,7 +865,6 @@ bool getUpletByAtt(vector<vector<string>> *uplets, Relation relation, string att
 
                         upletValide = true;
                     }
-//                    cout<<endl<<" str: "<<champ; //debug
                 }
 
 
@@ -1065,7 +1046,6 @@ int creationListe(int idRel){
             MEMOIRE[0][i] = '1';
             MEMOIRE[0][indiceB] = '1';
             METALISTE[TAILLEBLOCK - TailleBitMapMetaListe + indiceBM] = '1';
-//            cout<<endl<<" idliste : "<<indiceBM<<endl;
             copy(MEMOIRE[i],0,METALISTE,TAILLEBLOCK);
 
             idBlockUpdated.push_back(i); //pour mettre dans le fichier le block qui a été modifier
@@ -1083,12 +1063,8 @@ void getListebyRel(vector<Liste>* listes, Relation relation){
         if(MEMOIRE[0][i] == '0') continue;
         copy(METALISTE, 0, MEMOIRE[i], TAILLEBLOCK);
 
-//        cout<<endl<<"ID BLOCK LISTE : "<<i; //debug
-
         for (int j = 0; j < TailleBitMapMetaListe; ++j) {
             if(METALISTE[TAILLEBLOCK-TailleBitMapMetaListe + j] == '0') continue;
-
-//            cout<<"ID BITMAP : "<<i<<endl; //debug
 
             char ent[5];
             copyPartie(ent, METALISTE,j*TAILLELISTE ,4);
@@ -1146,7 +1122,6 @@ bool deleteUpletByAtt(Relation relation,string attr,string val){
                        (atoi(val.c_str()) == stringToDecimal((char *) champ.c_str())) ){
                         UPLET[TAILLEBLOCK - tailleBipmap + j] ='0';
 
-//                        cout<<endl<<" AP: "<<UPLET[TAILLEBLOCK - tailleBipmap + j]; //debug
                         break;
                     }
                 } else{
@@ -1161,7 +1136,6 @@ bool deleteUpletByAtt(Relation relation,string attr,string val){
                         UPLET[TAILLEBLOCK - tailleBipmap + j] ='0';
                         break;
                     }
-//                    cout<<endl<<" str: "<<champ; //debug
                 }
 
             }//forAttribut
@@ -1241,14 +1215,12 @@ bool updateUpletByRel(Relation relation,vector<string> attFiltres,vector<string>
                     if(attributs[k].type == 1){
                         //entier
                         int pos = find(newAtts.begin(), newAtts.end(), string(attributs[k].nom)) - newAtts.begin(); //uplet k
-//                        cout<<endl<<" newAtts.size() "<<newAtts.size(); //debug
                         if(pos >= newAtts.size()){
                             indUplet+=4;
                             continue;
                         }
                         //k < newAtts.size
                         string newIntValeur = decimalToString(atoi(newVals[pos].c_str()));
-//                        cout<<endl<<" newIntValeur "<<newIntValeur<<endl; //debug
 
                         for (int l = 0; l < 4; ++l) {
                             UPLET[indUplet] = newIntValeur[l];
@@ -1270,11 +1242,10 @@ bool updateUpletByRel(Relation relation,vector<string> attFiltres,vector<string>
                             UPLET[indUplet] = newStrtValeur[l];
                             indUplet++;
                         }
-                        // champ.erase(remove(champ.begin(), champ.end(), ' '), champ.end());
                     }
 
                 }//forAttribut
-            }//fin if----------------------------------------------------------------------------------------------
+            }//fin if----
         }//forbitmap
         copy(MEMOIRE[listeUpletRel[i].numBlock],0,UPLET,TAILLEBLOCK);
     }//forliste
@@ -1316,7 +1287,6 @@ bool innerJoin(vector<vector<string>>* resultats, Relation relation1,Relation re
         cout<<endl<<"PROBLEME LES DEUX ATTRIBUTS SONT DE TYPE DIFFERENTS"<<endl;
         return false;
     }
-    cout<<endl<<"ChekPoint 1 "<<pos1<<" "<<pos2; //debug
 
     for (int i = 0; i < uplets1.size(); ++i) {
         swap( uplets1[i] [0], uplets1[i] [pos1] );
@@ -1332,7 +1302,6 @@ bool innerJoin(vector<vector<string>>* resultats, Relation relation1,Relation re
     int i=0,j=0;
 
     while (i < uplets1.size() && j < uplets2.size()){
-        cout<<endl<<"Boucle-> 1 "<<uplets1[i][0]<<"  "<<uplets2[j][0]<<" **i : "<<i<<"**j : "<<j; //debug
 
         if(uplets1[i][0] > uplets2[j][0]){
             j++;
@@ -1341,7 +1310,6 @@ bool innerJoin(vector<vector<string>>* resultats, Relation relation1,Relation re
                 i++;
             } else{
                 //egalité
-                cout<<endl<<"egalite 2 "<<uplets1[i][0]<<"  "<<uplets2[j][0]<<" taille"<<uplets1[i].size() + uplets2[j].size(); //debug
                 vector<string> vecTmp;
 
                 vecTmp.insert(vecTmp.end(),uplets1[i].begin(),uplets1[i].end());
@@ -1513,7 +1481,6 @@ int affichageMenuOperation(){
                 if(4 == cpt++)goto LabelMenu;
                 goto LableInsertion;
             }
-//            creationListe(relation.id);//!! averifier
             getListebyRel(&listes, relation);
             insertionUplet(creationUplet(relation), listes,relation.id);
             cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
