@@ -96,6 +96,7 @@ int main() {
         for (int i = 0; i < TAILLEPAGE; ++i) {
             for (int j = 0; j < TAILLEBLOCK; ++j) {
                 fichier >> MEMOIRE[i][j];
+//                cout<<" ("<<(int)MEMOIRE[i][j]<<") "<<MEMOIRE[i][j];
             }
         }
         cout << "LE FICHER BDI CHARGER AVEC SUCCES :) "<<endl;
@@ -720,7 +721,7 @@ bool insertionUplet(string uplet,vector<Liste> vector1, int relationId){
 //        cout<<"bitMAP : "<<TAILLEBLOCK-tailleBipmap + ind<<endl;
 
         for (int j = 0; j < uplet.size(); ++j) {
-            UPLET[ind * uplet.size() + j] = uplet[j];
+            UPLET[ind * uplet.size() + j] = uplet.c_str()[j];
         }
 
         UPLET[TAILLEBLOCK-tailleBipmap + ind] ='1';
@@ -732,6 +733,9 @@ bool insertionUplet(string uplet,vector<Liste> vector1, int relationId){
     if (idNewBlock != -1) {
         copy(UPLET,0,MEMOIRE[idNewBlock],TAILLEBLOCK);
         for (int i = 0; i < uplet.size(); ++i) {
+            if((int)uplet[i] == 32){
+                uplet[i]=((char)0);
+            }
             UPLET[i] = uplet[i];
         }
         UPLET[TAILLEBLOCK-tailleBipmap] ='1';
@@ -1967,10 +1971,10 @@ int affichageMenu(){
             cout<<endl<<"OUH LA LA VOUS PARTEZ DEJA !!! BON C EST PAS GRAVE ON VA ENREGISTRER QUAND MEME POUR  "<<endl;
             const char separateur(' ');
 
-            ofstream ofstream1(nomfichier,ios::out|ios::ate);
+            ofstream ofstream1(nomfichier,ios::out);
             for (int k = 0; k < TAILLEPAGE; ++k) {
                 for (int i = 0; i < TAILLEBLOCK; ++i) {
-                    ofstream1 << MEMOIRE[k][i] << separateur;
+                    ofstream1 << MEMOIRE[k][i];
                 }
             }
 
