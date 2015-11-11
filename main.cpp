@@ -85,6 +85,8 @@ int main() {
     getAllMetaRelation(&temporaire);
     idBlockUpdated.push_back(0);
     IDREL = temporaire.size();
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
     for (int i = 0; i < temporaire.size(); ++i) {
         IDATT+=temporaire[i].nbAtt;
     }
@@ -110,7 +112,6 @@ int main() {
     for (int i = 0; i < TAILLEPAGE; ++i) {
         for (int j = 0; j < TAILLEBLOCK; ++j) {
             fichier >> MEMOIRE[i][j];
-//            fichier >>;
         }
     }
     cout << "LE FICHER BDI CHARGER AVEC SUCCES :) "<<endl;
@@ -206,6 +207,7 @@ void initialisation(){
 }
 
 void afficheBlock(char tab[]){
+
     cout<<endl;
     cout<<"[ ";
     for (int i = 0; i < TAILLEBLOCK; ++i) {
@@ -1491,7 +1493,7 @@ int affichageMenuOperation(){
     cout<<"|            7.RETOUR                        |"<<endl;
     cout<<"|____________________________________________|"<<endl;
 
-    LabelchoixMenu:   cout<<"\nVotre choix?"<<endl;
+    cout<<"\nVotre choix?"<<endl;
     cin>>choixMenu;
     switch (choixMenu)
     {
@@ -1503,7 +1505,7 @@ int affichageMenuOperation(){
             vector<Liste> listes(0);
             LableInsertion: system("cls");
 
-            cout << "_________________INSERTION__________________";
+            cout << "_________________INSERTION__________________"<<endl;
             cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
             cin.ignore(); cin>>nomRelation;
             if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
@@ -1531,7 +1533,7 @@ int affichageMenuOperation(){
             Relation relation;
             LableSuppression: system("cls");
 
-            cout << "_________________SUPPRESSION__________________";
+            cout << "_________________SUPPRESSION__________________"<<endl;
             cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
             cin.ignore(); cin>>nomRelation;
             if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
@@ -1562,7 +1564,7 @@ int affichageMenuOperation(){
 
             LableMAJ:system("cls");
 
-            cout << "______________MISE A JOUR________________  ";
+            cout << "______________MISE A JOUR________________"<<endl;
             cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
             cin.ignore(); cin>>nomRelation;
             if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
@@ -1612,7 +1614,7 @@ int affichageMenuOperation(){
 
             LableJointure:system("cls");
 
-            cout << "_________________JOINTURE___________________";
+            cout << "_________________JOINTURE___________________"<<endl;
             cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
             cin.ignore(); cin>>nomRelation1;
             if(! getMetaRalation(&relation1, (char *) nomRelation1.c_str()) ){
@@ -1631,7 +1633,7 @@ int affichageMenuOperation(){
             cin.ignore(); cin>>attribut1;
             cout<<endl<<"DONNER LE NOM DU DEUXIEME ATTRIBUT : ";
             cin.ignore(); cin>>attribut2;
-            innerJoin(&resultats, relation1,relation2,"age","age");
+            innerJoin(&resultats, relation1,relation2,attribut1,attribut2);
             break;
         }
         case 6: {
@@ -1643,7 +1645,7 @@ int affichageMenuOperation(){
 
             LableProjection:system("cls");
 
-            cout << "________________PROJECTION__________________";
+            cout << "________________PROJECTION__________________"<<endl;
             cout<<endl<<"DONNER LE NOM DE LA PREMIERE RELATION : ";
             cin.ignore(); cin>>nomRelation;
             if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
@@ -1674,7 +1676,8 @@ int affichageMenuOperation(){
             break;
         default:
             cout<<"Vous ne ferez rien du tout!";
-            goto LabelchoixMenu;
+            cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
+            goto LabelMenu;
             break;
     }
     cout<<endl;
@@ -1696,14 +1699,14 @@ int affichageMenuAffichage(){
     cout<<"|            5.RETOUR                        |"<<endl;
     cout<<"|____________________________________________|"<<endl;
 
-    LabelchoixMenu:   cout<<"\nVotre choix?"<<endl;
+    cout<<"\nVotre choix?"<<endl;
     cin>>choixMenu;
     switch (choixMenu)
     {
         case 1: {
             system("cls");
             vector<Relation> relations;
-            cout << "_________________RELATIONS__________________";
+            cout << "_________________RELATIONS__________________"<<endl;
             getAllMetaRelation(&relations);
             if(relations.empty()){
                 cout<<endl<<"PAS DE RELATION";
@@ -1753,7 +1756,7 @@ int affichageMenuAffichage(){
         }
         case 3: {
             system("cls");
-            cout << "__________________BLOCK_____________________";
+            cout << "__________________BLOCK_____________________"<< endl;
             int idBlock = 0;
             do {
                 cout << endl << "DONNER LE NUMERO DU BLOCK [0 - " << TAILLEPAGE << "] : ";
@@ -1769,6 +1772,9 @@ int affichageMenuAffichage(){
             cout << "_________________MEMOIRE___________________"<<endl<<endl;
             affichePage();
             cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
+
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
+
             goto LabelMenu;
             break;
         }
@@ -1778,7 +1784,7 @@ int affichageMenuAffichage(){
             break;
         default:
             cout<<"Vous ne ferez rien du tout!";
-            goto LabelchoixMenu;
+            cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
             break;
     }
     cout<<endl;
@@ -1799,7 +1805,7 @@ int affichageMenuOperationSelection(){
     cout<<"|            4.RETOUR                        |"<<endl;
     cout<<"|____________________________________________|"<<endl;
 
-    LabelchoixMenu:  cout<<"\nVotre choix?"<<endl;
+    cout<<"\nVotre choix?"<<endl;
     cin>>choixMenu;
     switch (choixMenu)
     {
@@ -1964,7 +1970,8 @@ int affichageMenuOperationSelection(){
             break;
         default:
             cout<<"Vous ne ferez rien du tout!";
-            goto LabelchoixMenu;
+            cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
+            goto LabelMenu;
             break;
     }
     cout<<endl;
@@ -1986,25 +1993,25 @@ int affichageMenu(){
     cout<<"|            4.EXIT!                         |"<<endl;
     cout<<"|____________________________________________|"<<endl;
 
-    LabelChoixMenu: cout<<"\nVotre choix?"<<endl;
+    cout<<"\nVotre choix?"<<endl;
     cin>>choixMenu;
     switch (choixMenu)
     {
         case 1: {
             system("cls");
-            cout << "________________CREATION RELATION__________ ";
+            cout << "________________CREATION RELATION__________ "<< endl;
             creationRelation();
             goto LabelMenu;
             break;
         }
         case 2:
             system("cls");
-            cout<<"OPERATION"<<endl;
+            cout<<"_____________OPERATION_____________"<<endl;
             affichageMenuOperation();
             break;
         case 3:
             system("cls");
-            cout<<"AFFICHAGE";
+            cout<<"_____________AFFICHAGE_____________"<<endl;
             affichageMenuAffichage();
             break;
         case 4: {
@@ -2016,22 +2023,21 @@ int affichageMenu(){
 
             for (int k = 0; k < idBlockUpdated.size(); ++k) {
                 fstream.seekp (idBlockUpdated[k]*TAILLEBLOCK);
-                cout<<idBlockUpdated[k]*TAILLEBLOCK<<" "<<idBlockUpdated[k]<<" "<< fstream.tellp()<<endl;
                 for (int i = 0; i < TAILLEBLOCK; ++i) {
                     string string1(1,MEMOIRE[idBlockUpdated[k]][i]);
                     fstream.write(string1.c_str(),1);
                 }
-                cout<<" "<< fstream.tellp()<<endl;
             }
 
             fstream.close();
-            cout<<endl<<"C EST OK BEY BEY "<<endl;
+            cout<<"C EST OK BEY BEY "<<endl;
 
             break;
         }
         default:
             cout<<"Vous ne ferez rien du tout!";
-            goto LabelChoixMenu;
+            cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
+            goto LabelMenu;
             break;
     }
     cout<<endl;
