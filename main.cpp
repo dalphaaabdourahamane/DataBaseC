@@ -43,6 +43,8 @@ const int TailleBitMapMetaListe = (TAILLEBLOCK -TAILLEBLOCK/TAILLELISTE)/TAILLEL
  * la suite est calculer par ( TAILLE_DE_MEMOIRE - 5 )/ 16, 24 qui est la taille (idREL,BLOCK,)
  */
 char MEMOIRE[TAILLEPAGE][TAILLEBLOCK];
+vector<int> idBlockUpdated;
+
 vector<TmpBlock> TEMPMEMOIRE;
 
 string nomfichier = "C:/Users/DIALLO Alpha Abdoura/ClionProjects/ProjetBaseDonnee/AFDataBase/bd2i.txt";
@@ -81,6 +83,7 @@ int main() {
 
     vector<Relation> temporaire;
     getAllMetaRelation(&temporaire);
+    idBlockUpdated.push_back(0);
     IDREL = temporaire.size();
     for (int i = 0; i < temporaire.size(); ++i) {
         IDATT+=temporaire[i].nbAtt;
@@ -91,16 +94,27 @@ int main() {
         cout << "LE FICHER BDI N EXISTE PAS DONC NOUS ALLONS L INITIALISER POUR VOUS SO KEEP CALM AND WATCH :) "<<endl;
         initialisation();
 
-    } else {
-        cout << "LE FICHER BDI EXISTE NOUS ALLONS LE CHARGER  :) "<<endl;
-        for (int i = 0; i < TAILLEPAGE; ++i) {
-            for (int j = 0; j < TAILLEBLOCK; ++j) {
-                fichier >> MEMOIRE[i][j];
+        ofstream ofstream1(nomfichier,ios::out);
+        for (int k = 0; k <TAILLEPAGE; ++k) {
+            for (int i = 0; i < TAILLEBLOCK; ++i) {
+                ofstream1 << MEMOIRE[k][i];
             }
         }
-        cout << "LE FICHER BDI CHARGER AVEC SUCCES :) "<<endl;
+        ofstream1.close();
 
+    } else {
+        cout << "LE FICHER BDI EXISTE NOUS ALLONS LE CHARGER  :) " << endl;
     }
+    //Lit le fichier
+
+    for (int i = 0; i < TAILLEPAGE; ++i) {
+        for (int j = 0; j < TAILLEBLOCK; ++j) {
+            fichier >> MEMOIRE[i][j];
+//            fichier >>;
+        }
+    }
+    cout << "LE FICHER BDI CHARGER AVEC SUCCES :) "<<endl;
+
     fichier.close();
     cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
     affichageMenu();
@@ -374,6 +388,8 @@ bool ajouteMetaRelation(Relation relation){
         METARELATION[TAILLEBLOCK-TailleBitMapMetaRelation+indiceVide]='1'; //mettre a jour le bipmap
         copy(MEMOIRE[1],0,METARELATION, TAILLEBLOCK); //recrire le tableau
 
+        idBlockUpdated.push_back(1); //pour mettre dans le fichier le block qui a été modifier
+
     } else{
         cout<<"PLUS DE PLACE POUR LA CREATION D UNE RELATION ";
         return false;
@@ -428,6 +444,7 @@ bool ajouteAttribut(Attribut attribut[], int size){
     Attribut attribut1;
     int indiceVide=0;
 
+    idBlockUpdated.push_back(2); //pour mettre dans le fichier le block qui a été modifier
     for (int x = 0; x < size; ++x) { // indice des attributs
         attribut1 = attribut[x];
 
@@ -451,7 +468,7 @@ bool ajouteAttribut(Attribut attribut[], int size){
                 return false;
             }
             indiceVide = indicePremierZero(METAATTRIBUT,TAILLEBLOCK-TailleBitMapMetaAttribut,TAILLEBLOCK);
-
+            idBlockUpdated.push_back(3); //pour mettre dans le fichier le block qui a été modifier
         }
         //Memoire disponible
         int position = indiceVide*TAILLEATTRIBUT;
@@ -490,6 +507,7 @@ bool ajouteRelAtt(RelationAttribut relationAttribut[], int size){
     RelationAttribut relationAttribut1;
     int indiceVide=0;
 
+    idBlockUpdated.push_back(4); //pour mettre dans le fichier le block qui a été modifier
     for (int x = 0; x < size; ++x) { // indice des attributs
         relationAttribut1 = relationAttribut[x];
 
@@ -513,6 +531,7 @@ bool ajouteRelAtt(RelationAttribut relationAttribut[], int size){
                 return false;
             }
             indiceVide = indicePremierZero(METARELATT,TAILLEBLOCK-TailleBitMapMetaRelAtt,TAILLEBLOCK);
+            idBlockUpdated.push_back(5); //pour mettre dans le fichier le block qui a été modifier
         }
         //Memoire disponible
         int position = indiceVide*TAILLERELATT;
@@ -721,11 +740,16 @@ bool insertionUplet(string uplet,vector<Liste> vector1, int relationId){
 //        cout<<"bitMAP : "<<TAILLEBLOCK-tailleBipmap + ind<<endl;
 
         for (int j = 0; j < uplet.size(); ++j) {
+            if((int)uplet[j] == 32){
+                uplet[j]=((char)0);
+            }
             UPLET[ind * uplet.size() + j] = uplet.c_str()[j];
         }
 
         UPLET[TAILLEBLOCK-tailleBipmap + ind] ='1';
         copy(MEMOIRE[vector1[i].numBlock],0,UPLET,TAILLEBLOCK);
+
+        idBlockUpdated.push_back(vector1[i].numBlock); //pour mettre dans le fichier le block qui a été modifier
         return true;
     }
     //tous les blocks sont plein
@@ -740,6 +764,8 @@ bool insertionUplet(string uplet,vector<Liste> vector1, int relationId){
         }
         UPLET[TAILLEBLOCK-tailleBipmap] ='1';
         copy(MEMOIRE[idNewBlock],0,UPLET,TAILLEBLOCK);
+        idBlockUpdated.push_back(idNewBlock); //pour mettre dans le fichier le block qui a été modifier
+
         return true;
     } else {
         cout<<endl<<"WARNING : PLUS DE PLACE POUR L INSERTION D UPLET "<<endl;
@@ -1040,6 +1066,7 @@ int creationListe(int idRel){
 //            cout<<endl<<" idliste : "<<indiceBM<<endl;
             copy(MEMOIRE[i],0,METALISTE,TAILLEBLOCK);
 
+            idBlockUpdated.push_back(i); //pour mettre dans le fichier le block qui a été modifier
             return indiceB;
         }
     }//for
@@ -1983,16 +2010,21 @@ int affichageMenu(){
         case 4: {
             cout << "exit";
             cout<<endl<<"OUH LA LA VOUS PARTEZ DEJA !!! BON C EST PAS GRAVE ON VA ENREGISTRER QUAND MEME POUR  "<<endl;
-            const char separateur(' ');
 
-            ofstream ofstream1(nomfichier,ios::out);
-            for (int k = 0; k < TAILLEPAGE; ++k) {
+            fstream fstream;
+            fstream.open(nomfichier,std::fstream::in | std::fstream::out);
+
+            for (int k = 0; k < idBlockUpdated.size(); ++k) {
+                fstream.seekp (idBlockUpdated[k]*TAILLEBLOCK);
+                cout<<idBlockUpdated[k]*TAILLEBLOCK<<" "<<idBlockUpdated[k]<<" "<< fstream.tellp()<<endl;
                 for (int i = 0; i < TAILLEBLOCK; ++i) {
-                    ofstream1 << MEMOIRE[k][i];
+                    string string1(1,MEMOIRE[idBlockUpdated[k]][i]);
+                    fstream.write(string1.c_str(),1);
                 }
+                cout<<" "<< fstream.tellp()<<endl;
             }
 
-            ofstream1.close();
+            fstream.close();
             cout<<endl<<"C EST OK BEY BEY "<<endl;
 
             break;
