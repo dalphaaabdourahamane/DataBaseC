@@ -29,4 +29,6 @@ bool updateUpletByRel(Relation relation,std::vector<std::string> attFiltres,std:
 
 bool innerJoin(std::vector<std::vector<std::string>> *resultats,Relation relation1,Relation relation2,std::string att1,std::string att2);
 
+bool projetion(std::vector<std::vector<std::string>> uplets, std::vector<std::string> atts, Relation relation);
+
 #endif //PROJETBASEDONNEE_DATABASE_H

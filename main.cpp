@@ -6,7 +6,6 @@
 #include <conio.h>
 #include <windows.h>
 #include <fstream>
-#include <stdlib.h>
 
 #include "HEADER/Structure.h"
 #include "HEADER/Metadonnee.h"
@@ -913,7 +912,7 @@ bool getUpletByAttOR(vector<vector<string>> *uplets, Relation relation, vector<s
                         indUplet++;
                     }
                     string valeur= static_cast<ostringstream*>( &(ostringstream() <<
-                            stringToDecimal((char *) champ.c_str())) )->str();
+                                                                  stringToDecimal((char *) champ.c_str())) )->str();
 
                     if(findAttVAleur(atts,vals,attributs[k].nom,valeur)){
                         upletValide = true;
@@ -972,7 +971,7 @@ bool getUpletByAttAND(vector<vector<string>> *uplets, Relation relation, vector<
                         indUplet++;
                     }
                     string valeur= static_cast<ostringstream*>( &(ostringstream() <<
-                            stringToDecimal((char *) champ.c_str())) )->str();
+                                                                  stringToDecimal((char *) champ.c_str())) )->str();
 
                     if(findAttVAleur(atts,vals,attributs[k].nom,valeur)){
                         upletValide ++;
@@ -1180,7 +1179,7 @@ bool updateUpletByRel(Relation relation,vector<string> attFiltres,vector<string>
                         indUplet++;
                     }
                     string valeur= static_cast<ostringstream*>( &(ostringstream() <<
-                            stringToDecimal((char *) champ.c_str())) )->str();
+                                                                  stringToDecimal((char *) champ.c_str())) )->str();
 
                     if(findAttVAleur(attFiltres,valfiltres,attributs[k].nom,valeur)){
                         upletValide ++;
@@ -1310,15 +1309,6 @@ bool innerJoin(vector<vector<string>>* resultats, Relation relation1,Relation re
             } else{
                 //egalité
                 cout<<endl<<"egalite 2 "<<uplets1[i][0]<<"  "<<uplets2[j][0]<<" taille"<<uplets1[i].size() + uplets2[j].size(); //debug
-                /*      resultats.resize(resultats.size()+1);
-
-                      for (int k = 0; k < uplets1[i].size(); ++k) {
-                          resultats[l].push_back(uplets1[i][k]);
-                      }
-                      for (int k = 0; k < uplets2[i].size(); ++k) {
-                          resultats[l].push_back(uplets2[j][k]);
-                      }
-                      l++;*/
                 vector<string> vecTmp;
 
                 vecTmp.insert(vecTmp.end(),uplets1[i].begin(),uplets1[i].end());
@@ -1362,29 +1352,40 @@ bool innerJoin(vector<vector<string>>* resultats, Relation relation1,Relation re
         cout<<endl;
     }
 
-/*
-    for (int i = 0; i < uplets1.size(); ++i) {
-        cout<<endl;
-        for (int j = 0; j < uplets1[i].size(); ++j) {
-            cout<<uplets1[i][j]<<" ";
-        }
-        cout<<endl;
-    }for (int i = 0; i < uplets2.size(); ++i) {
-        cout<<endl;
-        for (int j = 0; j < uplets2[i].size(); ++j) {
-            cout<<uplets2[i][j]<<" ";
-        }
-        cout<<endl;
-    }
-     */
     return true;
 }
 
-bool projetion(vector<vector<string>> uplets, vector<int> idatt){
-    for (int i = 0; i < idatt.size(); ++i) {
-        for (int j = 0; j < uplets.size(); ++j) {
-            uplets[j].erase( uplets[j].begin() + idatt[i]);
+bool projetion(vector<vector<string>> uplets, vector<string> atts, Relation relation){
+
+    getUpletByRel(&uplets,relation);
+    vector<Attribut> attributs(0);
+    getAttribut(&attributs,relation);
+    vector<vector<string>> resultats(0);
+
+
+    for (int i = 0; i < uplets.size(); ++i) {
+
+        vector<string> temps(0);
+        int idAtt = 0;
+        for (int k = 0; k < atts.size(); ++k) {
+            for (int j = 0; j < uplets[i].size(); ++j) { // uplet[i].size == attribut.size
+                if(atts[idAtt].compare(attributs[j].nom)==0){
+                    temps.push_back(uplets[i][j]);
+                }
+            }
+            idAtt++;
         }
+        resultats.push_back(temps);
+    }
+
+    cout<<endl<<"Taille "<<resultats.size()<< " : ";
+    for (int k = 0; k < resultats.size(); ++k) {
+        cout<<endl<<"UPLET "<<k<<endl;
+        cout<<" ->TU : "<<resultats[k].size();
+        for (int l = 0; l <resultats[k].size() ; ++l) {
+            cout<< "   "<<resultats[k][l];
+        }
+        cout<<endl;
     }
     return true;
 }
@@ -1441,7 +1442,8 @@ int affichageMenuOperation(){
     cout<<"|            3.SUPRESSION                    |"<<endl;
     cout<<"|            4.MISE A JOUR                   |"<<endl;
     cout<<"|            5.JOINTURE                      |"<<endl;
-    cout<<"|            6.RETOUR                        |"<<endl;
+    cout<<"|            6.PROJECTION                    |"<<endl;
+    cout<<"|            7.RETOUR                        |"<<endl;
     cout<<"|____________________________________________|"<<endl;
 
     LabelchoixMenu:   cout<<"\nVotre choix?"<<endl;
@@ -1566,7 +1568,7 @@ int affichageMenuOperation(){
             LableJointure:system("cls");
 
             cout << "_________________JOINTURE___________________";
-            cout<<endl<<"DONNER LE NOM DE LA PREMIERE RELATION : ";
+            cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
             cin.ignore(); cin>>nomRelation1;
             if(! getMetaRalation(&relation1, (char *) nomRelation1.c_str()) ){
                 cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
@@ -1587,7 +1589,41 @@ int affichageMenuOperation(){
             innerJoin(&resultats, relation1,relation2,"age","age");
             break;
         }
-        case 6:
+        case 6: {
+            string nomRelation,tmp,rep;
+            int cpt = 0;
+            Relation relation;
+            vector<vector<string>> resultats;
+            vector<string> attributs;
+
+            LableProjection:system("cls");
+
+            cout << "________________PROJECTION__________________";
+            cout<<endl<<"DONNER LE NOM DE LA PREMIERE RELATION : ";
+            cin.ignore(); cin>>nomRelation;
+            if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
+                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                if(4 == cpt++)goto LabelMenu;
+                goto LableProjection;
+            }
+
+            cpt = 0;
+            do {
+                cout<<endl<<"DONNER LE NOM DE L ATTRIBUT : ";
+                cin.ignore();
+                cin>>tmp;
+                attributs.push_back(tmp);
+                cout<<endl<<"VOULEZ VOUS CONTINUEZ (o/n) : ";
+                cin.ignore();
+                cin>>rep;
+            } while (cpt!= relation.nbAtt && rep.compare("n") !=0);
+
+            projetion(resultats,attributs,relation);
+            getch();
+            goto LabelMenu;
+            break;
+        }
+        case 7:
             cout<<"RETOUR"<<endl;
             affichageMenu();
             break;
