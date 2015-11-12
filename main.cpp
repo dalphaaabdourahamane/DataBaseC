@@ -820,7 +820,7 @@ bool getUpletByAtt(vector<vector<string>> *uplets, Relation relation, string att
     getAttribut(&attributs,relation);
 
     for (int i = 0; i < attributs.size(); ++i) {
-        if(attr.compare(attributs[i].nom) == 0) break;
+        if(strcmp(attr.c_str(),attributs[i].nom) == 0) break;
         if(i==attributs.size()-1) return false;
     }
 
@@ -849,7 +849,7 @@ bool getUpletByAtt(vector<vector<string>> *uplets, Relation relation, string att
                         indUplet++;
                     }
 
-                    if((attr.compare(attributs[k].nom) == 0) &&
+                    if((strcmp(attr.c_str(),attributs[k].nom) == 0) &&
                        (atoi(val.c_str()) == stringToDecimal((char *) champ.c_str())) ){
                         upletValide = true;
                     }
@@ -861,7 +861,7 @@ bool getUpletByAtt(vector<vector<string>> *uplets, Relation relation, string att
                     }
                     champ.erase(remove(champ.begin(), champ.end(), ' '), champ.end());
 
-                    if((attr.compare(attributs[k].nom) == 0) && (val.compare(champ)==0) ){
+                    if((strcmp(attr.c_str(), attributs[k].nom) == 0) && (strcmp(val.c_str(), champ.c_str())==0) ){
 
                         upletValide = true;
                     }
@@ -886,9 +886,7 @@ bool findAttVAleur(vector<string> attributs,vector<string> valeurs, string att,s
     val.erase(remove(val.begin(), val.end(), ' '), val.end());
 
     for (int i = 0; i < attributs.size(); ++i) {
-        attributs[i].erase(remove(attributs[i].begin(), attributs[i].end(), ' '), attributs[i].end());
-
-        if((att.compare(attributs[i]) == 0) && (val.compare(valeurs[i])==0) ){
+        if((strcmp(att.c_str(),attributs[i].c_str()) == 0) && (strcmp(val.c_str(),valeurs[i].c_str())==0) ){
             return true;
         }
     }
@@ -1092,7 +1090,7 @@ bool deleteUpletByAtt(Relation relation,string attr,string val){
     getAttribut(&attributs,relation);
 
     for (int i = 0; i < attributs.size(); ++i) {
-        if(attr.compare(attributs[i].nom) == 0) break;
+        if(strcmp(attr.c_str(),attributs[i].nom) == 0) break;
         if(i==attributs.size()-1) return false;
     }
 
@@ -1118,7 +1116,7 @@ bool deleteUpletByAtt(Relation relation,string attr,string val){
                         indUplet++;
                     }
 
-                    if((attr.compare(attributs[k].nom) == 0) &&
+                    if((strcmp(attr.c_str(),attributs[k].nom) == 0) &&
                        (atoi(val.c_str()) == stringToDecimal((char *) champ.c_str())) ){
                         UPLET[TAILLEBLOCK - tailleBipmap + j] ='0';
 
@@ -1132,7 +1130,7 @@ bool deleteUpletByAtt(Relation relation,string attr,string val){
                     }
                     champ.erase(std::remove(champ.begin(), champ.end(), ' '), champ.end());
 
-                    if((attr.compare(attributs[k].nom) == 0) && (val.compare(champ)==0) ){
+                    if((strcmp(attr.c_str(),attributs[k].nom) == 0) && (strcmp(val.c_str(),champ.c_str())==0) ){
                         UPLET[TAILLEBLOCK - tailleBipmap + j] ='0';
                         break;
                     }
@@ -1258,7 +1256,7 @@ bool sortByStrVal(vector<string>lhs, vector<string>  rhs) { return lhs.at(0) < r
 
 int findPosition(vector<Attribut> attributs,string nom){
     for (int i = 0; i < attributs.size(); ++i) {
-        if(string(attributs[i].nom).compare(nom) == 0) return i;
+        if(strcmp(attributs[i].nom, nom.c_str()) == 0) return i;
     }
     return -1;
 }
@@ -1337,18 +1335,14 @@ bool innerJoin(vector<vector<string>>* resultats, Relation relation1,Relation re
                     cout<<endl<<"parcour t "<<vecTmp.size();
                     vecTmp.clear();
                 }
-
             }
-
         }
     }
 
-    cout<<endl<<"Taille "<<resultats->size()<< " : ";
     for (int k = 0; k < resultats->size(); ++k) {
-        cout<<endl<<"UPLET "<<k<<endl;
-        cout<<" ->TU : "<<(*resultats)[k].size();
+
         for (int l = 0; l <(*resultats)[k].size() ; ++l) {
-            cout<< "   "<<(*resultats)[k][l];
+            cout<<endl<<" -> "<<(*resultats)[k][l];
         }
         cout<<endl;
     }
@@ -1370,7 +1364,7 @@ bool projetion(vector<vector<string>> uplets, vector<string> atts, Relation rela
         int idAtt = 0;
         for (int k = 0; k < atts.size(); ++k) {
             for (int j = 0; j < uplets[i].size(); ++j) { // uplet[i].size == attribut.size
-                if(atts[idAtt].compare(attributs[j].nom)==0){
+                if(strcmp(atts[idAtt].c_str(), attributs[j].nom)==0){
                     temps.push_back(uplets[i][j]);
                 }
             }
@@ -1379,12 +1373,9 @@ bool projetion(vector<vector<string>> uplets, vector<string> atts, Relation rela
         resultats.push_back(temps);
     }
 
-    cout<<endl<<"Taille "<<resultats.size()<< " : ";
     for (int k = 0; k < resultats.size(); ++k) {
-        cout<<endl<<"UPLET "<<k<<endl;
-        cout<<" ->TU : "<<resultats[k].size();
         for (int l = 0; l <resultats[k].size() ; ++l) {
-            cout<< "   "<<resultats[k][l];
+            cout<<endl<<" -> "<<resultats[k][l];
         }
         cout<<endl;
     }
