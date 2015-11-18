@@ -6,6 +6,7 @@
 #include <conio.h>
 #include <windows.h>
 #include <fstream>
+#include <regex>
 
 #include "HEADER/Structure.h"
 #include "HEADER/Metadonnee.h"
@@ -269,16 +270,21 @@ void upper(char chaine[]) {
 }
 
 string decimalToString(int n){
-    string string1;
-    string1=static_cast<ostringstream*>( &(ostringstream() << n) )->str();
-    for (int i = string1.size(); i < 4; ++i) {
-        string1.insert(0,"0");
+    stringstream ss;
+    ss<<hex << n%65536; // int decimal_value
+    string res ( ss.str() );
+    for (int i = res.size(); i < 4; ++i) {
+        res.insert(0,"0");
     }
-    return  string1;
+    return  res;
 }
 
 int stringToDecimal(const char *str) {
-    return atoi(str);
+    stringstream ss1;
+    int val = 0;
+    ss1  << str ; // std::string hex_value
+    ss1 >> hex >> val ; //int decimal_value
+    return  val;
 }
 
 int indicePremierZero(char tab[],int d, int f){
@@ -1473,7 +1479,10 @@ int affichageMenuOperation(){
                 goto LableInsertion;
             }
             getListebyRel(&listes, relation);
+            cout<<endl<<"TAille meta liste "<<relation.nom<<" --"<<listes[0].numBlock<< "**"<<relation.id<<endl;
+
             insertionUplet(creationUplet(relation), listes,relation.id);
+
             cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
             goto LabelMenu;
 

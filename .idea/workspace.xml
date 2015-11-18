@@ -12,12 +12,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e555875a-4ba2-492a-9a62-ae45a982b335" name="Default" comment="">
+<<<<<<< Updated upstream
       <change type="DELETED" beforePath="C:\Users\DIALLO Alpha Abdoura\ClionProjects\ProjetBaseDonnee\.idea\.name" afterPath="" />
       <change type="DELETED" beforePath="C:\Users\DIALLO Alpha Abdoura\ClionProjects\ProjetBaseDonnee\.idea\dictionaries\DIALLO_Alpha_Abdoura.xml" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CMakeLists.txt" afterPath="$PROJECT_DIR$/CMakeLists.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/ProjetBaseDonnee.iml" afterPath="$PROJECT_DIR$/.idea/ProjetBaseDonnee.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+=======
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AFDataBase/bd2i.txt" afterPath="$PROJECT_DIR$/AFDataBase/bd2i.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.cpp" afterPath="$PROJECT_DIR$/main.cpp" />
+>>>>>>> Stashed changes
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="ProjetBaseDonnee.iws" />
@@ -46,10 +51,52 @@
       <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
             <state vertical-scroll-proportion="0.39534885">
               <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="20" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
+=======
+            <state vertical-scroll-proportion="0.69949496">
+              <caret line="1813" column="28" selection-start-line="1813" selection-start-column="28" selection-end-line="1813" selection-end-column="28" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
+                <element signature="e#2950#4193#0" expanded="false" />
+                <element signature="e#4197#6023#0" expanded="false" />
+                <element signature="e#6025#6185#0" expanded="false" />
+                <element signature="e#6187#7458#0" expanded="false" />
+                <element signature="e#7560#7782#0" expanded="false" />
+                <element signature="e#7784#7967#0" expanded="false" />
+                <element signature="e#7969#8162#0" expanded="false" />
+                <element signature="e#8164#8272#0" expanded="false" />
+                <element signature="e#8274#8461#0" expanded="false" />
+                <element signature="e#8463#9907#0" expanded="false" />
+                <element signature="e#9909#11285#0" expanded="false" />
+                <element signature="e#11287#12593#0" expanded="false" />
+                <element signature="e#12595#15116#0" expanded="false" />
+                <element signature="e#15118#17696#0" expanded="false" />
+                <element signature="e#17698#18109#0" expanded="false" />
+                <element signature="e#18111#19684#0" expanded="false" />
+                <element signature="e#19686#22517#0" expanded="false" />
+                <element signature="e#22519#23386#0" expanded="false" />
+                <element signature="e#23388#24979#0" expanded="false" />
+                <element signature="e#24981#26705#0" expanded="false" />
+                <element signature="e#26707#29055#0" expanded="false" />
+                <element signature="e#29057#29494#0" expanded="false" />
+                <element signature="e#29496#31767#0" expanded="false" />
+                <element signature="e#31769#34043#0" expanded="false" />
+                <element signature="e#34045#35455#0" expanded="false" />
+                <element signature="e#35457#36350#0" expanded="false" />
+                <element signature="e#36352#38950#0" expanded="false" />
+                <element signature="e#38952#42866#0" expanded="false" />
+                <element signature="e#43115#43308#0" expanded="false" />
+                <element signature="e#43310#46361#0" expanded="false" />
+                <element signature="e#46363#47281#0" expanded="false" />
+                <element signature="e#47283#48079#0" expanded="false" />
+                <element signature="e#48081#48512#0" expanded="false" />
+                <element signature="e#48513#48674#0" expanded="false" />
+                <element signature="e#48676#60494#0" expanded="false" />
+>>>>>>> Stashed changes
               </folding>
             </state>
           </provider>
@@ -137,9 +184,16 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
+<<<<<<< Updated upstream
     <option name="x" value="-7" />
     <option name="width" value="697" />
     <option name="height" value="735" />
+=======
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1382" />
+    <option name="height" value="744" />
+>>>>>>> Stashed changes
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -265,20 +319,33 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
+<<<<<<< Updated upstream
     <frame x="-7" y="0" width="697" height="735" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.38472834" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32913387" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+=======
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16983895" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32440946" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+>>>>>>> Stashed changes
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290735" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32913387" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+<<<<<<< Updated upstream
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4057508" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+=======
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28661418" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+>>>>>>> Stashed changes
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -292,7 +359,9 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="3" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
@@ -302,6 +371,44 @@
           <caret line="49" column="24" selection-start-line="0" selection-start-column="0" selection-end-line="2003" selection-end-column="1" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+<<<<<<< Updated upstream
+=======
+            <element signature="e#2950#4193#0" expanded="false" />
+            <element signature="e#4197#6023#0" expanded="false" />
+            <element signature="e#6025#6185#0" expanded="false" />
+            <element signature="e#6187#7458#0" expanded="false" />
+            <element signature="e#7560#7782#0" expanded="false" />
+            <element signature="e#7784#7967#0" expanded="false" />
+            <element signature="e#7969#8162#0" expanded="false" />
+            <element signature="e#8164#8272#0" expanded="false" />
+            <element signature="e#8274#8461#0" expanded="false" />
+            <element signature="e#8463#9907#0" expanded="false" />
+            <element signature="e#9909#11285#0" expanded="false" />
+            <element signature="e#11287#12593#0" expanded="false" />
+            <element signature="e#12595#15116#0" expanded="false" />
+            <element signature="e#15118#17696#0" expanded="false" />
+            <element signature="e#17698#18109#0" expanded="false" />
+            <element signature="e#18111#19684#0" expanded="false" />
+            <element signature="e#19686#22517#0" expanded="false" />
+            <element signature="e#22519#23386#0" expanded="false" />
+            <element signature="e#23388#24979#0" expanded="false" />
+            <element signature="e#24981#26705#0" expanded="false" />
+            <element signature="e#26707#29055#0" expanded="false" />
+            <element signature="e#29057#29494#0" expanded="false" />
+            <element signature="e#29496#31767#0" expanded="false" />
+            <element signature="e#31769#34043#0" expanded="false" />
+            <element signature="e#34045#35455#0" expanded="false" />
+            <element signature="e#35457#36350#0" expanded="false" />
+            <element signature="e#36352#38950#0" expanded="false" />
+            <element signature="e#38952#42866#0" expanded="false" />
+            <element signature="e#43115#43308#0" expanded="false" />
+            <element signature="e#43310#46361#0" expanded="false" />
+            <element signature="e#46363#47281#0" expanded="false" />
+            <element signature="e#47283#48079#0" expanded="false" />
+            <element signature="e#48081#48512#0" expanded="false" />
+            <element signature="e#48513#48674#0" expanded="false" />
+            <element signature="e#48676#60494#0" expanded="false" />
+>>>>>>> Stashed changes
           </folding>
         </state>
       </provider>
@@ -362,6 +469,44 @@
           <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+<<<<<<< Updated upstream
+=======
+            <element signature="e#2950#4193#0" expanded="false" />
+            <element signature="e#4197#6023#0" expanded="false" />
+            <element signature="e#6025#6185#0" expanded="false" />
+            <element signature="e#6187#7458#0" expanded="false" />
+            <element signature="e#7560#7782#0" expanded="false" />
+            <element signature="e#7784#7967#0" expanded="false" />
+            <element signature="e#7969#8162#0" expanded="false" />
+            <element signature="e#8164#8272#0" expanded="false" />
+            <element signature="e#8274#8461#0" expanded="false" />
+            <element signature="e#8463#9907#0" expanded="false" />
+            <element signature="e#9909#11285#0" expanded="false" />
+            <element signature="e#11287#12593#0" expanded="false" />
+            <element signature="e#12595#15116#0" expanded="false" />
+            <element signature="e#15118#17696#0" expanded="false" />
+            <element signature="e#17698#18109#0" expanded="false" />
+            <element signature="e#18111#19684#0" expanded="false" />
+            <element signature="e#19686#22517#0" expanded="false" />
+            <element signature="e#22519#23386#0" expanded="false" />
+            <element signature="e#23388#24979#0" expanded="false" />
+            <element signature="e#24981#26705#0" expanded="false" />
+            <element signature="e#26707#29055#0" expanded="false" />
+            <element signature="e#29057#29494#0" expanded="false" />
+            <element signature="e#29496#31767#0" expanded="false" />
+            <element signature="e#31769#34043#0" expanded="false" />
+            <element signature="e#34045#35455#0" expanded="false" />
+            <element signature="e#35457#36350#0" expanded="false" />
+            <element signature="e#36352#38950#0" expanded="false" />
+            <element signature="e#38952#42866#0" expanded="false" />
+            <element signature="e#43115#43308#0" expanded="false" />
+            <element signature="e#43310#46361#0" expanded="false" />
+            <element signature="e#46363#47281#0" expanded="false" />
+            <element signature="e#47283#48079#0" expanded="false" />
+            <element signature="e#48081#48512#0" expanded="false" />
+            <element signature="e#48513#48674#0" expanded="false" />
+            <element signature="e#48676#60494#0" expanded="false" />
+>>>>>>> Stashed changes
           </folding>
         </state>
       </provider>
@@ -380,6 +525,44 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+<<<<<<< Updated upstream
+=======
+            <element signature="e#2950#4193#0" expanded="false" />
+            <element signature="e#4197#6023#0" expanded="false" />
+            <element signature="e#6025#6185#0" expanded="false" />
+            <element signature="e#6187#7458#0" expanded="false" />
+            <element signature="e#7560#7782#0" expanded="false" />
+            <element signature="e#7784#7967#0" expanded="false" />
+            <element signature="e#7969#8162#0" expanded="false" />
+            <element signature="e#8164#8272#0" expanded="false" />
+            <element signature="e#8274#8461#0" expanded="false" />
+            <element signature="e#8463#9907#0" expanded="false" />
+            <element signature="e#9909#11285#0" expanded="false" />
+            <element signature="e#11287#12593#0" expanded="false" />
+            <element signature="e#12595#15116#0" expanded="false" />
+            <element signature="e#15118#17696#0" expanded="false" />
+            <element signature="e#17698#18109#0" expanded="false" />
+            <element signature="e#18111#19684#0" expanded="false" />
+            <element signature="e#19686#22517#0" expanded="false" />
+            <element signature="e#22519#23386#0" expanded="false" />
+            <element signature="e#23388#24979#0" expanded="false" />
+            <element signature="e#24981#26705#0" expanded="false" />
+            <element signature="e#26707#29055#0" expanded="false" />
+            <element signature="e#29057#29494#0" expanded="false" />
+            <element signature="e#29496#31767#0" expanded="false" />
+            <element signature="e#31769#34043#0" expanded="false" />
+            <element signature="e#34045#35455#0" expanded="false" />
+            <element signature="e#35457#36350#0" expanded="false" />
+            <element signature="e#36352#38950#0" expanded="false" />
+            <element signature="e#38952#42866#0" expanded="false" />
+            <element signature="e#43115#43308#0" expanded="false" />
+            <element signature="e#43310#46361#0" expanded="false" />
+            <element signature="e#46363#47281#0" expanded="false" />
+            <element signature="e#47283#48079#0" expanded="false" />
+            <element signature="e#48081#48512#0" expanded="false" />
+            <element signature="e#48513#48674#0" expanded="false" />
+            <element signature="e#48676#60494#0" expanded="false" />
+>>>>>>> Stashed changes
           </folding>
         </state>
       </provider>
@@ -390,6 +573,44 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+<<<<<<< Updated upstream
+=======
+            <element signature="e#2950#4193#0" expanded="false" />
+            <element signature="e#4197#6023#0" expanded="false" />
+            <element signature="e#6025#6185#0" expanded="false" />
+            <element signature="e#6187#7458#0" expanded="false" />
+            <element signature="e#7560#7782#0" expanded="false" />
+            <element signature="e#7784#7967#0" expanded="false" />
+            <element signature="e#7969#8162#0" expanded="false" />
+            <element signature="e#8164#8272#0" expanded="false" />
+            <element signature="e#8274#8461#0" expanded="false" />
+            <element signature="e#8463#9907#0" expanded="false" />
+            <element signature="e#9909#11285#0" expanded="false" />
+            <element signature="e#11287#12593#0" expanded="false" />
+            <element signature="e#12595#15116#0" expanded="false" />
+            <element signature="e#15118#17696#0" expanded="false" />
+            <element signature="e#17698#18109#0" expanded="false" />
+            <element signature="e#18111#19684#0" expanded="false" />
+            <element signature="e#19686#22517#0" expanded="false" />
+            <element signature="e#22519#23386#0" expanded="false" />
+            <element signature="e#23388#24979#0" expanded="false" />
+            <element signature="e#24981#26705#0" expanded="false" />
+            <element signature="e#26707#29055#0" expanded="false" />
+            <element signature="e#29057#29494#0" expanded="false" />
+            <element signature="e#29496#31767#0" expanded="false" />
+            <element signature="e#31769#34043#0" expanded="false" />
+            <element signature="e#34045#35455#0" expanded="false" />
+            <element signature="e#35457#36350#0" expanded="false" />
+            <element signature="e#36352#38950#0" expanded="false" />
+            <element signature="e#38952#42866#0" expanded="false" />
+            <element signature="e#43115#43308#0" expanded="false" />
+            <element signature="e#43310#46361#0" expanded="false" />
+            <element signature="e#46363#47281#0" expanded="false" />
+            <element signature="e#47283#48079#0" expanded="false" />
+            <element signature="e#48081#48512#0" expanded="false" />
+            <element signature="e#48513#48674#0" expanded="false" />
+            <element signature="e#48676#60494#0" expanded="false" />
+>>>>>>> Stashed changes
           </folding>
         </state>
       </provider>
@@ -400,6 +621,44 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+<<<<<<< Updated upstream
+=======
+            <element signature="e#2950#4193#0" expanded="false" />
+            <element signature="e#4197#6023#0" expanded="false" />
+            <element signature="e#6025#6185#0" expanded="false" />
+            <element signature="e#6187#7458#0" expanded="false" />
+            <element signature="e#7560#7782#0" expanded="false" />
+            <element signature="e#7784#7967#0" expanded="false" />
+            <element signature="e#7969#8162#0" expanded="false" />
+            <element signature="e#8164#8272#0" expanded="false" />
+            <element signature="e#8274#8461#0" expanded="false" />
+            <element signature="e#8463#9907#0" expanded="false" />
+            <element signature="e#9909#11285#0" expanded="false" />
+            <element signature="e#11287#12593#0" expanded="false" />
+            <element signature="e#12595#15116#0" expanded="false" />
+            <element signature="e#15118#17696#0" expanded="false" />
+            <element signature="e#17698#18109#0" expanded="false" />
+            <element signature="e#18111#19684#0" expanded="false" />
+            <element signature="e#19686#22517#0" expanded="false" />
+            <element signature="e#22519#23386#0" expanded="false" />
+            <element signature="e#23388#24979#0" expanded="false" />
+            <element signature="e#24981#26705#0" expanded="false" />
+            <element signature="e#26707#29055#0" expanded="false" />
+            <element signature="e#29057#29494#0" expanded="false" />
+            <element signature="e#29496#31767#0" expanded="false" />
+            <element signature="e#31769#34043#0" expanded="false" />
+            <element signature="e#34045#35455#0" expanded="false" />
+            <element signature="e#35457#36350#0" expanded="false" />
+            <element signature="e#36352#38950#0" expanded="false" />
+            <element signature="e#38952#42866#0" expanded="false" />
+            <element signature="e#43115#43308#0" expanded="false" />
+            <element signature="e#43310#46361#0" expanded="false" />
+            <element signature="e#46363#47281#0" expanded="false" />
+            <element signature="e#47283#48079#0" expanded="false" />
+            <element signature="e#48081#48512#0" expanded="false" />
+            <element signature="e#48513#48674#0" expanded="false" />
+            <element signature="e#48676#60494#0" expanded="false" />
+>>>>>>> Stashed changes
           </folding>
         </state>
       </provider>
@@ -410,6 +669,44 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+<<<<<<< Updated upstream
+=======
+            <element signature="e#2950#4193#0" expanded="false" />
+            <element signature="e#4197#6023#0" expanded="false" />
+            <element signature="e#6025#6185#0" expanded="false" />
+            <element signature="e#6187#7458#0" expanded="false" />
+            <element signature="e#7560#7782#0" expanded="false" />
+            <element signature="e#7784#7967#0" expanded="false" />
+            <element signature="e#7969#8162#0" expanded="false" />
+            <element signature="e#8164#8272#0" expanded="false" />
+            <element signature="e#8274#8461#0" expanded="false" />
+            <element signature="e#8463#9907#0" expanded="false" />
+            <element signature="e#9909#11285#0" expanded="false" />
+            <element signature="e#11287#12593#0" expanded="false" />
+            <element signature="e#12595#15116#0" expanded="false" />
+            <element signature="e#15118#17696#0" expanded="false" />
+            <element signature="e#17698#18109#0" expanded="false" />
+            <element signature="e#18111#19684#0" expanded="false" />
+            <element signature="e#19686#22517#0" expanded="false" />
+            <element signature="e#22519#23386#0" expanded="false" />
+            <element signature="e#23388#24979#0" expanded="false" />
+            <element signature="e#24981#26705#0" expanded="false" />
+            <element signature="e#26707#29055#0" expanded="false" />
+            <element signature="e#29057#29494#0" expanded="false" />
+            <element signature="e#29496#31767#0" expanded="false" />
+            <element signature="e#31769#34043#0" expanded="false" />
+            <element signature="e#34045#35455#0" expanded="false" />
+            <element signature="e#35457#36350#0" expanded="false" />
+            <element signature="e#36352#38950#0" expanded="false" />
+            <element signature="e#38952#42866#0" expanded="false" />
+            <element signature="e#43115#43308#0" expanded="false" />
+            <element signature="e#43310#46361#0" expanded="false" />
+            <element signature="e#46363#47281#0" expanded="false" />
+            <element signature="e#47283#48079#0" expanded="false" />
+            <element signature="e#48081#48512#0" expanded="false" />
+            <element signature="e#48513#48674#0" expanded="false" />
+            <element signature="e#48676#60494#0" expanded="false" />
+>>>>>>> Stashed changes
           </folding>
         </state>
       </provider>
@@ -420,6 +717,44 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+<<<<<<< Updated upstream
+=======
+            <element signature="e#2950#4193#0" expanded="false" />
+            <element signature="e#4197#6023#0" expanded="false" />
+            <element signature="e#6025#6185#0" expanded="false" />
+            <element signature="e#6187#7458#0" expanded="false" />
+            <element signature="e#7560#7782#0" expanded="false" />
+            <element signature="e#7784#7967#0" expanded="false" />
+            <element signature="e#7969#8162#0" expanded="false" />
+            <element signature="e#8164#8272#0" expanded="false" />
+            <element signature="e#8274#8461#0" expanded="false" />
+            <element signature="e#8463#9907#0" expanded="false" />
+            <element signature="e#9909#11285#0" expanded="false" />
+            <element signature="e#11287#12593#0" expanded="false" />
+            <element signature="e#12595#15116#0" expanded="false" />
+            <element signature="e#15118#17696#0" expanded="false" />
+            <element signature="e#17698#18109#0" expanded="false" />
+            <element signature="e#18111#19684#0" expanded="false" />
+            <element signature="e#19686#22517#0" expanded="false" />
+            <element signature="e#22519#23386#0" expanded="false" />
+            <element signature="e#23388#24979#0" expanded="false" />
+            <element signature="e#24981#26705#0" expanded="false" />
+            <element signature="e#26707#29055#0" expanded="false" />
+            <element signature="e#29057#29494#0" expanded="false" />
+            <element signature="e#29496#31767#0" expanded="false" />
+            <element signature="e#31769#34043#0" expanded="false" />
+            <element signature="e#34045#35455#0" expanded="false" />
+            <element signature="e#35457#36350#0" expanded="false" />
+            <element signature="e#36352#38950#0" expanded="false" />
+            <element signature="e#38952#42866#0" expanded="false" />
+            <element signature="e#43115#43308#0" expanded="false" />
+            <element signature="e#43310#46361#0" expanded="false" />
+            <element signature="e#46363#47281#0" expanded="false" />
+            <element signature="e#47283#48079#0" expanded="false" />
+            <element signature="e#48081#48512#0" expanded="false" />
+            <element signature="e#48513#48674#0" expanded="false" />
+            <element signature="e#48676#60494#0" expanded="false" />
+>>>>>>> Stashed changes
           </folding>
         </state>
       </provider>
@@ -430,6 +765,44 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+<<<<<<< Updated upstream
+=======
+            <element signature="e#2950#4193#0" expanded="false" />
+            <element signature="e#4197#6023#0" expanded="false" />
+            <element signature="e#6025#6185#0" expanded="false" />
+            <element signature="e#6187#7458#0" expanded="false" />
+            <element signature="e#7560#7782#0" expanded="false" />
+            <element signature="e#7784#7967#0" expanded="false" />
+            <element signature="e#7969#8162#0" expanded="false" />
+            <element signature="e#8164#8272#0" expanded="false" />
+            <element signature="e#8274#8461#0" expanded="false" />
+            <element signature="e#8463#9907#0" expanded="false" />
+            <element signature="e#9909#11285#0" expanded="false" />
+            <element signature="e#11287#12593#0" expanded="false" />
+            <element signature="e#12595#15116#0" expanded="false" />
+            <element signature="e#15118#17696#0" expanded="false" />
+            <element signature="e#17698#18109#0" expanded="false" />
+            <element signature="e#18111#19684#0" expanded="false" />
+            <element signature="e#19686#22517#0" expanded="false" />
+            <element signature="e#22519#23386#0" expanded="false" />
+            <element signature="e#23388#24979#0" expanded="false" />
+            <element signature="e#24981#26705#0" expanded="false" />
+            <element signature="e#26707#29055#0" expanded="false" />
+            <element signature="e#29057#29494#0" expanded="false" />
+            <element signature="e#29496#31767#0" expanded="false" />
+            <element signature="e#31769#34043#0" expanded="false" />
+            <element signature="e#34045#35455#0" expanded="false" />
+            <element signature="e#35457#36350#0" expanded="false" />
+            <element signature="e#36352#38950#0" expanded="false" />
+            <element signature="e#38952#42866#0" expanded="false" />
+            <element signature="e#43115#43308#0" expanded="false" />
+            <element signature="e#43310#46361#0" expanded="false" />
+            <element signature="e#46363#47281#0" expanded="false" />
+            <element signature="e#47283#48079#0" expanded="false" />
+            <element signature="e#48081#48512#0" expanded="false" />
+            <element signature="e#48513#48674#0" expanded="false" />
+            <element signature="e#48676#60494#0" expanded="false" />
+>>>>>>> Stashed changes
           </folding>
         </state>
       </provider>
@@ -486,10 +859,52 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
         <state vertical-scroll-proportion="0.39534885">
           <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="20" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+=======
+        <state vertical-scroll-proportion="0.69949496">
+          <caret line="1813" column="28" selection-start-line="1813" selection-start-column="28" selection-end-line="1813" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#2950#4193#0" expanded="false" />
+            <element signature="e#4197#6023#0" expanded="false" />
+            <element signature="e#6025#6185#0" expanded="false" />
+            <element signature="e#6187#7458#0" expanded="false" />
+            <element signature="e#7560#7782#0" expanded="false" />
+            <element signature="e#7784#7967#0" expanded="false" />
+            <element signature="e#7969#8162#0" expanded="false" />
+            <element signature="e#8164#8272#0" expanded="false" />
+            <element signature="e#8274#8461#0" expanded="false" />
+            <element signature="e#8463#9907#0" expanded="false" />
+            <element signature="e#9909#11285#0" expanded="false" />
+            <element signature="e#11287#12593#0" expanded="false" />
+            <element signature="e#12595#15116#0" expanded="false" />
+            <element signature="e#15118#17696#0" expanded="false" />
+            <element signature="e#17698#18109#0" expanded="false" />
+            <element signature="e#18111#19684#0" expanded="false" />
+            <element signature="e#19686#22517#0" expanded="false" />
+            <element signature="e#22519#23386#0" expanded="false" />
+            <element signature="e#23388#24979#0" expanded="false" />
+            <element signature="e#24981#26705#0" expanded="false" />
+            <element signature="e#26707#29055#0" expanded="false" />
+            <element signature="e#29057#29494#0" expanded="false" />
+            <element signature="e#29496#31767#0" expanded="false" />
+            <element signature="e#31769#34043#0" expanded="false" />
+            <element signature="e#34045#35455#0" expanded="false" />
+            <element signature="e#35457#36350#0" expanded="false" />
+            <element signature="e#36352#38950#0" expanded="false" />
+            <element signature="e#38952#42866#0" expanded="false" />
+            <element signature="e#43115#43308#0" expanded="false" />
+            <element signature="e#43310#46361#0" expanded="false" />
+            <element signature="e#46363#47281#0" expanded="false" />
+            <element signature="e#47283#48079#0" expanded="false" />
+            <element signature="e#48081#48512#0" expanded="false" />
+            <element signature="e#48513#48674#0" expanded="false" />
+            <element signature="e#48676#60494#0" expanded="false" />
+>>>>>>> Stashed changes
           </folding>
         </state>
       </provider>
