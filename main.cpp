@@ -1479,7 +1479,7 @@ int affichageMenuOperation(){
                 goto LableInsertion;
             }
             getListebyRel(&listes, relation);
-            cout<<endl<<"TAille meta liste "<<relation.nom<<" --"<<listes[0].numBlock<< "**"<<relation.id<<endl;
+//            cout<<endl<<"TAille meta liste "<<relation.nom<<" --"<<listes[0].numBlock<< "**"<<relation.id<<endl;
 
             insertionUplet(creationUplet(relation), listes,relation.id);
 
