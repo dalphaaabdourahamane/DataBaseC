@@ -4,8 +4,7 @@ project(ProjetBaseDonnee)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 set(SOURCE_FILES
-    .idea/dictionaries/DIALLO_Alpha_Abdoura.xml
-    .idea/.name
+
     .idea/misc.xml
     .idea/modules.xml
     .idea/ProjetBaseDonnee.iml
