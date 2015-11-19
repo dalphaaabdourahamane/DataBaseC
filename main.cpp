@@ -44,7 +44,7 @@ const int TailleBitMapMetaListe = (TAILLEBLOCK -TAILLEBLOCK/TAILLELISTE)/TAILLEL
  * la suite est calculer par ( TAILLE_DE_MEMOIRE - 5 )/ 16, 24 qui est la taille (idREL,BLOCK,)
  */
 char MEMOIRE[TAILLEPAGE][TAILLEBLOCK];
-vector<int> idBlockUpdated;
+//vector<int> idBlockUpdated;
 
 vector<TmpBlock> TEMPMEMOIRE;
 
@@ -84,7 +84,7 @@ int main() {
 
     vector<Relation> temporaire;
     getAllMetaRelation(&temporaire);
-    idBlockUpdated.push_back(0);
+//    idBlockUpdated.push_back(0);
     IDREL = temporaire.size();
 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
@@ -361,6 +361,8 @@ bool ajouteMetaRelation(Relation relation){
     char METARELATION[TAILLEBLOCK];
     copy(METARELATION,0,MEMOIRE[1],TAILLEBLOCK);
 
+//    idBlockUpdated.push_back(1); //pour mettre dans le fichier le block qui a été modifier
+
     if(MEMOIRE[0][1] == '0') MEMOIRE[0][1] = '1'; // on met le bit a 1
     int indiceVide = indicePremierZero(METARELATION,TAILLEBLOCK-TailleBitMapMetaRelation,TAILLEBLOCK);
     if(indiceVide != -1){
@@ -389,7 +391,6 @@ bool ajouteMetaRelation(Relation relation){
         METARELATION[TAILLEBLOCK-TailleBitMapMetaRelation+indiceVide]='1'; //mettre a jour le bipmap
         copy(MEMOIRE[1],0,METARELATION, TAILLEBLOCK); //recrire le tableau
 
-        idBlockUpdated.push_back(1); //pour mettre dans le fichier le block qui a été modifier
 
     } else{
         cout<<"PLUS DE PLACE POUR LA CREATION D UNE RELATION ";
@@ -445,7 +446,7 @@ bool ajouteAttribut(Attribut attribut[], int size){
     Attribut attribut1;
     int indiceVide=0;
 
-    idBlockUpdated.push_back(2); //pour mettre dans le fichier le block qui a été modifier
+//    idBlockUpdated.push_back(2); //pour mettre dans le fichier le block qui a été modifier
     for (int x = 0; x < size; ++x) { // indice des attributs
         attribut1 = attribut[x];
 
@@ -469,7 +470,7 @@ bool ajouteAttribut(Attribut attribut[], int size){
                 return false;
             }
             indiceVide = indicePremierZero(METAATTRIBUT,TAILLEBLOCK-TailleBitMapMetaAttribut,TAILLEBLOCK);
-            idBlockUpdated.push_back(3); //pour mettre dans le fichier le block qui a été modifier
+//            idBlockUpdated.push_back(3); //pour mettre dans le fichier le block qui a été modifier
         }
         //Memoire disponible
         int position = indiceVide*TAILLEATTRIBUT;
@@ -507,7 +508,7 @@ bool ajouteRelAtt(RelationAttribut relationAttribut[], int size){
     RelationAttribut relationAttribut1;
     int indiceVide=0;
 
-    idBlockUpdated.push_back(4); //pour mettre dans le fichier le block qui a été modifier
+//    idBlockUpdated.push_back(4); //pour mettre dans le fichier le block qui a été modifier
     for (int x = 0; x < size; ++x) { // indice des attributs
         relationAttribut1 = relationAttribut[x];
 
@@ -531,7 +532,7 @@ bool ajouteRelAtt(RelationAttribut relationAttribut[], int size){
                 return false;
             }
             indiceVide = indicePremierZero(METARELATT,TAILLEBLOCK-TailleBitMapMetaRelAtt,TAILLEBLOCK);
-            idBlockUpdated.push_back(5); //pour mettre dans le fichier le block qui a été modifier
+//            idBlockUpdated.push_back(5); //pour mettre dans le fichier le block qui a été modifier
         }
         //Memoire disponible
         int position = indiceVide*TAILLERELATT;
@@ -745,7 +746,7 @@ bool insertionUplet(string uplet,vector<Liste> vector1, int relationId){
         UPLET[TAILLEBLOCK-tailleBipmap + ind] ='1';
         copy(MEMOIRE[vector1[i].numBlock],0,UPLET,TAILLEBLOCK);
 
-        idBlockUpdated.push_back(vector1[i].numBlock); //pour mettre dans le fichier le block qui a été modifier
+//        idBlockUpdated.push_back(vector1[i].numBlock); //pour mettre dans le fichier le block qui a été modifier
         return true;
     }
     //tous les blocks sont plein
@@ -760,7 +761,7 @@ bool insertionUplet(string uplet,vector<Liste> vector1, int relationId){
         }
         UPLET[TAILLEBLOCK-tailleBipmap] ='1';
         copy(MEMOIRE[idNewBlock],0,UPLET,TAILLEBLOCK);
-        idBlockUpdated.push_back(idNewBlock); //pour mettre dans le fichier le block qui a été modifier
+//        idBlockUpdated.push_back(idNewBlock); //pour mettre dans le fichier le block qui a été modifier
 
         return true;
     } else {
@@ -1052,7 +1053,7 @@ int creationListe(int idRel){
             METALISTE[TAILLEBLOCK - TailleBitMapMetaListe + indiceBM] = '1';
             copy(MEMOIRE[i],0,METALISTE,TAILLEBLOCK);
 
-            idBlockUpdated.push_back(i); //pour mettre dans le fichier le block qui a été modifier
+//            idBlockUpdated.push_back(i); //pour mettre dans le fichier le block qui a été modifier
             return indiceB;
         }
     }//for
@@ -1327,18 +1328,15 @@ bool innerJoin(vector<vector<string>>* resultats, Relation relation1,Relation re
                     vecTmp.insert(vecTmp.end(),uplets1[i].begin(),uplets1[i].end());
                     vecTmp.insert(vecTmp.end(),uplets2[j].begin(),uplets2[j].end());
                     resultats->push_back(vecTmp);
-                    cout<<endl<<"parcour t "<<vecTmp.size();
                     vecTmp.clear();
                 }
 
-                cout<<endl<<"ChekPoint *** "<<i<<" "<<j;
                 if(j==uplets2.size()) j--;
                 while(++i < uplets1.size() && uplets1[i][0] == uplets2[j][0]){
 
                     vecTmp.insert(vecTmp.end(),uplets1[i].begin(),uplets1[i].end());
                     vecTmp.insert(vecTmp.end(),uplets2[j].begin(),uplets2[j].end());
                     resultats->push_back(vecTmp);
-                    cout<<endl<<"parcour t "<<vecTmp.size();
                     vecTmp.clear();
                 }
             }
@@ -1346,9 +1344,9 @@ bool innerJoin(vector<vector<string>>* resultats, Relation relation1,Relation re
     }
 
     for (int k = 0; k < resultats->size(); ++k) {
-
+        cout<<endl<<" -> ";
         for (int l = 0; l <(*resultats)[k].size() ; ++l) {
-            cout<<endl<<" -> "<<(*resultats)[k][l];
+            cout<<(*resultats)[k][l] << " ";
         }
         cout<<endl;
     }
@@ -1380,8 +1378,9 @@ bool projetion(vector<vector<string>> uplets, vector<string> atts, Relation rela
     }
 
     for (int k = 0; k < resultats.size(); ++k) {
+        cout<<endl<<" -> ";
         for (int l = 0; l <resultats[k].size() ; ++l) {
-            cout<<endl<<" -> "<<resultats[k][l];
+            cout<<resultats[k][l]<<" ";
         }
         cout<<endl;
     }
@@ -1474,13 +1473,23 @@ int affichageMenuOperation(){
             cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
             cin.ignore(); cin>>nomRelation;
             if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
-                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                cout<<endl<<"ERREUR CETTE RELATION N EXISTE PAS ... ??"<<endl;
                 if(4 == cpt++)goto LabelMenu;
-                goto LableInsertion;
+
+                vector<Relation> relations;
+                getAllMetaRelation(&relations);
+                if(relations.empty()){
+                    cout<<endl<<"PAS DE RELATION";
+                    getch(); goto LabelMenu;
+                }
+                for (int i = 0; i < relations.size(); ++i) {
+                    if (std::regex_match (relations[i].nom, regex(nomRelation.substr(0,1).append("(.*)") ))){
+                        cout<<endl<<"---> "<<relations[i].nom<<endl;
+                    }
+                }
+                getch(); goto  LableInsertion;
             }
             getListebyRel(&listes, relation);
-//            cout<<endl<<"TAille meta liste "<<relation.nom<<" --"<<listes[0].numBlock<< "**"<<relation.id<<endl;
-
             insertionUplet(creationUplet(relation), listes,relation.id);
 
             cout<<endl<<"TAPE UNE TOUCHE POUR TERMINER "<<endl;     getch();
@@ -1504,9 +1513,21 @@ int affichageMenuOperation(){
             cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
             cin.ignore(); cin>>nomRelation;
             if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
-                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                cout<<endl<<"ERREUR CETTE RELATION N EXISTE PAS ... ??"<<endl;
                 if(4 == cpt++)goto LabelMenu;
-                goto LableSuppression;
+
+                vector<Relation> relations;
+                getAllMetaRelation(&relations);
+                if(relations.empty()){
+                    cout<<endl<<"PAS DE RELATION";
+                    getch(); goto LabelMenu;
+                }
+                for (int i = 0; i < relations.size(); ++i) {
+                    if (std::regex_match (relations[i].nom, regex(nomRelation.substr(0,1).append("(.*)") ))){
+                        cout<<endl<<"---> "<<relations[i].nom<<endl;
+                    }
+                }
+                getch(); goto LableSuppression;
             }
 
             cout<<endl<<"DONNER CHAMP DE LA RELATION A SELECTIONNER : ";
@@ -1535,8 +1556,20 @@ int affichageMenuOperation(){
             cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
             cin.ignore(); cin>>nomRelation;
             if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
-                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                cout<<endl<<"ERREUR CETTE RELATION N EXISTE PAS ...??"<<endl;
                 if(4 == cpt++)goto LabelMenu;
+
+                vector<Relation> relations;
+                getAllMetaRelation(&relations);
+                if(relations.empty()){
+                    cout<<endl<<"PAS DE RELATION";
+                    getch(); goto LabelMenu;
+                }
+                for (int i = 0; i < relations.size(); ++i) {
+                    if (std::regex_match (relations[i].nom, regex(nomRelation.substr(0,1).append("(.*)") ))){
+                        cout<<endl<<"---> "<<relations[i].nom<<endl;
+                    }
+                }
                 goto LableMAJ;
             }
 
@@ -1585,14 +1618,14 @@ int affichageMenuOperation(){
             cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
             cin.ignore(); cin>>nomRelation1;
             if(! getMetaRalation(&relation1, (char *) nomRelation1.c_str()) ){
-                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                cout<<endl<<"ERREUR CETTE RELATION N EXISTE PAS ... ??"<<endl;
                 if(4 == cpt++)goto LabelMenu;
                 goto LableJointure;
             }
             cout<<endl<<"DONNER LE NOM DE LA DEUXIEME RELATION : ";
             cin.ignore(); cin>>nomRelation2;
             if(! getMetaRalation(&relation2, (char *) nomRelation2.c_str()) ){
-                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                cout<<endl<<"ERREUR CETTE RELATION N EXISTE PAS ... ??"<<endl;
                 if(4 == cpt++)goto LabelMenu;
                 goto LableJointure;
             }
@@ -1616,9 +1649,20 @@ int affichageMenuOperation(){
             cout<<endl<<"DONNER LE NOM DE LA PREMIERE RELATION : ";
             cin.ignore(); cin>>nomRelation;
             if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
-                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                cout<<endl<<"ERREUR CETTE RELATION N EXISTE PAS ... ??"<<endl;
                 if(4 == cpt++)goto LabelMenu;
-                goto LableProjection;
+                vector<Relation> relations;
+                getAllMetaRelation(&relations);
+                if(relations.empty()){
+                    cout<<endl<<"PAS DE RELATION";
+                    getch(); goto  LableProjection;
+                }
+                for (int i = 0; i < relations.size(); ++i) {
+                    if (std::regex_match (relations[i].nom, regex(nomRelation.substr(0,1).append("(.*)") ))){
+                        cout<<endl<<"---> "<<relations[i].nom<<endl;
+                    }
+                }
+                goto  LableProjection;
             }
 
             cpt = 0;
@@ -1686,7 +1730,7 @@ int affichageMenuAffichage(){
             break;
         }
         case 2: {
-            string nomRelation;
+            string nomRelation; int cpt = 0;
             Relation relation;
             vector<Attribut> attributs(0);
             vector<vector<string>> uplets;
@@ -1698,8 +1742,22 @@ int affichageMenuAffichage(){
             cin.ignore();
             cin >> nomRelation;
             if (!getMetaRalation(&relation, (char *) nomRelation.c_str())) {
-                cout << endl << "ERREUR CETTE RELATION N HESITE PAS" << endl;
-                goto LableUpletRelation;
+                cout << endl << "ERREUR CETTE RELATION N EXISTE PAS ... ??" << endl;
+
+                if(4 == cpt++) goto LabelMenu;
+
+                vector<Relation> relations;
+                getAllMetaRelation(&relations);
+                if(relations.empty()){
+                    cout<<endl<<"PAS DE RELATION";
+                    getch(); goto LabelMenu;
+                }
+                for (int i = 0; i < relations.size(); ++i) {
+                    if (std::regex_match (relations[i].nom, regex(nomRelation.substr(0,1).append("(.*)") ))){
+                        cout<<endl<<"---> "<<relations[i].nom<<endl;
+                    }
+                }
+                getch(); goto  LableUpletRelation;
             }
             getAttribut(&attributs, relation);
             getUpletByRel(&uplets, relation);
@@ -1789,9 +1847,21 @@ int affichageMenuOperationSelection(){
             cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
             cin.ignore(); cin>>nomRelation;
             if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
-                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                cout<<endl<<"ERREUR CETTE RELATION N EXISTE PAS .. ??"<<endl;
                 if(4 == cpt++)goto LabelMenu;
-                goto LableSelectionAtt;
+
+                vector<Relation> relations;
+                getAllMetaRelation(&relations);
+                if(relations.empty()){
+                    cout<<endl<<"PAS DE RELATION";
+                    getch(); goto LabelMenu;
+                }
+                for (int i = 0; i < relations.size(); ++i) {
+                    if (std::regex_match (relations[i].nom, regex(nomRelation.substr(0,1).append("(.*)") ))){
+                        cout<<endl<<"---> "<<relations[i].nom<<endl;
+                    }
+                }
+                goto  LableSelectionAtt;
             }
             cout<<endl<<"DONNER CHAMP DE LA RELATION : ";
             cin.ignore(); cin>>attribut;
@@ -1834,9 +1904,21 @@ int affichageMenuOperationSelection(){
             cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
             cin.ignore(); cin>>nomRelation;
             if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
-                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                cout<<endl<<"ERREUR CETTE RELATION N EXISTE PAS .. ??"<<endl;
                 if(4 == cpt++)goto LabelMenu;
-                goto LableSelectionOR;
+
+                vector<Relation> relations;
+                getAllMetaRelation(&relations);
+                if(relations.empty()){
+                    cout<<endl<<"PAS DE RELATION";
+                    getch(); goto LabelMenu;
+                }
+                for (int i = 0; i < relations.size(); ++i) {
+                    if (std::regex_match (relations[i].nom, regex(nomRelation.substr(0,1).append("(.*)") ))){
+                        cout<<endl<<"---> "<<relations[i].nom<<endl;
+                    }
+                }
+                getch(); goto  LableSelectionOR;
             }
 
             string rep;
@@ -1890,9 +1972,21 @@ int affichageMenuOperationSelection(){
             cout<<endl<<"DONNER LE NOM DE LA RELATION : ";
             cin.ignore(); cin>>nomRelation;
             if(! getMetaRalation(&relation, (char *) nomRelation.c_str()) ){
-                cout<<endl<<"ERREUR CETTE RELATION N HESITE PAS"<<endl;
+                cout<<endl<<"ERREUR CETTE RELATION N EXISTE PAS ... ??"<<endl;
                 if(4 == cpt++)goto LabelMenu;
-                goto LableSelectionAND;
+
+                vector<Relation> relations;
+                getAllMetaRelation(&relations);
+                if(relations.empty()){
+                    cout<<endl<<"PAS DE RELATION";
+                    getch(); goto LabelMenu;
+                }
+                for (int i = 0; i < relations.size(); ++i) {
+                    if (std::regex_match (relations[i].nom, regex(nomRelation.substr(0,1).append("(.*)") ))){
+                        cout<<endl<<"---> "<<relations[i].nom<<endl;
+                    }
+                }
+                getch(); goto  LableSelectionAND;
             }
 
             string rep;
@@ -1988,11 +2082,17 @@ int affichageMenu(){
             fstream fstream;
             fstream.open(nomfichier,std::fstream::in | std::fstream::out);
 
-            for (int k = 0; k < idBlockUpdated.size(); ++k) {
-                fstream.seekp (idBlockUpdated[k]*TAILLEBLOCK);
+//            for (int k = 0; k < idBlockUpdated.size(); ++k) {
+//                fstream.seekp (idBlockUpdated[k]*TAILLEBLOCK);
+//                for (int i = 0; i < TAILLEBLOCK; ++i) {
+//                    string string1(1,MEMOIRE[idBlockUpdated[k]][i]);
+//                    fstream.write(string1.c_str(),1);
+//                }
+//            }
+
+            for (int k = 0; k <TAILLEPAGE; ++k) {
                 for (int i = 0; i < TAILLEBLOCK; ++i) {
-                    string string1(1,MEMOIRE[idBlockUpdated[k]][i]);
-                    fstream.write(string1.c_str(),1);
+                    fstream << MEMOIRE[k][i];
                 }
             }
 
